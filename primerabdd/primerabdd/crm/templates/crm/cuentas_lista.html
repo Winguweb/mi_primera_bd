@@ -1,0 +1,21 @@
+<h1>Cuentas</h1>
+
+<table>
+	<thead>
+		<tr>
+			<th>Nombre</th>
+			<th>Detalles</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for cuenta in mis_cuentas %}
+		<tr>
+		<td>{{ cuenta.nombre }}</td>
+		<td>
+			<a  href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
+		</td>
+		</tr>
+
+		{% endfor %}
+	</tbody>
+</table>
