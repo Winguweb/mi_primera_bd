@@ -1,4 +1,4 @@
-"""mysite URL Configuration
+"""django_crud_cbv URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -14,9 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from contacts import views
 
 urlpatterns = [
-	path('', include('polls.urls')),
     path('admin/', admin.site.urls),
+    path('contacts', views.ContactList.as_view(), name='contact_list'),
+    path('contact/<int:pk>', views.ContactDetail.as_view(), name='contact_detail'),
+    path('create', views.ContactCreate.as_view(), name='contact_create'),
+    path('update/<int:pk>', views.ContactUpdate.as_view(), name='contact_update'),
+    path('delete/<int:pk>', views.ContactDelete.as_view(), name='contact_delete'),
+    path('edit<int:pk>', views.ContactDetail.as_view(), name='contact_edit'),
 ]
