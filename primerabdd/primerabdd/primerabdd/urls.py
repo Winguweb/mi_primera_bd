@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from crm import views
+from user_register_login import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('user_register_login.urls')),
     path('cuentas/', include('crm.urls')),
 ]
