@@ -12,8 +12,6 @@ class CuentasLista(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        print(user)
-        print(Cuenta.objects.all())
         listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
 
         return Cuenta.objects.filter(id__in=listado_cuentas)

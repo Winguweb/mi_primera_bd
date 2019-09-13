@@ -1,21 +1,37 @@
-<h1>Cuentas</h1>
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	{% load bootstrap4 %}
+	{% bootstrap_css %}
+</head>
+<body>
+	<h1>Cuentas</h1>
 
-<table>
-	<thead>
-		<tr>
-			<th>Nombre</th>
-			<th>Detalles</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for cuenta in mis_cuentas %}
-		<tr>
-		<td>{{ cuenta.nombre }}</td>
-		<td>
-			<a  href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
-		</td>
-		</tr>
+	<table class="table table-striped table-hover ">
+		<thead class="thead-dark">
+			<tr>
+				<th>Nombre</th>
+				<th>Detalles</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for cuenta in mis_cuentas %}
+			<tr>
+			<td>{{ cuenta.nombre }}</td>
+			<td>
+				<a  href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
+			</td>
+			</tr>
 
-		{% endfor %}
-	</tbody>
-</table>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% bootstrap_javascript jquery='full' %}
+</body>
+</html>
+
+
+
+
