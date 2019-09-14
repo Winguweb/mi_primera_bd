@@ -26,7 +26,7 @@ class Cuenta(models.Model):
         return self.nombre
 
 class Contacto(models.Model):
-    cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=100)
     email = models.EmailField()
     direccion = models.CharField(max_length=100)

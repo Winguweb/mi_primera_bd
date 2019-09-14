@@ -21,5 +21,5 @@ from user_register_login import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user_register_login.urls')),
-    path('cuentas/', include('crm.urls')),
+    path('', include('crm.urls')),
 ]

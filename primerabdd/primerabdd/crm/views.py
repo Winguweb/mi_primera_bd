@@ -4,7 +4,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Cuenta, Contacto
 
 
-# Create your views here.
+# Lista de cuentas
 class CuentasLista(ListView): 
     model = Cuenta 
     context_object_name = 'mis_cuentas'  
@@ -15,6 +15,18 @@ class CuentasLista(ListView):
         listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
 
         return Cuenta.objects.filter(id__in=listado_cuentas)
+
+# Lista de contactos
+class ContactosLista(ListView): 
+    model = Contacto 
+    context_object_name = 'mis_contactos'  
+    template_name = 'crm/contactos_lista.html'  
+
+    def get_queryset(self):
+        user = self.request.user
+        listado_contactos = Contacto.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+
+        return Contacto.objects.filter(id__in=listado_contactos)
 
 class CuentasDetalles(DetailView): 
     model = Cuenta

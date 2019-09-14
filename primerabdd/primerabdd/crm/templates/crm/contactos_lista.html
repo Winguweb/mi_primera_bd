@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	{% load bootstrap4 %}
+	{% bootstrap_css %}
+</head>
+<body>
+	<h1>Contactos</h1>
+
+	<table class="table table-striped table-hover ">
+		<thead class="thead-dark">
+			<tr>
+				<th>Nombre</th>
+				<th>Email</th>
+				<th>Direccion</th>
+				<th>Telefono</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for contacto in mis_contactos %}
+			<tr>
+			<td>{{ contacto.nombre }}</td>
+			<td>{{ contacto.email }}</td>
+			<td>{{ contacto.direccion }}</td>
+			<td>{{ contacto.telefono }}</td>
+			</tr>
+
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% bootstrap_javascript jquery='full' %}
+</body>
+</html>
+
+
+
+
