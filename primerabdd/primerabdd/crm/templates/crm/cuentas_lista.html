@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-	{% load bootstrap4 %}
-	{% bootstrap_css %}
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block body %}
 	<h1>Cuentas</h1>
 
 	<table class="table table-striped table-hover ">
@@ -27,10 +22,7 @@
 			{% endfor %}
 		</tbody>
 	</table>
-
-	{% bootstrap_javascript jquery='full' %}
-</body>
-</html>
+{% endblock %}
 
 
 

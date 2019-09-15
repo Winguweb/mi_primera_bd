@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-	{% load bootstrap4 %}
-	{% bootstrap_css %}
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block body %}
 	<h1>Detalle de cuenta</h1>
 
-	<p><b>Name:</b> {{cuenta.nombre}}</p>
+	<p><b>Nombre:</b> {{cuenta.nombre}}</p>
 
-	{% bootstrap_javascript jquery='full' %}
-</body>
-</html>
+{% endblock %}
 
 
 
