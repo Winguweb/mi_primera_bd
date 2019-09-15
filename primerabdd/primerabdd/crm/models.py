@@ -20,8 +20,7 @@ class Organizacion(models.Model):
 class Cuenta(models.Model):
     organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=200)
-    cantidad_contactos = lambda self : self.contacto_set.count()
-
+    
     def __str__(self):
         return self.nombre
 
