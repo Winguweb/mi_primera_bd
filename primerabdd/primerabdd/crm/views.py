@@ -45,6 +45,13 @@ class ContactoCrear(CreateView):
     template_name = 'crm/creacion_contacto.html'
     success_url = reverse_lazy('contactos')
 
+class ContactoEditar(UpdateView): 
+    model = Contacto
+    fields = ('nombre', 'email', 'direccion', 'telefono',)
+    template_name = 'crm/creacion_contacto.html'
+    success_url = reverse_lazy('contactos')
+
+
 # class ContactCreate(CreateView): 
 #     model = Contact
 

@@ -4,6 +4,25 @@
 	<title></title>
 	{% load bootstrap4 %}
 	{% bootstrap_css %}
+	<style type="text/css">
+
+		body {
+			padding: 15px;
+		}
+
+		.table th, .table .tdCenter {
+		   text-align: center;   
+		}
+
+		.table th, .table td {
+			vertical-align: middle;
+		}
+
+		.table {
+			border: solid;
+		}
+
+	</style>
 </head>
 <body>
 	<h1>Contactos</h1>
@@ -22,10 +41,11 @@
 			{% for contacto in mis_contactos %}
 			<tr>
 				<td>{{ contacto.nombre }}</td>
-				<td>{{ contacto.email }}</td>
-				<td>{{ contacto.direccion }}</td>
-				<td>{{ contacto.telefono }}</td>
-				<td>
+				<td class="tdCenter">{{ contacto.email }}</td>
+				<td class="tdCenter">{{ contacto.direccion }}</td>
+				<td class="tdCenter">{{ contacto.telefono }}</td>
+				<td class="tdCenter">
+					<a class="btn btn-secondary" href="{% url "editar_contacto"  contacto.id  %}">Editar</a>
 					<a class="btn btn-danger" href="{% url "eliminar_contacto"  contacto.id  %}">Eliminar</a>
 				</td>
 			</tr>
