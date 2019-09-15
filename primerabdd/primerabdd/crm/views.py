@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 from .models import Cuenta, Contacto
 
 
@@ -32,6 +33,11 @@ class CuentasDetalles(DetailView):
     model = Cuenta
     context_object_name = 'cuenta'  
     template_name = 'crm/cuentas_detalles.html'  
+
+class ContactoEliminar(DeleteView): 
+    model = Contacto
+    template_name = 'crm/confirmar_eliminacion.html'
+    success_url = reverse_lazy('contactos')
 
 # class ContactCreate(CreateView): 
 #     model = Contact

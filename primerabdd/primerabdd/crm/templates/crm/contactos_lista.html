@@ -15,20 +15,35 @@
 				<th>Email</th>
 				<th>Direccion</th>
 				<th>Telefono</th>
+				<th>Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for contacto in mis_contactos %}
 			<tr>
-			<td>{{ contacto.nombre }}</td>
-			<td>{{ contacto.email }}</td>
-			<td>{{ contacto.direccion }}</td>
-			<td>{{ contacto.telefono }}</td>
+				<td>{{ contacto.nombre }}</td>
+				<td>{{ contacto.email }}</td>
+				<td>{{ contacto.direccion }}</td>
+				<td>{{ contacto.telefono }}</td>
+				<td>
+					<a  href="{% url "eliminar_contacto"  contacto.id  %}">Eliminar</a>
+				</td>
 			</tr>
 
 			{% endfor %}
 		</tbody>
 	</table>
+
+	<div class="row">
+
+		<div class="col-md-9">
+		</div>
+
+		<div class="col-md-3">
+			<button class="btn btn-success">Agregar nuevo contacto</button>
+		</div>
+
+	</div>
 
 	{% bootstrap_javascript jquery='full' %}
 </body>
