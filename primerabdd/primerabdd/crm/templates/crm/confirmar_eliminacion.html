@@ -1,6 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
 <h1>Eliminar {{ contacto.nombre }}</h1>
 <form  method="post">
 {% csrf_token %}
 ¿Está seguro de que desea eliminar este contacto?
 <input type="submit" value="Si"/>
 </form>
+{% endblock %}
