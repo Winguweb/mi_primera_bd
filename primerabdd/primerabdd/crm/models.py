@@ -34,5 +34,12 @@ class Contacto(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class Donante(Contacto):
+    cuentaBanco = models.CharField(max_length=22)
+
+class Voluntario(Contacto):
+    barrio = models.CharField(max_length=50)
+
         
         
