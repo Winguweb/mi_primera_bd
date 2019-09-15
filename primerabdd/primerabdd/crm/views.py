@@ -51,6 +51,17 @@ class ContactoEditar(UpdateView):
     template_name = 'crm/creacion_contacto.html'
     success_url = reverse_lazy('contactos')
 
+class DashBoard(ListView):
+    model = Contacto
+    context_object_name = 'metricas'
+    template_name = 'crm/dashboard.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        listado_contactos = Contacto.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+        cantidad_contactos = Contacto.objects.filter(id__in=listado_contactos).count()
+        return cantidad_contactos
+    
 
 # class ContactCreate(CreateView): 
 #     model = Contact
