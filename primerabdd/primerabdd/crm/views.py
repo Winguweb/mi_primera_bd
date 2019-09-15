@@ -39,6 +39,12 @@ class ContactoEliminar(DeleteView):
     template_name = 'crm/confirmar_eliminacion.html'
     success_url = reverse_lazy('contactos')
 
+class ContactoCrear(CreateView): 
+    model = Contacto
+    fields = '__all__'
+    template_name = 'crm/creacion_contacto.html'
+    success_url = reverse_lazy('contactos')
+
 # class ContactCreate(CreateView): 
 #     model = Contact
 
