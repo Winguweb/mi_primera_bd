@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView 
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.forms import ModelForm
 from django.urls import reverse_lazy
-from .models import Cuenta, Contacto
+from .models import Organizacion, Cuenta, Contacto
 
 
 # Lista de cuentas
@@ -39,11 +40,24 @@ class ContactoEliminar(DeleteView):
     template_name = 'crm/confirmar_eliminacion.html'
     success_url = reverse_lazy('contactos')
 
+# Form especial para excluir organizacion
+class ContactoCrearForm(ModelForm):
+    class Meta:
+        model = Contacto
+        exclude = ['organizacion']
+
 class ContactoCrear(CreateView): 
     model = Contacto
-    fields = '__all__'
+    form_class = ContactoCrearForm
     template_name = 'crm/creacion_contacto.html'
     success_url = reverse_lazy('contactos')
+
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        print(organizacion)
+        form.instance.organizacion = organizacion
+        return super(ContactoCrear, self).form_valid(form)
 
 class ContactoEditar(UpdateView): 
     model = Contacto
@@ -62,12 +76,3 @@ class DashBoard(ListView):
         cantidad_contactos = Contacto.objects.filter(id__in=listado_contactos).count()
         return cantidad_contactos
     
-
-# class ContactCreate(CreateView): 
-#     model = Contact
-
-# class ContactUpdate(UpdateView): 
-#     model = Contact
-
-# class ContactDelete(DeleteView): 
-#     model = Contact
