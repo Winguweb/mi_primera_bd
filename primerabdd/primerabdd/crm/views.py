@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView 
+from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Cuenta, Contacto
+from .models import Cuenta, Contacto, Voluntario, Donante
 
 
 # Lista de cuentas
@@ -28,6 +28,25 @@ class ContactosLista(ListView):
         listado_contactos = Contacto.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
 
         return Contacto.objects.filter(id__in=listado_contactos)
+
+class ContactosPorNivel(TemplateView): 
+    context_object_name = 'mis_contactos'  
+    template_name = 'crm/contactos_lista.html'  
+
+    def get_context_data(self, **kwargs):
+
+        user = self.request.user
+        listado_contactos = Contacto.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+        listado_voluntarios = Voluntario.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+        listado_donantes = Donante.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+       
+
+        context = super(ContactosPorNivel, self).get_context_data(**kwargs)        
+        context['genericos'] = Contacto.objects.filter(id__in=listado_contactos).exclude(id__in=listado_voluntarios).exclude(id__in=listado_donantes)
+        context['voluntarios'] = Voluntario.objects.filter(id__in=listado_voluntarios)
+        context['donantes'] = Donante.objects.filter(id__in=listado_donantes)
+
+        return context
 
 class CuentasDetalles(DetailView): 
     model = Cuenta
