@@ -7,9 +7,14 @@
 		<thead class="thead-dark">
 			<tr>
 				<th>Nombre</th>
+				<th>Apellido</th>
+				<th>Tipo</th>
 				<th>Email</th>
-				<th>Direccion</th>
+				<th>Sexo</th>
 				<th>Telefono</th>
+				<th>Estado</th>
+				<th>Frecuencia</th>
+				<th>Monto</th>
 				<th>Acciones</th>
 			</tr>
 		</thead>
@@ -17,9 +22,14 @@
 			{% for contacto in genericos %}
 			<tr>
 				<td>{{ contacto.nombre }}</td>
+				<td>{{ contacto.apellido }}</td>
+				<td>{{ contacto.get_tipo_display }}</td>
 				<td class="tdCenter">{{ contacto.email }}</td>
-				<td class="tdCenter">{{ contacto.direccion }}</td>
+				<td class="tdCenter">{{ contacto.get_sexo_display }}</td>
 				<td class="tdCenter">{{ contacto.telefono }}</td>
+				<td>{{ contacto.donante.get_estado_display }}</td>
+				<td>{{ contacto.donante.get_frecuencia_display }}</td>
+				<td>{{ contacto.donante.monto }}</td>
 				<td class="tdCenter">
 					<a class="btn btn-secondary" href="{% url "editar_contacto"  contacto.id  %}">Editar</a>
 					<a class="btn btn-danger" href="{% url "eliminar_contacto"  contacto.id  %}">Eliminar</a>
@@ -28,64 +38,6 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<h2>Donantes</h2>
-	<table class="table table-striped table-hover ">
-		<thead class="thead-dark">
-			<tr>
-				<th>Nombre</th>
-				<th>Email</th>
-				<th>Direccion</th>
-				<th>Telefono</th>
-				<th>Cuenta bancaria</th>
-				<th>Acciones</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for contacto in donantes %}
-			<tr>
-				<td>{{ contacto.nombre }}</td>
-				<td class="tdCenter">{{ contacto.email }}</td>
-				<td class="tdCenter">{{ contacto.direccion }}</td>
-				<td class="tdCenter">{{ contacto.telefono }}</td>
-				<td class="tdCenter">{{ contacto.cuentaBanco }}</td>
-				<td class="tdCenter">
-					<a class="btn btn-secondary" href="{% url "editar_contacto"  contacto.id  %}">Editar</a>
-					<a class="btn btn-danger" href="{% url "eliminar_contacto"  contacto.id  %}">Eliminar</a>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
-	<h2>Voluntarios</h2>
-	<table class="table table-striped table-hover ">
-		<thead class="thead-dark">
-			<tr>
-				<th>Nombre</th>
-				<th>Email</th>
-				<th>Direccion</th>
-				<th>Telefono</th>
-				<th>Barrio</th>
-				<th>Acciones</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for contacto in voluntarios %}
-			<tr>
-				<td>{{ contacto.nombre }}</td>
-				<td class="tdCenter">{{ contacto.email }}</td>
-				<td class="tdCenter">{{ contacto.direccion }}</td>
-				<td class="tdCenter">{{ contacto.telefono }}</td>
-				<td class="tdCenter">{{ contacto.barrio }}</td>
-				<td class="tdCenter">
-					<a class="btn btn-secondary" href="{% url "editar_contacto"  contacto.id  %}">Editar</a>
-					<a class="btn btn-danger" href="{% url "eliminar_contacto"  contacto.id  %}">Eliminar</a>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
 	
 	<div class="row">
 

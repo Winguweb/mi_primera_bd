@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap4',
     'widget_tweaks',
+    'djmoney',
     'crm',
     'user_register_login',
 ]

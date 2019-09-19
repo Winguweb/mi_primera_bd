@@ -14,8 +14,21 @@ class OrganizacionAdmin(admin.ModelAdmin):
 		ContactoInline
 	]
 
-admin.site.register(Cuenta)
-admin.site.register(Contacto)
+class DonanteInline(admin.TabularInline):
+	model = Donante
+
+class VoluntarioInline(admin.TabularInline):
+	model = Voluntario
+
+class ContactoAdmin(admin.ModelAdmin):
+	inlines = [
+		DonanteInline,
+		VoluntarioInline
+	]
+
 admin.site.register(Organizacion, OrganizacionAdmin)
+admin.site.register(Contacto, ContactoAdmin)
+
+admin.site.register(Cuenta)
 admin.site.register(Voluntario)
 admin.site.register(Donante)
