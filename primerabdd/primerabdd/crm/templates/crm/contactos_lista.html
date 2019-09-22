@@ -1,21 +1,27 @@
 {% extends "base.html" %}
 
 {% block body %}
+	<style type="text/css">
+		.tdCenter {
+			text-align: center;
+		}
+	</style>
+
 	<h1>Contactos</h1>
 
 	<table class="table table-striped table-hover ">
 		<thead class="thead-dark">
 			<tr>
-				<th>Nombre</th>
-				<th>Apellido</th>
-				<th>Tipo</th>
-				<th>Email</th>
-				<th>Sexo</th>
-				<th>Telefono</th>
-				<th>Estado</th>
-				<th>Frecuencia</th>
-				<th>Monto</th>
-				<th>Acciones</th>
+				<th class="tdCenter">Nombre</th>
+				<th class="tdCenter">Apellido</th>
+				<th class="tdCenter">Tipo</th>
+				<th class="tdCenter">Email</th>
+				<th class="tdCenter">Sexo</th>
+				<th class="tdCenter">Telefono</th>
+				<th class="tdCenter">Estado</th>
+				<th class="tdCenter">Frecuencia</th>
+				<th class="tdCenter">Monto</th>
+				<th class="tdCenter">Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -23,7 +29,7 @@
 			<tr>
 				<td>{{ contacto.nombre }}</td>
 				<td>{{ contacto.apellido }}</td>
-				<td>{{ contacto.get_tipo_display }}</td>
+				<td class="tdCenter">{{ contacto.get_tipo_display }}</td>
 				<td class="tdCenter">{{ contacto.email }}</td>
 				<td class="tdCenter">{{ contacto.get_sexo_display }}</td>
 				<td class="tdCenter">{{ contacto.telefono }}</td>
@@ -39,16 +45,10 @@
 		</tbody>
 	</table>
 	
-	<div class="row">
-
-		<div class="col-md-9">
-		</div>
-
-		<div class="col-md-3">
-			<a class="btn btn-success" href="{% url "crear_contacto"  %}">Agregar nuevo contacto</a>
-		</div>
-
+	<div class="text-right" style="margin-right: 10px;">
+		<a class="btn btn-success pull-right" href="{% url "crear_contacto"  %}">Agregar nuevo contacto</a>
 	</div>
+
 {% endblock %}
 
 
