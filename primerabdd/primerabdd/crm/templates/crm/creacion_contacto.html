@@ -15,26 +15,4 @@
     <input class="btn btn-success" type="submit" value="Guardar" />
 </form>
 
-        {% bootstrap_javascript jquery='full' %}
-
-        <script type="text/javascript">
-            $('#id_tipo').change(function(){
-                //alert(this.value);
-                switch(this.value){
-                    case '0':
-                        $('#divDonante').hide();
-                        $('#divVoluntario').hide();
-                        break;
-                    case '1':
-                        $('#divDonante').show();
-                        $('#divVoluntario').hide();
-                        break;
-                    case '2':
-                        $('#divDonante').hide();
-                        $('#divVoluntario').show();
-                        break;
-                }
-            });
-        </script>
-
 {% endblock %}
