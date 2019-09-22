@@ -4,10 +4,37 @@
 <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <h1>Donante</h1>
-    {{ donante.as_p }}
-    <h1>Voluntario</h1>
-    {{ voluntario.as_p }}
+    <div id="divDonante" style="display: none;">
+    	    <h1>Donante</h1>
+    		{{ donante.as_p }}
+    </div>
+    <div id="divVoluntario" style="display: none;">
+	    <h1>Voluntario</h1>
+    	{{ voluntario.as_p }}
+    </div>
     <input class="btn btn-success" type="submit" value="Guardar" />
 </form>
+
+        {% bootstrap_javascript jquery='full' %}
+
+        <script type="text/javascript">
+            $('#id_tipo').change(function(){
+                //alert(this.value);
+                switch(this.value){
+                    case '0':
+                        $('#divDonante').hide();
+                        $('#divVoluntario').hide();
+                        break;
+                    case '1':
+                        $('#divDonante').show();
+                        $('#divVoluntario').hide();
+                        break;
+                    case '2':
+                        $('#divDonante').hide();
+                        $('#divVoluntario').show();
+                        break;
+                }
+            });
+        </script>
+
 {% endblock %}
