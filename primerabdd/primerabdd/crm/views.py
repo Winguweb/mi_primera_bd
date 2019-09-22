@@ -58,7 +58,7 @@ class ContactoCrearForm(ModelForm):
     
     class Meta:
         model = Contacto
-        exclude = ['organizacion']
+        exclude = ['organizacion', 'tipo',]
         
 class DonanteCrearForm(ModelForm):
     class Meta:

@@ -38,24 +38,22 @@
         {% bootstrap_javascript jquery='full' %}
 
         <script type="text/javascript">
-            $('#id_tipo').change(function(){
-                //alert(this.value);
-                switch(this.value){
-                    case '0':
-                        $('#divDonante').hide();
-                        $('#divVoluntario').hide();
-                        break;
-                    case '1':
-                        $('#divDonante').show();
-                        $('#divVoluntario').hide();
-                        break;
-                    case '2':
-                        $('#divDonante').hide();
-                        $('#divVoluntario').show();
-                        break;
-                }
+            $('#checkDonante').change(function() {
+                if(this.checked) {
+                    $('#divDonante').show();
+                } else {
+                    $('#divDonante').hide();
+                }     
+            });
+
+            $('#checkVoluntario').change(function() {
+                if(this.checked) {
+                    $('#divVoluntario').show();
+                } else {
+                    $('#divVoluntario').hide();
+                }     
             });
         </script>
-
+        
 	</body>
 </html>
