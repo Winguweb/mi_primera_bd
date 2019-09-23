@@ -33,9 +33,9 @@
 				<td class="tdCenter">{{ contacto.email }}</td>
 				<td class="tdCenter">{{ contacto.get_sexo_display }}</td>
 				<td class="tdCenter">{{ contacto.telefono }}</td>
-				<td>{{ contacto.donante.get_estado_display }}</td>
-				<td>{{ contacto.donante.get_frecuencia_display }}</td>
-				<td>{{ contacto.donante.monto }}</td>
+				<td class="tdCenter">{{ contacto.donante.get_estado_display }}</td>
+				<td class="tdCenter">{{ contacto.donante.get_frecuencia_display }}</td>
+				<td class="tdCenter">{{ contacto.donante.monto }}</td>
 				<td class="tdCenter">
 					<a class="btn btn-secondary" href="{% url "editar_contacto"  contacto.id  %}">Editar</a>
 					<a class="btn btn-danger" href="{% url "eliminar_contacto"  contacto.id  %}">Eliminar</a>

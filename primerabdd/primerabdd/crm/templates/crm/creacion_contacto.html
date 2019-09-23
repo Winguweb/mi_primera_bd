@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
+<p id="tipoContacto" style="display: none">{{ contacto.tipo }}</p>
 <form style="padding: 15px;" action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}

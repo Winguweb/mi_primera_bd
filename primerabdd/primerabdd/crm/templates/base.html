@@ -38,6 +38,26 @@
         {% bootstrap_javascript jquery='full' %}
 
         <script type="text/javascript">
+            //En editar mostrar al iniciar los campos de Donante/Voluntario en el caso de que corresponda
+            if($('#tipoContacto').text() == '1'){ //Donante
+                $('#checkDonante').prop('checked', true);
+                $('#checkVoluntario').prop('checked', false);
+
+                $('#divDonante').show();
+                $('#divVoluntario').hide();
+            }
+
+            if($('#tipoContacto').text() == '2'){ //Donante
+                $('#checkDonante').prop('checked', false);
+                $('#checkVoluntario').prop('checked', true);
+
+                $('#divDonante').hide();
+                $('#divVoluntario').show();
+            }
+        </script>
+
+        <script type="text/javascript">
+            //Activar o desactivar campos de Donante/Voluntario en función del checkbox
             $('#checkDonante').change(function() {
                 if(this.checked) {
                     $('#divDonante').show();
