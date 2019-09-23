@@ -158,4 +158,5 @@ class DashBoard(ListView):
         listado_contactos = Contacto.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
         cantidad_contactos = Contacto.objects.filter(id__in=listado_contactos).count()
         return cantidad_contactos
-    
+
+        
