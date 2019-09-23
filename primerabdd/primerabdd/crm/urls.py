@@ -10,4 +10,6 @@ urlpatterns = [
     path('create/', views.ContactoCrear.as_view(), name='crear_contacto'),
     path('edit/<int:pk>', views.ContactoEditar.as_view(), name='editar_contacto'),
     path('dashboard/', views.DashBoard.as_view(),name='ver_dashboard'),
+    path('carga/', views.Importador.as_view(),name='ver_importador'),
+    path('upload/csv/', views.upload_csv, name='upload_csv'),   
 ]

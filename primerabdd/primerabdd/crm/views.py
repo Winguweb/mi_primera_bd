@@ -7,7 +7,17 @@ from django.forms.models import inlineformset_factory
 from django.urls import reverse_lazy
 from .models import Organizacion, Cuenta, Contacto, Voluntario, Donante
 from djmoney.forms.fields import MoneyField
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.contrib import messages
 
+
+CSV_NOMBRE_INDEX = 0
+CSV_APELLIDO_INDEX = 1
+CSV_TIPO_INDEX = 2
+CSV_EMAIL_INDEX = 3
+CSV_SEXO_INDEX = 4
+CSV_TELEFONO_INDEX = 5
 
 
 # Lista de cuentas
@@ -26,9 +36,6 @@ class CuentasDetalles(DetailView):
     model = Cuenta
     context_object_name = 'cuenta'  
     template_name = 'crm/cuentas_detalles.html'  
-
-
-
 
 
 
@@ -180,4 +187,44 @@ class DashBoard(ListView):
         cantidad_contactos = Contacto.objects.filter(id__in=listado_contactos).count()
         return cantidad_contactos
 
-        
+class Importador(TemplateView):
+
+    template_name = 'crm/uploader.html'
+
+
+def upload_csv(request):
+    if "GET" == request.method:
+        return HttpResponseRedirect(reverse("contactos"))
+
+    user = request.user
+    csv_file = request.FILES["csv_file"]
+
+    if not csv_file.name.endswith('.csv'):
+        messages.error(request,'El archivo no es un csv')
+        return HttpResponseRedirect(reverse("ver_importador"))
+    if csv_file.multiple_chunks():
+        messages.error(request,'El archivo es muy grande')
+        return HttpResponseRedirect(reverse("ver_importador"))
+
+    file_data = csv_file.read().decode("utf-8")     
+    lineas = file_data.split("\n")
+
+    organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+
+    for linea in lineas:                      
+        try:
+            fields = linea.split(",")
+            nombre = fields[CSV_NOMBRE_INDEX]
+            apellido = fields[CSV_APELLIDO_INDEX]
+            tipo = int(fields[CSV_TIPO_INDEX])
+            email = fields[CSV_EMAIL_INDEX]
+            sexo = int(fields[CSV_SEXO_INDEX])
+            telefono = fields[CSV_TELEFONO_INDEX]
+            
+            contacto = Contacto(organizacion=organizacion, nombre=nombre, 
+                apellido=apellido, tipo=tipo, email=email,
+                 sexo=sexo, telefono=telefono)
+            contacto.save()              
+        except:
+            print("Error cargando un usuario: " + linea)
+    return HttpResponseRedirect(reverse("contactos"))
