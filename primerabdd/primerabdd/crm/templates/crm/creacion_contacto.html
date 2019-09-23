@@ -6,21 +6,21 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-    <div>
+    <!-- <div>
         <p>Seleccione en el caso de que corresponda el tipo de Contacto</p>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="checkDonante" value="Donante">
+            <input class="form-check-input" type="checkbox" name="checkDonante" value="Donante">
             <label class="form-check-label" for="checkDonante">Donante</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="checkVoluntario" value="Voluntario">
+            <input class="form-check-input" type="checkbox" name="checkVoluntario" value="Voluntario">
             <label class="form-check-label" for="checkVoluntario">Voluntario</label>
         </div>
-    </div>
+    </div> -->
 
     <div id="divDonante" style="display: none;">
-            <h1>Donante</h1>
-            {{ donante.as_p }}
+        <h1>Donante</h1>
+        {{ donante.as_p }}
     </div>
     <div id="divVoluntario" style="display: none;">
         <h1>Voluntario</h1>

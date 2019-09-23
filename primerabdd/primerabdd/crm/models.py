@@ -38,6 +38,7 @@ class Contacto(models.Model):
         (0, 'General'),
         (1, 'Donante'),
         (2, 'Voluntario'),
+        (3, 'Ambos'),
         
     ]
 

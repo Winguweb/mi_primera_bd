@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, CheckboxInput
 from django.forms.models import inlineformset_factory
 from django.urls import reverse_lazy
 from .models import Organizacion, Cuenta, Contacto, Voluntario, Donante
@@ -55,10 +55,12 @@ class ContactoEliminar(DeleteView):
 
 # Form especial para excluir organizacion
 class ContactoCrearForm(ModelForm):
-    
+    donanteCheckBox = forms.BooleanField(required=False, label='Donante', widget=CheckboxInput(attrs={'id': 'checkDonante',}))
+    voluntarioCheckBox = forms.BooleanField(required=False, label='Voluntario', widget=CheckboxInput(attrs={'id': 'checkVoluntario',}))
+
     class Meta:
         model = Contacto
-        exclude = ['organizacion', 'tipo',]
+        exclude = ['organizacion', 'tipo']
         
 class DonanteCrearForm(ModelForm):
     class Meta:
@@ -96,7 +98,10 @@ class ContactoCrear(CreateView):
         donante = context['donante']
         voluntario = context['voluntario']
 
+
+
         organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        
         form.instance.organizacion = organizacion
         self.object = form.save()
 
@@ -113,6 +118,7 @@ class ContactoEditar(UpdateView):
     form_class = ContactoCrearForm
     template_name = 'crm/creacion_contacto.html'
     success_url = reverse_lazy('contactos')
+
 
     def get_context_data(self, **kwargs):
         data = super(ContactoEditar, self).get_context_data(**kwargs)
@@ -133,14 +139,29 @@ class ContactoEditar(UpdateView):
 
         organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
         form.instance.organizacion = organizacion
-        self.object = form.save()
+        
 
-        if donante.is_valid() and voluntario.is_valid():
+        es_donante = self.request.POST.get("donanteCheckBox", False)
+        es_voluntario = self.request.POST.get("voluntarioCheckBox", False)
+
+        if es_donante and not es_voluntario and donante.is_valid():
+            form.instance.tipo = 1
+            donante.instance = self.object
+            donante.save()
+        elif es_voluntario and not es_donante and voluntario.is_valid():
+            form.instance.tipo = 2
+            voluntario.instance = self.object
+            voluntario.save()
+        elif es_donante and es_voluntario and donante.is_valid() and voluntario.is_valid():
+            form.instance.tipo = 3
             donante.instance = self.object
             donante.save()
             voluntario.instance = self.object
             voluntario.save()
+        else:
+            form.instance.tipo = 0
 
+        self.object = form.save()
         return super(ContactoEditar, self).form_valid(form)
 
 

@@ -64,6 +64,14 @@
                 $('#divDonante').hide();
                 $('#divVoluntario').show();
             }
+
+            if($('#tipoContacto').text() == '3'){ //Ambos
+                $('#checkDonante').prop('checked', true);
+                $('#checkVoluntario').prop('checked', true);
+
+                $('#divDonante').show();
+                $('#divVoluntario').show();
+            }
         </script>
 
         <script type="text/javascript">
