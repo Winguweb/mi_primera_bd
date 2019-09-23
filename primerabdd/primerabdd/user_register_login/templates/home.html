@@ -63,7 +63,7 @@
             <div class="card">
               <div class="card-header">Gestion de Voluntarios y Donantes</div>
               <div class="card-body">Seleccione esta opción para poder dar de alta a un voluntario o donante en la organización.</div>
-              <div class="card-footer"><button type="button" class="btn btn-primary" href="{% url "crear_contacto"  %}">Agregar Voluntario/Donante</button></div>
+              <div class="card-footer"><button type="button" class="btn btn-primary" onclick="location.href='{% url 'crear_contacto' %}'">Agregar Voluntario/Donante</button></div>
             </div>
           </div>
         
@@ -71,7 +71,7 @@
             <div class="card">
                   <div class="card-header">Gestion Cuentas</div>
                   <div class="card-body">Seleccione esta opción para poder gestionar las cuentas de la organización.</div>
-                  <div class="card-footer"><button type="button" class="btn btn-primary" href="/cuentas">Ver Cuentas</button></div>
+                  <div class="card-footer"><button type="button" class="btn btn-primary"  onclick="location.href='/cuentas'">Ver Cuentas</button></div>
             </div>
           </div>
           
@@ -79,7 +79,7 @@
             <div class="card">
                   <div class="card-header">Indicadores/Dashboard</div>
                   <div class="card-body">Vea los distintos indicadores de su organizacion para saber el estado actual de la misma.</div>
-                  <div class="card-footer"><button type="button" class="btn btn-primary">Ir a Indicadores</button></div>
+                  <div class="card-footer"><button type="button" class="btn btn-primary" onclick="location.href='/dashboard'">Ir a Indicadores</button></div>
             </div>
           </div>
         </div>
