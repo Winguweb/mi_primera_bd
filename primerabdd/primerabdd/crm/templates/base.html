@@ -7,10 +7,17 @@
         {% bootstrap_css %}
 	</head>
 	<body>
+        <style type="text/css">
+                /* navbar */
+            nav {
+                background-color: #ffffff;
+                border-color: #E7E7E7;
+            }
+        </style>
         {% if user.is_authenticated %}
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <nav class="navbar navbar-expand-sm">
             <!-- Brand/logo -->
-            <a class="navbar-brand" href="https://winguweb.org/nosotros">WINGU</a>
+            <a class="navbar-brand" href="/">WINGU</a>
                  
             <!-- Links -->
             <ul class="navbar-nav">
@@ -24,7 +31,10 @@
                     <a class="nav-link" href="/dashboard">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="/">Salir</a>
+                        <a class="nav-link" href="{% url 'password_reset' %}">Resetear Contraseña</a>
+                </li>
+                <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Salir</a>
                 </li>
             </ul>
         </nav>

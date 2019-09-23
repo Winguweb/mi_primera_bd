@@ -1,13 +1,92 @@
 {% extends 'base.html' %}
-
-
+{% load static %}
 {% block body %}
+<style type="text/css">
+  body {
+      background-color: #2680FF;
+      color: #000000;
+  }
+  img {
+      padding-top: 30px;
+  }
+  h1 {
+      padding-top: 20px;
+      padding-bottom: 20px;
+      color: #ffffff;
+  }
+  div {
+      text-align: center;
+  }
+  h2 {
+      padding-bottom: 60px;
+      color: #ffffff;
+  }
+  .column {
+      float: left;
+      width: 25%;
+      padding: 0 10px;
+  }
+  /* Remove extra left and right margins, due to padding */
+  .row {margin: 0 -5px;
+      align-content: center;}
+  /* Clear floats after the columns */
+  .row:after {
+      content: "";
+      display: table;
+      clear: both;
+  }
+  /* Style the counter cards */
+  .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* this adds the "card" effect */
+      text-align: center;
+      background-color: #f1f1f1;
+  }
+
+  /* Responsive columns - one column layout (vertical) on small screens */
+  @media screen and (max-width: 600px) {
+  .column {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+  }
+  }
+
+</style>
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
-  <p><a href="{% url 'logout' %}">logout</a></p>
-  <p><a href="{% url 'password_reset' %}">reset password</a></p>
+<div>
+  <img src="{% static 'images/wingu_logo.png' %}" class="rounded mx-auto d-block container-fluid" alt="LOGO WINGU"> 
+  <h1>Bienvenido a "MI PRIMERA BASE DE DATOS"</h1>
+  <h2>Entraste al sistema como: {{ user.username }}</h2>
+  <h2>¿ Qué desea hacer ?</h2>
+  <div class="row justify-content-center">
+          <div class="column">
+            <div class="card">
+              <div class="card-header">Gestion de Voluntarios y Donantes</div>
+              <div class="card-body">Seleccione esta opción para poder dar de alta a un voluntario o donante en la organización.</div>
+              <div class="card-footer"><button type="button" class="btn btn-primary" href="{% url "crear_contacto"  %}">Agregar Voluntario/Donante</button></div>
+            </div>
+          </div>
+        
+          <div class="column">
+            <div class="card">
+                  <div class="card-header">Gestion Cuentas</div>
+                  <div class="card-body">Seleccione esta opción para poder gestionar las cuentas de la organización.</div>
+                  <div class="card-footer"><button type="button" class="btn btn-primary" href="/cuentas">Ver Cuentas</button></div>
+            </div>
+          </div>
+          
+          <div class="column">
+            <div class="card">
+                  <div class="card-header">Indicadores/Dashboard</div>
+                  <div class="card-body">Vea los distintos indicadores de su organizacion para saber el estado actual de la misma.</div>
+                  <div class="card-footer"><button type="button" class="btn btn-primary">Ir a Indicadores</button></div>
+            </div>
+          </div>
+        </div>
+</div>
 {% else %}
   <p>You are not logged in</p>
   <a href="{% url 'login' %}">login</a>
 {% endif %}
 {% endblock %}
+
