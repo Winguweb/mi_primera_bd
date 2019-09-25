@@ -2,6 +2,7 @@
 {% load widget_tweaks %}
 
 {% block body %}
+{% load staticfiles %}
 
 <style type="text/css">
   
@@ -10,10 +11,10 @@
   }
 
   body {
-    padding-top: 80px;
-    padding-bottom: 80px;
+    padding: 15px;
     width: 40%;
     margin: auto;
+    background-image: url('{% static "fondo.jpg"%}');
   }
 
   .main {
@@ -23,13 +24,17 @@
   }
 
   .wrapper {
+    background-color: white;
     display: table-cell;
     vertical-align: middle;
-    border: 1px solid; 
+    border: 3px solid #1b68ff; 
+    border-radius:20px;
+    text-align: center;
   }
 
   form {
     margin-top: 20px;
+    margin-bottom: 20px;
     margin-left: 50px;
     margin-right: 50px;
   }
@@ -38,8 +43,8 @@
 
 <div class="main">
   <div class="wrapper">
-    
-    <h2 style="text-align: center;">Wingu - Mi primera BDD</h2>
+    <img src="{% static "wingu_logo.png" %}" alt="Not found">
+    <h2>Mi primera BDD</h2>
     <form method="post" class="was-validated">
       {% csrf_token %}
 
@@ -81,7 +86,7 @@
       {% endfor %}
 
       <div class="text-center">
-        <button type="submit" class="btn btn-success">Ingresar</button>
+        <button type="submit" class="btn btn-success" style="background-color: #1b68ff; border: #1b68ff">Ingresar</button>
       </div>
       
     </form>
