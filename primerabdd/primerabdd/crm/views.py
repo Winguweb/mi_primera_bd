@@ -11,13 +11,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 
-
-CSV_NOMBRE_INDEX = 0
-CSV_APELLIDO_INDEX = 1
-CSV_TIPO_INDEX = 2
-CSV_EMAIL_INDEX = 3
-CSV_SEXO_INDEX = 4
-CSV_TELEFONO_INDEX = 5
+CSV_CUENTA_INDEX = 0
+CSV_NOMBRE_INDEX = 1
+CSV_APELLIDO_INDEX = 2
+CSV_TIPO_INDEX = 3
+CSV_EMAIL_INDEX = 4
+CSV_SEXO_INDEX = 5
+CSV_TELEFONO_INDEX = 6
 
 
 # Lista de cuentas
@@ -209,11 +209,12 @@ def upload_csv(request):
     file_data = csv_file.read().decode("utf-8")     
     lineas = file_data.split("\n")
 
-    organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
-
     for linea in lineas:                      
         try:
             fields = linea.split(",")
+            id_cuenta = fields[CSV_CUENTA_INDEX]
+            cuenta = Cuenta.objects.get(id=id_cuenta)
+
             nombre = fields[CSV_NOMBRE_INDEX]
             apellido = fields[CSV_APELLIDO_INDEX]
             tipo = int(fields[CSV_TIPO_INDEX])
@@ -221,10 +222,11 @@ def upload_csv(request):
             sexo = int(fields[CSV_SEXO_INDEX])
             telefono = fields[CSV_TELEFONO_INDEX]
             
-            contacto = Contacto(organizacion=organizacion, nombre=nombre, 
+            contacto = Contacto(cuenta=cuenta, nombre=nombre, 
                 apellido=apellido, tipo=tipo, email=email,
                  sexo=sexo, telefono=telefono)
             contacto.save()              
-        except:
+        except Exception as e:
             print("Error cargando un usuario: " + linea)
+            print(e)
     return HttpResponseRedirect(reverse("contactos"))
