@@ -17,12 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 from user_register_login import views
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('crm.urls')),
     path('', include('user_register_login.urls')),
     path('', include('django.contrib.auth.urls')),
-    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('', login_required(TemplateView.as_view(template_name='home.html'), login_url="/login"), name='home'),
     
 ]
+

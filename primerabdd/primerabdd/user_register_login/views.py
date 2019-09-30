@@ -4,4 +4,5 @@ from .forms import LoginForm
 
 class LoginView(LoginView):
     authentication_form = LoginForm
+
         
