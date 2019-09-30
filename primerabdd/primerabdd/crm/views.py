@@ -67,7 +67,13 @@ class ContactoCrearForm(ModelForm):
 
     class Meta:
         model = Contacto
-        exclude = ['organizacion', 'tipo']
+        exclude = ['tipo']
+
+    def __init__(self, *args, **kwargs):
+        super(ContactoCrearForm, self).__init__(*args, **kwargs)
+        self.fields['cuenta'].empty_label = "Crear cuenta automáticamente"
+        # following line needed to refresh widget copy of choice list
+        self.fields['cuenta'].widget.choices = self.fields['cuenta'].choices
         
 class DonanteCrearForm(ModelForm):
     class Meta:
@@ -88,6 +94,7 @@ class ContactoCrear(CreateView):
     template_name = 'crm/creacion_contacto.html'
     success_url = reverse_lazy('contactos')
 
+
     def get_context_data(self, **kwargs):
         data = super(ContactoCrear, self).get_context_data(**kwargs)
         if self.request.POST:
@@ -100,16 +107,21 @@ class ContactoCrear(CreateView):
 
     def form_valid(self, form):
         user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
 
         context = self.get_context_data()
         donante = context['donante']
         voluntario = context['voluntario']
 
+        cuenta_nombre = form.cleaned_data['cuenta']
+        if cuenta_nombre:
+            cuenta = Cuenta.objects.filter(nombre=cuenta_nombre)[:1].get()
+        else:
+            cuenta = Cuenta(organizacion=organizacion,nombre="Cuenta " + form.cleaned_data['apellido'])
+            cuenta.save()
 
-
-        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
         
-        form.instance.organizacion = organizacion
+        form.instance.cuenta = cuenta
         self.object = form.save()
 
         if donante.is_valid() and voluntario.is_valid():
@@ -139,14 +151,21 @@ class ContactoEditar(UpdateView):
 
     def form_valid(self, form):
         user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
 
         context = self.get_context_data()
         donante = context['donante']
         voluntario = context['voluntario']
 
-        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
-        form.instance.organizacion = organizacion
+        cuenta_nombre = form.cleaned_data['cuenta']
+        if cuenta_nombre:
+            cuenta = Cuenta.objects.filter(nombre=cuenta_nombre)[:1].get()
+        else:
+            cuenta = Cuenta(organizacion=organizacion,nombre="Cuenta " + form.cleaned_data['apellido'])
+            cuenta.save()
         
+        form.instance.cuenta = cuenta
+        self.object = form.save()
 
         es_donante = self.request.POST.get("donanteCheckBox", False)
         es_voluntario = self.request.POST.get("voluntarioCheckBox", False)
