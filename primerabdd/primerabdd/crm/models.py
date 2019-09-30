@@ -28,7 +28,7 @@ class Cuenta(models.Model):
 #########################################
 
 class Contacto(models.Model):
-    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE)
 
     nombre = models.CharField(max_length=200, default=None, blank=True, null=True)
 

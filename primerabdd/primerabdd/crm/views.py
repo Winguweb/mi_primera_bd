@@ -47,7 +47,7 @@ class ContactosPorNivel(TemplateView):
     def get_context_data(self, **kwargs):
 
         user = self.request.user
-        listado_contactos = Contacto.objects.filter(organizacion__usuario=user).values_list('id', flat=True)       
+        listado_contactos = Contacto.objects.filter(cuenta__organizacion__usuario=user).values_list('id', flat=True)       
 
         context = super(ContactosPorNivel, self).get_context_data(**kwargs)        
         context['genericos'] = Contacto.objects.filter(id__in=listado_contactos)
@@ -183,7 +183,7 @@ class DashBoard(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        listado_contactos = Contacto.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+        listado_contactos = Contacto.objects.filter(cuenta__organizacion__usuario=user).values_list('id', flat=True)
         cantidad_contactos = Contacto.objects.filter(id__in=listado_contactos).count()
         return cantidad_contactos
 

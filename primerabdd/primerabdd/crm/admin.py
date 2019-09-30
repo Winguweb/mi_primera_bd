@@ -2,33 +2,36 @@ from django.contrib import admin
 from .models import Cuenta, Contacto, Organizacion, Donante, Voluntario
 
 class ContactoInline(admin.TabularInline):
-	model = Contacto
+    model = Contacto
 
+class CuentaAdmin(admin.ModelAdmin):
+    inlines = [
+        ContactoInline
+    ]   
 
 class CuentaInline(admin.TabularInline):
-	model = Cuenta
+    model = Cuenta
 
 class OrganizacionAdmin(admin.ModelAdmin):
-	inlines = [
-		CuentaInline,
-		ContactoInline
-	]
+    inlines = [
+        CuentaInline
+    ]
 
 class DonanteInline(admin.TabularInline):
-	model = Donante
+    model = Donante
 
 class VoluntarioInline(admin.TabularInline):
-	model = Voluntario
+    model = Voluntario
 
 class ContactoAdmin(admin.ModelAdmin):
-	inlines = [
-		DonanteInline,
-		VoluntarioInline
-	]
+    inlines = [
+        DonanteInline,
+        VoluntarioInline
+    ]
 
 admin.site.register(Organizacion, OrganizacionAdmin)
+admin.site.register(Cuenta, CuentaAdmin)
 admin.site.register(Contacto, ContactoAdmin)
 
-admin.site.register(Cuenta)
 admin.site.register(Voluntario)
 admin.site.register(Donante)
