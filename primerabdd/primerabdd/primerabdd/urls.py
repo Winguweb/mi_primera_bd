@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
 from django.views.generic.base import TemplateView
 from user_register_login import views
 from django.contrib.auth.decorators import login_required
@@ -25,6 +26,6 @@ urlpatterns = [
     path('', include('user_register_login.urls')),
     path('', include('django.contrib.auth.urls')),
     path('', login_required(TemplateView.as_view(template_name='home.html'), login_url="/login"), name='home'),
-    
+    url(r'^select2/', include('django_select2.urls')),
 ]
 

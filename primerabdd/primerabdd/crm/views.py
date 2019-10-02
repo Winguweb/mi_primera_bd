@@ -10,6 +10,7 @@ from djmoney.forms.fields import MoneyField
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django_select2.forms import Select2Widget
 
 CSV_CUENTA_INDEX = 0
 CSV_NOMBRE_INDEX = 1
@@ -68,6 +69,10 @@ class ContactoCrearForm(ModelForm):
     class Meta:
         model = Contacto
         exclude = ['tipo']
+
+        widgets = {
+            'cuenta': Select2Widget(attrs={'data-placeholder':"Crear cuenta nueva"})
+        }
 
     def __init__(self, *args, **kwargs):
         super(ContactoCrearForm, self).__init__(*args, **kwargs)

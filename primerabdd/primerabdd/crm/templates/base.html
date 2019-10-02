@@ -5,6 +5,7 @@
 	  	<title>Mi Primer BDD</title>
   		{% load bootstrap4 %}
         {% bootstrap_css %}
+        {{ form.media.css }}
 	</head>
 	<body>
         <style type="text/css">
@@ -92,6 +93,6 @@
                 }     
             });
         </script>
-        
+    {{ form.media.js }} 
 	</body>
 </html>

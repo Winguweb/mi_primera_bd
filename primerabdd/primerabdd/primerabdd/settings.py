@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'widget_tweaks',
     'djmoney',
+    'django_select2',
     'crm',
     'user_register_login',
 ]
