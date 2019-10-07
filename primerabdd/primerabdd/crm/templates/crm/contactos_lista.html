@@ -14,13 +14,11 @@
 			<tr>
 				<th class="tdCenter">Nombre</th>
 				<th class="tdCenter">Apellido</th>
-				<th class="tdCenter">Tipo</th>
-				<th class="tdCenter">Email</th>
-				<th class="tdCenter">Sexo</th>
+				<th class="tdCenter">Cuenta</th>
+				<th class="tdCenter">DNI</th>
+				<th class="tdCenter">Mail</th>
 				<th class="tdCenter">Telefono</th>
-				<th class="tdCenter">Estado</th>
-				<th class="tdCenter">Frecuencia</th>
-				<th class="tdCenter">Monto</th>
+				<th class="tdCenter">Tipo</th>
 				<th class="tdCenter">Acciones</th>
 			</tr>
 		</thead>
@@ -29,13 +27,23 @@
 			<tr>
 				<td>{{ contacto.nombre }}</td>
 				<td>{{ contacto.apellido }}</td>
-				<td class="tdCenter">{{ contacto.get_tipo_display }}</td>
+				<td class="tdCenter">{{ contacto.cuenta }}</td>
+				<td class="tdCenter">
+					{% if contacto.documento == None %}
+					    {{ "-" }}
+					{% else %}
+					    {{ contacto.documento }}
+					{% endif %}
+				</td>
 				<td class="tdCenter">{{ contacto.email }}</td>
-				<td class="tdCenter">{{ contacto.get_sexo_display }}</td>
-				<td class="tdCenter">{{ contacto.telefono }}</td>
-				<td class="tdCenter">{{ contacto.donante.get_estado_display }}</td>
-				<td class="tdCenter">{{ contacto.donante.get_frecuencia_display }}</td>
-				<td class="tdCenter">{{ contacto.donante.monto }}</td>
+				<td class="tdCenter">
+					{% if contacto.telefono == None %}
+					    {{ "-" }}
+					{% else %}
+					    {{ contacto.telefono }}
+					{% endif %}
+				</td>
+				<td class="tdCenter">{{ contacto.get_tipo_display }}</td>
 				<td class="tdCenter">
 					<a class="btn btn-secondary" href="{% url "editar_contacto"  contacto.id  %}">Editar</a>
 					<a class="btn btn-danger" href="{% url "eliminar_contacto"  contacto.id  %}">Eliminar</a>
