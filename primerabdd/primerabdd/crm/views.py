@@ -122,7 +122,7 @@ class ContactoCrear(CreateView):
         if cuenta_nombre:
             cuenta = Cuenta.objects.filter(nombre=cuenta_nombre)[:1].get()
         else:
-            cuenta = Cuenta(organizacion=organizacion,nombre="Cuenta " + form.cleaned_data['apellido'])
+            cuenta = Cuenta(organizacion=organizacion,nombre="Cuenta " + form.cleaned_data['apellido'], email=form.cleaned_data['email'])
             cuenta.save()
 
         
@@ -134,7 +134,7 @@ class ContactoCrear(CreateView):
             donante.save()
             voluntario.instance = self.object
             voluntario.save()
-
+        print(form)
         return super(ContactoCrear, self).form_valid(form)
 
 class ContactoEditar(UpdateView): 
