@@ -30,6 +30,4 @@ class ContactoAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(Organizacion, OrganizacionAdmin)
-admin.site.register(Cuenta, CuentaAdmin)
-admin.site.register(Contacto, ContactoAdmin)
 

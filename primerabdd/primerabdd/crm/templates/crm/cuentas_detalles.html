@@ -5,6 +5,82 @@
 
 	<p><b>Nombre:</b> {{cuenta.nombre}}</p>
 
+	<p>
+		<b>Dirección:</b> 
+			{% if cuenta.calle == None or cuenta.numero == None %} 
+				{{ "-" }} 
+			{% else %}
+				{{cuenta.calle}}, {{cuenta.numero}}
+			{% endif %} 
+	</p>
+	
+	<p>
+		<b>Ciudad:</b> 
+			{% if cuenta.ciudad == None%} 
+				{{ "-" }} 
+			{% else %}
+				{{cuenta.ciudad}}
+			{% endif %} 
+	</p>
+	
+	<p>
+		<b>Código Postal:</b> 
+			{% if cuenta.cod_postal == None%} 
+				{{ "-" }} 
+			{% else %}
+				{{cuenta.cod_postal}}
+			{% endif %} 
+	</p>
+	
+	<p>
+		<b>País:</b>
+			{% if cuenta.pais == None%} 
+				{{ "-" }} 
+			{% else %}
+				{{cuenta.pais}}
+			{% endif %} 
+	</p>
+	
+	<p><b>Mail:</b> {{cuenta.email}}</p>
+	
+	<p>
+		<b>Mail Alternativo:</b>
+			{% if cuenta.email_alternativo == None%} 
+				{{ "-" }} 
+			{% else %}
+				{{cuenta.email_alternativo}}
+			{% endif %} 
+	</p>
+	
+	<p>
+		<b>Teléfono:</b>
+			{% if cuenta.telefono == None%} 
+				{{ "-" }} 
+			{% else %}
+				{{cuenta.telefono}}
+			{% endif %} 
+		</p>
+	
+	<p>
+		<b>Télefono Alternativo:</b> 
+			{% if cuenta.telefono_alternativo == None%} 
+				{{ "-" }} 
+			{% else %}
+				{{cuenta.telefono_alternativo}}
+			{% endif %} 
+	</p>
+	
+	<p>
+		<b>Web:</b>
+			{% if cuenta.web == None%} 
+				{{ "-" }} 
+			{% else %}
+				{{cuenta.web}}
+			{% endif %} 
+	</p>
+	
+	<p><b>Observaciones:</b> {{cuenta.observaciones}}</p>
+
 {% endblock %}
 
 

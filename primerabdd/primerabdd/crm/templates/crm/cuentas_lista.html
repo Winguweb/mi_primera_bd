@@ -1,21 +1,34 @@
 {% extends "base.html" %}
 
 {% block body %}
+	<style type="text/css">
+		.tdCenter {
+			text-align: center;
+		}
+	</style>
+
 	<h1>Cuentas</h1>
 
 	<table class="table table-striped table-hover ">
 		<thead class="thead-dark">
 			<tr>
-				<th>Nombre</th>
-				<th>Detalles</th>
+				<th class="tdCenter">Nombre</th>
+				<th class="tdCenter">Tipo</th>
+				<th class="tdCenter">Mail</th>
+				<th class="tdCenter">Teléfono</th>
+				<th class="tdCenter">Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for cuenta in mis_cuentas %}
 			<tr>
 			<td>{{ cuenta.nombre }}</td>
-			<td>
-				<a  href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
+			<td class="tdCenter">-</td>
+			<td class="tdCenter">{{ cuenta.email }}</td>
+			<td class="tdCenter">{{ cuenta.telefono }}</td>
+			<td class="tdCenter">
+				<a class="btn btn-primary" href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
+				<a class="btn btn-secondary" href="#">Ver contactos</a>
 			</td>
 			</tr>
 
