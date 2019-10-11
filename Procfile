@@ -1,1 +1,1 @@
-web: gunicorn primerabdd.wsgi:application
+web: sh -c 'cd ./primerabdd/primerabdd/ && gunicorn primerabdd.wsgi:application'
