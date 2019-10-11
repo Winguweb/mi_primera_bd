@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'djmoney',
     'django_select2',
+    'django_extensions',
     'crm',
     'user_register_login',
 ]
