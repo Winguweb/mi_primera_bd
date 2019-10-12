@@ -2,15 +2,50 @@
 
 {% block body %}
 	<style type="text/css">
+		  html, body {
+	      	max-width: 100%;
+	      	overflow-x: hidden;
+		  }
 		.tdCenter {
 			text-align: center;
 		}
+
+		.col-lg-2 a {
+			width: 100%;
+		}
+
+		.nav{
+		    list-style:none;
+		    margin:0;
+		    padding:0;
+		    text-align:center;
+		}
+		.nav li{
+		    display:inline;
+		}
+		.nav a{
+		    display:inline-block;
+		    padding:10px;
+		}
 	</style>
 
-	<h2>Gestión de Contactos</h2>
+	<h2 style="margin-top: 10px; padding-left: 10px;">Gestión de Contactos</h2>
+
+	<div class="row" style="padding-right: 20px; padding-left: 10px;">
+		<div class="form-group mb-4 col-lg-6">
+			<input id="filtroBusqueda" placeholder="¿Qué está buscando?" class="form-control form-control-underlined">
+		</div>
+		<div class="col-lg-2"></div>
+		<div class="col-lg-2" style="padding-left: 2px; padding-right: 2px;">
+			<a class="btn btn-success pull-right" href="{% url "crear_contacto"  %}">Nuevo Contacto</a>
+		</div>
+		<div class="col-lg-2" style="padding-left: 2px; padding-right: 2px;">
+			<a class="btn btn-primary pull-right" href="{% url "ver_importador"  %}">Importar Contactos</a>
+		</div>
+	</div>
 
 	<table class="table table-striped table-hover ">
-		<thead class="thead-dark">
+		<thead>
 			<tr>
 				<th class="tdCenter">Nombre</th>
 				<th class="tdCenter">Apellido</th>
@@ -53,16 +88,67 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	
-	<div class="text-right" style="margin-right: 10px;">
-		<a class="btn btn-success pull-right" href="{% url "crear_contacto"  %}">Agregar nuevo contacto</a>
-	</div>
-	<div class="text-right" style="margin-right: 10px; margin-top: 20px">
-		<a class="btn btn-light pull-right" href="{% url "ver_importador"  %}">Importar contactos de un archivo</a>
-	</div>
 
-
-
+	<!-- Paginado -->
+	<div style="background-color: white;" class="navbar navbar-expand-sm" aria-label="Page navigation example">
+	  <ul class="navbar-nav mx-auto">
+	  	{% if genericos.has_previous %}
+	    <li class="page-item">
+	      <a class="page-link" href="?page=1" aria-label="Previous">
+	        <span aria-hidden="true">&laquo;</span>
+	        <span class="sr-only">Previous</span>
+	      </a>
+	    </li>
+	    <li class="page-item">
+	      <a class="page-link" href="?page={{ genericos.previous_page_number }}" aria-label="Previous">
+	        <span aria-hidden="true">&lt;</span>
+	        <span class="sr-only">Previous</span>
+	      </a>
+	    </li>
+	    {% else %}
+	    <li class="page-item">
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="#" aria-label="Previous">
+	        <span aria-hidden="true">&laquo;</span>
+	        <span class="sr-only">Previous</span>
+	      </a>
+	    </li>
+	    <li class="page-item">
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="#" aria-label="Previous">
+	        <span aria-hidden="true">&lt;</span>
+	        <span class="sr-only">Previous</span>
+	      </a>
+	    </li>
+	    {% endif %}
+	    <li class="page-item"><a style="pointer-events: none;" class="page-link" href="#">{{ genericos.number }} de {{ genericos.paginator.num_pages }}</a></li>
+	    {% if genericos.has_next %}
+	    <li class="page-item">
+	      <a class="page-link" href="?page={{ genericos.next_page_number }}" aria-label="Next">
+	        <span aria-hidden="true">&gt;</span>
+	        <span class="sr-only">Next</span>
+	      </a>
+	    </li>
+	    <li class="page-item">
+	      <a class="page-link" href="?page={{ genericos.paginator.num_pages }}" aria-label="Next">
+	        <span aria-hidden="true">&raquo;</span>
+	        <span class="sr-only">Next</span>
+	      </a>
+	    </li>
+	    {% else %}
+	    <li class="page-item">
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="#" aria-label="Next">
+	        <span aria-hidden="true">&gt;</span>
+	        <span class="sr-only">Next</span>
+	      </a>
+	    </li>
+	    <li class="page-item">
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="#" aria-label="Next">
+	        <span aria-hidden="true">&raquo;</span>
+	        <span class="sr-only">Next</span>
+	      </a>
+	    </li>
+	    {% endif %}
+	  </ul>
+	</nav>
 
 {% endblock %}
 
