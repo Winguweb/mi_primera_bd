@@ -2,15 +2,17 @@
 {% load staticfiles %}
 {% block body %}
 <style type="text/css">
+
+  html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+  }
+  
   body {
-      background-color: #2680FF;
+      background-color: #007bff;
       color: #000000;
   }
-  img {
-      padding-top: 30px;
-      height: 200px;
-      width: 200px !important;
-  }
+
   h1 {
       padding-top: 20px;
       padding-bottom: 20px;
@@ -56,7 +58,6 @@
 </style>
 {% if user.is_authenticated %}
 <div>
-  <img src="{% static 'wingu_logo.png' %}" class="rounded mx-auto d-block container-fluid" alt="LOGO WINGU"> 
   <h1>Bienvenido a "MI PRIMERA BASE DE DATOS"</h1>
   <h2>Entraste al sistema como: {{ user.username }}</h2>
   <h2>¿ Qué desea hacer ?</h2>

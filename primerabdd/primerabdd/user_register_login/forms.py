@@ -3,6 +3,6 @@ from django.contrib.auth.forms import AuthenticationForm, UsernameField#, Passwo
 
 class LoginForm(AuthenticationForm):
     
-    username = UsernameField(label='Usuario de la organización', widget=forms.TextInput(attrs={'autofocus': True}))
+    username = UsernameField(label='Usuario de la organización', widget=forms.TextInput(attrs={'autofocus': True, 'placeholder': 'Usuario'}))
 
-    password = forms.CharField(widget=forms.PasswordInput, label='Contraseña')
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Contraseña'}), label='Contraseña')

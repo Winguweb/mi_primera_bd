@@ -102,6 +102,7 @@ class ContactoCrear(CreateView):
 
     def get_context_data(self, **kwargs):
         data = super(ContactoCrear, self).get_context_data(**kwargs)
+        data['accion'] = 'Nuevo Contacto'
         if self.request.POST:
             data['donante'] = DonanteFormSet(self.request.POST)
             data['voluntario'] = VoluntarioFormSet(self.request.POST)
@@ -146,6 +147,7 @@ class ContactoEditar(UpdateView):
 
     def get_context_data(self, **kwargs):
         data = super(ContactoEditar, self).get_context_data(**kwargs)
+        data['accion'] = 'Editar Contacto'
         if self.request.POST:
             data['donante'] = DonanteFormSet(self.request.POST, instance=self.object)
             data['voluntario'] = VoluntarioFormSet(self.request.POST, instance=self.object)
