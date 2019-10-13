@@ -32,9 +32,12 @@
 	<h2 style="margin-top: 10px; padding-left: 10px;">Gestión de Contactos</h2>
 
 	<div class="row" style="padding-right: 20px; padding-left: 10px;">
-		<div class="form-group mb-4 col-lg-6">
-			<input id="filtroBusqueda" placeholder="¿Qué está buscando?" class="form-control form-control-underlined">
-		</div>
+        <div class="form-group mb-4 col-lg-6">
+            <form type="get" action="." style="margin: 0">
+                <input  id="search_box" type="text" name="query"  placeholder="¿Qué está buscando?">
+                <button id="search_submit" type="submit" >Buscar</button>
+            </form> 
+        </div>
 		<div class="col-lg-2"></div>
 		<div class="col-lg-2" style="padding-left: 2px; padding-right: 2px;">
 			<a class="btn btn-success pull-right" href="{% url "crear_contacto"  %}">Nuevo Contacto</a>

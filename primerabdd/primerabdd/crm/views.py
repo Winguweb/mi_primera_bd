@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django_select2.forms import Select2Widget
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 CSV_CUENTA_INDEX = 0
 CSV_NOMBRE_INDEX = 1
@@ -52,7 +53,15 @@ class ContactosPorNivel(TemplateView):
         listado_contactos = Contacto.objects.filter(cuenta__organizacion__usuario=user).values_list('id', flat=True)       
 
         context = super(ContactosPorNivel, self).get_context_data(**kwargs)
-        listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
+        query = self.request.GET.get('query')
+        listado_contactos = []
+        if query:
+            print("query : " + query)
+            listado_contactos = Contacto.objects.filter(Q(nombre__startswith=query) | 
+            Q(apellido__startswith=query) | Q(cuenta__nombre__startswith=query)).filter(id__in=listado_contactos)
+        else:
+            listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
+
         paginator = Paginator(listado_contactos,10)
         page = self.request.GET.get('page')
         listado_contactos_paginado = paginator.get_page(page)     
