@@ -56,7 +56,6 @@ class ContactosPorNivel(TemplateView):
         query = self.request.GET.get('query')
         listado_contactos = []
         if query:
-            print("query : " + query)
             listado_contactos = Contacto.objects.filter(Q(nombre__startswith=query) | 
             Q(apellido__startswith=query) | Q(cuenta__nombre__startswith=query)).filter(id__in=listado_contactos)
         else:
