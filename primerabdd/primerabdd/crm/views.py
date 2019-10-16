@@ -64,6 +64,7 @@ class ContactosPorNivel(TemplateView):
         page = self.request.GET.get('page')
         listado_contactos_paginado = paginator.get_page(page)     
         context['genericos'] = listado_contactos_paginado
+        context['query'] = query
 
         return context
 
