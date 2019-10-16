@@ -23,54 +23,61 @@
 
 </style>
 
-<p id="tipoContacto" style="display: none">{{ contacto.tipo }}</p>
 <form style="padding: 15px;" action="" method="post">
     {% csrf_token %}
-
+    {{ form.non_field_errors }}
     <h2> {{ "Gestión de Contactos / "|add:accion }} </h2>
 
     <div class="row">
         <div class="col-lg-4">
-            <p>Nombre</p>
+            {{ form.nombre.errors }}
+            <label for="{{ form.nombre.id_for_label }}">Nombre *</label>
             {{ form.nombre }}
         </div>
 
         <div class="col-lg-4">
-            <p>Apellido</p>
-            {{ form.nombre }}
+            {{ form.apellido.errors }}
+            <label for="{{ form.apellido.id_for_label }}">Apellido *</label>
+            {{ form.apellido }}
         </div>
 
         <div class="col-lg-4">
-            <p>Género</p>
+            {{ form.sexo.errors }}
+            <label for="{{ form.sexo.id_for_label }}">Género</label>
             {{ form.sexo }}
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-4">
-            <p>Cargo</p>
+            {{ form.cargo.errors }}
+            <label for="{{ form.cargo.id_for_label }}">Cargo</label>
             {{ form.cargo }}
         </div>
 
         <div class="col-lg-4">
-            <p>Documento</p>
+            {{ form.documento.errors }}
+            <label for="{{ form.documento.id_for_label }}">Documento</label>
             {{ form.documento }}
         </div>
 
         <div class="col-lg-4">
-            <p>Fecha de nacimiento</p>
+            {{ form.fecha_de_nacimiento.errors }}
+            <label for="{{ form.fecha_de_nacimiento.id_for_label }}">Fecha de nacimiento *</label>
             {{ form.fecha_de_nacimiento }}
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-4">
-            <p>Ocupación</p>
+            {{ form.ocupacion.errors }}
+            <label for="{{ form.ocupacion.id_for_label }}">Ocupación</label>
             {{ form.ocupacion }}
         </div>
 
         <div class="col-lg-4">
-            <p>Cuenta</p>
+            {{ form.cuenta.errors }}
+            <label for="{{ form.cuenta.id_for_label }}">Cuenta</label>
             {{ form.cuenta }}
         </div>
 
@@ -83,12 +90,14 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <p>Email</p>
+            {{ form.email.errors }}
+            <label for="{{ form.email.id_for_label }}">Email *</label>
             {{ form.email }}
         </div>
 
         <div class="col-lg-4">
-            <p>Email alternativo</p>
+            {{ form.email_alternativo.errors }}
+            <label for="{{ form.email_alternativo.id_for_label }}">Email alternativo</label>
             {{ form.email_alternativo }}
         </div>
 
@@ -100,7 +109,8 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <p>Teléfono</p>
+            {{ form.telefono.errors }}
+            <label for="{{ form.telefono.id_for_label }}">Teléfono</label>
             {{ form.telefono }}
         </div>
 
@@ -122,7 +132,8 @@
         </div>
 
         <div class="col-lg-4">
-            <p>Tipo</p>
+            {{ form.tipo.errors }}
+            <label for="{{ form.tipo.id_for_label }}">Tipo *</label>
             {{ form.tipo }}
         </div>
 

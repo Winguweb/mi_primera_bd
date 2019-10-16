@@ -55,8 +55,8 @@ class ContactosPorNivel(TemplateView):
         context = super(ContactosPorNivel, self).get_context_data(**kwargs)
         query = self.request.GET.get('query')
         if query:
-            listado_contactos = Contacto.objects.filter(Q(nombre__startswith=query) | 
-            Q(apellido__startswith=query) | Q(cuenta__nombre__startswith=query)).filter(id__in=listado_contactos)
+            listado_contactos = Contacto.objects.filter(Q(nombre__icontains=query) | 
+            Q(apellido__icontains=query) | Q(cuenta__nombre__icontains=query)).filter(id__in=listado_contactos)
         else:
             listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
 
@@ -80,7 +80,7 @@ class ContactoCrearForm(ModelForm):
 
     class Meta:
         model = Contacto
-        exclude = ['tipo']
+        fields = '__all__'
 
         widgets = {
             'cuenta': Select2Widget(attrs={'data-placeholder':"Crear cuenta nueva"})
@@ -142,12 +142,27 @@ class ContactoCrear(CreateView):
         form.instance.cuenta = cuenta
         self.object = form.save()
 
-        if donante.is_valid() and voluntario.is_valid():
+        es_donante = self.request.POST.get("donanteCheckBox", False)
+        es_voluntario = self.request.POST.get("voluntarioCheckBox", False)
+
+        if es_donante and not es_voluntario and donante.is_valid():
+            form.instance.tipo = 1
+            donante.instance = self.object
+            donante.save()
+        elif es_voluntario and not es_donante and voluntario.is_valid():
+            form.instance.tipo = 2
+            voluntario.instance = self.object
+            voluntario.save()
+        elif es_donante and es_voluntario and donante.is_valid() and voluntario.is_valid():
+            form.instance.tipo = 3
             donante.instance = self.object
             donante.save()
             voluntario.instance = self.object
             voluntario.save()
-        print(form)
+        else:
+            form.instance.tipo = 0
+
+        self.object = form.save()
         return super(ContactoCrear, self).form_valid(form)
 
 class ContactoEditar(UpdateView): 
