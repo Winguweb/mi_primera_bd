@@ -55,8 +55,8 @@ class ContactosPorNivel(TemplateView):
         context = super(ContactosPorNivel, self).get_context_data(**kwargs)
         query = self.request.GET.get('query')
         if query:
-            listado_contactos = Contacto.objects.filter(Q(nombre__startswith=query) | 
-            Q(apellido__startswith=query) | Q(cuenta__nombre__startswith=query)).filter(id__in=listado_contactos)
+            listado_contactos = Contacto.objects.filter(Q(nombre__icontains=query) | 
+            Q(apellido__icontains=query) | Q(cuenta__nombre__icontains=query)).filter(id__in=listado_contactos)
         else:
             listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
 
@@ -64,6 +64,7 @@ class ContactosPorNivel(TemplateView):
         page = self.request.GET.get('page')
         listado_contactos_paginado = paginator.get_page(page)     
         context['genericos'] = listado_contactos_paginado
+        context['query'] = query
 
         return context
 
