@@ -6,7 +6,7 @@ from djmoney.models.fields import MoneyField
 class Organizacion(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     nombre = models.CharField(max_length=200, blank=False, null=False)
-    fecha_alta = models.DateTimeField('fecha de alta')
+    fecha_alta = models.DateField('fecha de alta')
 
     
 
@@ -65,7 +65,7 @@ class Contacto(models.Model):
     pais = models.CharField(max_length=200, default=None, blank=True, null=True)
 
 
-    fecha_de_nacimiento = models.DateTimeField('fecha de nacimiento')
+    fecha_de_nacimiento = models.DateField('fecha de nacimiento')
 
     TIPOS_CONTACTO = [
         (0, 'General'),
@@ -138,9 +138,9 @@ class Donante(models.Model):
 
     monto = MoneyField(max_digits=14, decimal_places=2, default_currency='ARS')
 
-    fecha_de_compromiso = models.DateTimeField('fecha de compromiso')
+    fecha_de_compromiso = models.DateField('fecha de compromiso')
 
-    fecha_de_baja = models.DateTimeField('fecha de baja')
+    fecha_de_baja = models.DateField('fecha de baja')
 
     MOTIVOS_BAJA = [
         (0, 'No puede seguir pagando'),
