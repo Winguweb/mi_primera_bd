@@ -106,6 +106,7 @@ venv.bak/
 #MAC
 .DS_Store
 
+migrations/
 
 bin/
 lib/
