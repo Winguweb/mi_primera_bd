@@ -11,5 +11,6 @@ urlpatterns = [
     path('edit/<int:pk>', views.ContactoEditar.as_view(), name='editar_contacto'),
     path('dashboard/', views.DashBoard.as_view(),name='ver_dashboard'),
     path('carga/', views.Importador.as_view(),name='ver_importador'),
-    path('upload/csv/', views.upload_csv, name='upload_csv'),   
+    path('upload/csv/', views.upload_csv, name='upload_csv'),  
+    path('custom/', views.CamposCustom.as_view(), name='campos_custom') 
 ]

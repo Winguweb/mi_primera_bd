@@ -261,3 +261,19 @@ def upload_csv(request):
             print("Error cargando un usuario: " + linea)
             print(e)
     return HttpResponseRedirect(reverse("contactos"))
+
+
+# Lista de cuentas
+class CamposCustom(TemplateView):
+    template_name = 'crm/custom.html'
+    context_object_name = 'campos'
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super(CamposCustom, self).get_context_data(**kwargs)
+        context['camposexo'] = CampoSexo.objects.filter(organizacion__usuario=user)
+        print(context['camposexo'])
+        #context['modeltwo'] = ModelTwo.objects.get(*query logic*)
+        return context
+
+
