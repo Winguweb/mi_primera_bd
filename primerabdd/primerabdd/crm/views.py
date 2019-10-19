@@ -84,6 +84,10 @@ class ContactoCrear(CreateView):
 
     def get_context_data(self, **kwargs):
         data = super(ContactoCrear, self).get_context_data(**kwargs)
+
+        #filtro los sexos segun org
+        data['form'].fields['sexo'].queryset = CampoSexo.objects.filter(organizacion__usuario=self.request.user)
+
         data['accion'] = 'Nuevo Contacto'
         if self.request.POST:
             data['donante'] = DonanteFormSet(self.request.POST)
@@ -145,6 +149,10 @@ class ContactoEditar(UpdateView):
     def get_context_data(self, **kwargs):
         data = super(ContactoEditar, self).get_context_data(**kwargs)
         data['accion'] = 'Editar Contacto'
+
+        #filtro los sexos segun org
+        data['form'].fields['sexo'].queryset = CampoSexo.objects.filter(organizacion__usuario=self.request.user)
+
         if self.request.POST:
             data['donante'] = DonanteFormSet(self.request.POST, instance=self.object)
             data['voluntario'] = VoluntarioFormSet(self.request.POST, instance=self.object)
