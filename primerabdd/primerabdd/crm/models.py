@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
 
+
+
+
 class Organizacion(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     nombre = models.CharField(max_length=200, blank=False, null=False)
@@ -16,7 +19,22 @@ class Organizacion(models.Model):
     def __str__(self):
         return self.nombre
 
-            
+#####################################################
+###########     CAMPOS CUSTOMIZABLES    #############
+#####################################################
+
+
+class CampoSexo(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    
+    sexo = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return self.sexo
+
+#####################################################
+###########     CAMPOS CUSTOMIZABLES    #############
+#####################################################      
 
 class Cuenta(models.Model):
     organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
@@ -41,9 +59,6 @@ class Cuenta(models.Model):
     def __str__(self):
         return self.nombre
 
-#########################################
-###########     CONTACTO    #############
-#########################################
 
 class Contacto(models.Model):
     cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE, blank=True)
@@ -81,13 +96,12 @@ class Contacto(models.Model):
 
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
-    SEXOS_CONTACTO = [
-        (0, 'Hombre'),
-        (1, 'Mujer'),
-        (2, 'No Aplica')
-    ]
-
-    sexo = models.IntegerField(choices=SEXOS_CONTACTO, default=None, blank=True, null=True)
+    sexo = models.OneToOneField(
+            CampoSexo,
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+        )
 
     telefono = models.CharField(max_length=50, default=None, blank=True, null=True)
 
@@ -181,4 +195,15 @@ class Voluntario(models.Model):
     ]
 
     habilidades = models.IntegerField(choices=LISTA_HABILIDADES, default=0, blank=True, null=True)    
-        
+
+
+
+
+
+
+
+
+
+
+
+

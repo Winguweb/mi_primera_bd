@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block body %}
+	<h1>Custom</h1>
+
+
+	<table class="table table-striped table-hover " style="width: 18rem;">
+		<thead class="thead-dark">
+			<tr>
+				<th>Sexo</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for campo in camposexo %}
+			<tr>
+			<td>{{ campo.sexo }}</td>
+			</tr>
+
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
