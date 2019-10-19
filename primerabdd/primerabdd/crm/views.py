@@ -1,16 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django import forms
-from django.forms import ModelForm, CheckboxInput
-from django.forms.models import inlineformset_factory
+from .forms import *
 from django.urls import reverse_lazy
 from .models import Organizacion, Cuenta, Contacto, Voluntario, Donante
 from djmoney.forms.fields import MoneyField
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-from django_select2.forms import Select2Widget
 from django.core.paginator import Paginator
 from django.db.models import Q
 
@@ -74,34 +71,6 @@ class ContactoEliminar(DeleteView):
     template_name = 'crm/confirmar_eliminacion.html'
     success_url = reverse_lazy('contactos')
 
-# Form especial para excluir organizacion
-class ContactoCrearForm(ModelForm):
-    donanteCheckBox = forms.BooleanField(required=False, label='Donante', widget=CheckboxInput(attrs={'id': 'checkDonante',}))
-    voluntarioCheckBox = forms.BooleanField(required=False, label='Voluntario', widget=CheckboxInput(attrs={'id': 'checkVoluntario',}))
-
-    class Meta:
-        model = Contacto
-        exclude = ['tipo']
-
-        widgets = {
-            'cuenta': Select2Widget(attrs={'data-placeholder':"Crear cuenta nueva"})
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(ContactoCrearForm, self).__init__(*args, **kwargs)
-        self.fields['cuenta'].empty_label = "Crear cuenta automáticamente"
-        # following line needed to refresh widget copy of choice list
-        self.fields['cuenta'].widget.choices = self.fields['cuenta'].choices
-        
-class DonanteCrearForm(ModelForm):
-    class Meta:
-        model = Donante
-        exclude=['contacto']
-
-class VoluntarioCrearForm(ModelForm):
-    class Meta:
-        model = Voluntario
-        exclude=['contacto']
 
 DonanteFormSet = inlineformset_factory(Contacto, Donante, form=DonanteCrearForm, extra=1, max_num=1)
 VoluntarioFormSet = inlineformset_factory(Contacto, Voluntario, form=VoluntarioCrearForm, extra=1, max_num=1)
@@ -143,12 +112,27 @@ class ContactoCrear(CreateView):
         form.instance.cuenta = cuenta
         self.object = form.save()
 
-        if donante.is_valid() and voluntario.is_valid():
+        es_donante = self.request.POST.get("donanteCheckBox", False)
+        es_voluntario = self.request.POST.get("voluntarioCheckBox", False)
+
+        if es_donante and not es_voluntario and donante.is_valid():
+            form.instance.tipo = 1
+            donante.instance = self.object
+            donante.save()
+        elif es_voluntario and not es_donante and voluntario.is_valid():
+            form.instance.tipo = 2
+            voluntario.instance = self.object
+            voluntario.save()
+        elif es_donante and es_voluntario and donante.is_valid() and voluntario.is_valid():
+            form.instance.tipo = 3
             donante.instance = self.object
             donante.save()
             voluntario.instance = self.object
             voluntario.save()
-        print(form)
+        else:
+            form.instance.tipo = 0
+
+        self.object = form.save()
         return super(ContactoCrear, self).form_valid(form)
 
 class ContactoEditar(UpdateView): 

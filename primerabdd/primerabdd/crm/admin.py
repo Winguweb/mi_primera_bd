@@ -29,5 +29,5 @@ class ContactoAdmin(admin.ModelAdmin):
         VoluntarioInline
     ]
 
-admin.site.register(Organizacion, OrganizacionAdmin)
+admin.site.register(Organizacion)
 
