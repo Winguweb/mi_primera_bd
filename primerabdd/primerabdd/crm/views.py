@@ -263,7 +263,7 @@ def upload_csv(request):
     return HttpResponseRedirect(reverse("contactos"))
 
 
-# Lista de cuentas
+# Lista de campos custom por organizacion
 class CamposCustom(TemplateView):
     template_name = 'crm/custom.html'
     context_object_name = 'campos'
