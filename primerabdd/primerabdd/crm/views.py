@@ -30,6 +30,11 @@ class CuentasLista(ListView):
         user = self.request.user
         listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
 
+        query = self.request.GET.get('query')
+        
+        if query:
+            return Cuenta.objects.filter(id__in=listado_cuentas).filter(Q(nombre__icontains=query))
+
         return Cuenta.objects.filter(id__in=listado_cuentas)
 
 class CuentasDetalles(DetailView): 
@@ -103,7 +108,7 @@ class ContactoCrear(CreateView):
 
         cuenta_nombre = form.cleaned_data['cuenta']
         if cuenta_nombre:
-            cuenta = Cuenta.objects.filter(nombre=cuenta_nombre)[:1].get()
+            cuenta = Cuenta.objects.filter(nombre__icontains=cuenta_nombre).filter(organizacion=organizacion)[:1].get()
         else:
             cuenta = Cuenta(organizacion=organizacion,nombre="Cuenta " + form.cleaned_data['apellido'], email=form.cleaned_data['email'])
             cuenta.save()
