@@ -18,6 +18,10 @@
             nav a {
                 color: white;
             }
+            
+            nav b {
+                color: white;
+            }
 
             h1, h2 {
                 color: #007bff;
@@ -50,6 +54,9 @@
                 </li> -->
             </ul>
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                        <b>Usuario:{{ user }}</b></a>
+                </li>
                 <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}"><b>Cerrar Sesión</b></a>
                 </li>
