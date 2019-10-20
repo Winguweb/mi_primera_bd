@@ -128,7 +128,7 @@
         <div class="row">
         <div class="col-lg-4">
             {{ form.origen.errors }}
-            <label for="{{ form.tipo.id_for_label }}">Origen</label>
+            <label for="{{ form.origen.id_for_label }}">Origen</label>
             {{ form.origen }}
         </div>
 
@@ -151,12 +151,18 @@
         {{ voluntario.as_p }}
     </div> -->
 
-    <div class="row">
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4 text-right">
+
+
+    <div class="row" style="padding-right: 20px; padding-left: 10px;">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
+            <a class="btn btn-secondary" style="margin-top: 10px; margin-right: 40px;" href="/contactos">Volver</a>
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
             <input class="btn btn-success" type="submit" value="Guardar" style="margin-top: 10px; margin-right: 40px;" /> 
-        </div>     
+        </div>
     </div>
 
 </form>

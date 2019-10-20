@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<style type="text/css">
+    
+    .col-lg-4 input, .col-lg-4 select {
+        width: 90%;
+    }
+
+    .col-lg-4 input {
+
+    }
+
+    .col-lg-4 .btn {
+        width: 50%;
+    }
+
+    p {
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+</style>
+
+<form style="padding: 15px;" action="" method="post">
+    {% csrf_token %}
+    <h2>Gestión de Contactos / Detalles</h2>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ contacto.nombre.id_for_label }}">Nombre *</label>
+            <br>
+            <input type="text" name="" value="{{ contacto.nombre }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ contacto.apellido.id_for_label }}">Apellido *</label>
+            <br>
+            <input type="text" name="" value="{{ contacto.apellido }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ contacto.sexo.id_for_label }}">Género</label>
+            <br>
+            {% if contacto.sexo == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.sexo }}" disabled>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ contacto.cargo.id_for_label }}">Cargo</label>
+            <br>
+            {% if contacto.cargo == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.cargo }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ contacto.documento.id_for_label }}">Documento</label>
+            <br>
+            {% if contacto.documento == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.documento }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ contacto.fecha_de_nacimiento.id_for_label }}">Fecha de nacimiento *</label>
+            <br>
+            <input type="text" name="" value="{{ contacto.fecha_de_nacimiento|date:'d-m-Y' }}" disabled>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ contacto.ocupacion.id_for_label }}">Ocupación</label>
+            <br>
+            {% if contacto.ocupacion == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.ocupacion }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ contacto.cuenta.id_for_label }}">Cuenta</label>
+            <br>
+            <input type="text" name="" value="{{ contacto.cuenta }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <p>Perfil de voluntariado</p>
+            ESTADO INDEFINIDO!!!
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ contacto.email.id_for_label }}">Email *</label>
+            <br>
+            <input type="text" name="" value="{{ contacto.email }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ contacto.email_alternativo.id_for_label }}">Email alternativo</label>
+            <br>
+            {% if contacto.email_alternativo == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.email_alternativo }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <p> . </p>
+            TURNO INDEFINIDO!!!
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ contacto.telefono.id_for_label }}">Teléfono</label>
+            <br>
+            {% if contacto.telefono == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.telefono }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <p>Dirección</p>
+            DIRECCIÓN INDEFINIDO!!!
+        </div>
+
+        <div class="col-lg-4">
+            <p> . </p>
+            HABILIDADES INDEFINIDO!!!
+        </div>
+    </div>
+
+        <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ contacto.tipo.id_for_label }}">Origen</label>
+            <br>
+            {% if contacto.origen == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.origen }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ contacto.tipo.id_for_label }}">Tipo *</label>
+            <br>
+            {% if contacto.tipo == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.tipo }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4 text-right">
+            <a class="btn btn-secondary" style="margin-top: 10px; margin-right: 40px;" href="/contactos">Volver</a> 
+        </div>     
+    </div>
+
+</form>
+
+{% endblock %}

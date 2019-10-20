@@ -153,6 +153,11 @@ class ContactoCrear(CreateView):
         self.object = form.save()
         return super(ContactoCrear, self).form_valid(form)
 
+class ContactoDetalle(DetailView): 
+    model = Contacto
+    context_object_name = 'contacto'  
+    template_name = 'crm/contacto_detalles.html'
+
 class ContactoEditar(UpdateView): 
     model = Contacto
     form_class = ContactoCrearForm
