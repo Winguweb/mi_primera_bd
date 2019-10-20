@@ -14,6 +14,9 @@
 			{% for campo in camposexo %}
 			<tr>
 			<td>{{ campo.sexo }}</td>
+			<td class="tdCenter">
+					<a class="btn btn-danger" href="{% url "eliminar_campos_custom"  campo.id  %}">Eliminar</a>
+				</td>
 			</tr>
 
 			{% endfor %}

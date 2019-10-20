@@ -276,4 +276,9 @@ class CamposCustom(TemplateView):
         #context['modeltwo'] = ModelTwo.objects.get(*query logic*)
         return context
 
+class CamposCustomEliminar(DeleteView): 
+    model = CampoSexo
+    template_name = 'crm/eliminar_campo_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
 

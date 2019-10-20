@@ -12,5 +12,6 @@ urlpatterns = [
     path('dashboard/', views.DashBoard.as_view(),name='ver_dashboard'),
     path('carga/', views.Importador.as_view(),name='ver_importador'),
     path('upload/csv/', views.upload_csv, name='upload_csv'),  
-    path('custom/', views.CamposCustom.as_view(), name='campos_custom') 
+    path('custom/', views.CamposCustom.as_view(), name='campos_custom'),
+    path('custom/delete/<int:pk>', views.CamposCustomEliminar.as_view(), name='eliminar_campos_custom') 
 ]

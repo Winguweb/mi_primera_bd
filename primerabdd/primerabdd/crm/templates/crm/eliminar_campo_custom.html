@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h1>Eliminar {{ campo }}</h1>
+<form  method="post">
+{% csrf_token %}
+¿Está seguro de que desea eliminar este campo?
+<input type="submit" value="Si"/>
+</form>
+{% endblock %}
