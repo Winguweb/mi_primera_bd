@@ -1,4 +1,4 @@
-from .models import Organizacion, Cuenta, Contacto, Voluntario, Donante, CamposCustomOrganizacion, TiposCamposCustom
+from .models import Organizacion, Cuenta, Contacto, Voluntario, Donante
 from django import forms
 from django.forms import ModelForm, CheckboxInput
 from django.forms.models import inlineformset_factory

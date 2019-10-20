@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
-from enum import Enum
+
 
 
 
@@ -23,22 +23,34 @@ class Organizacion(models.Model):
 #####################################################
 ###########     CAMPOS CUSTOMIZABLES    #############
 #####################################################
-class TiposCamposCustom(Enum):
-    GENERO_CONTACTO = 1
-    TIPO_CONTACTO = 2
-    ORIGEN_CONTACTO = 3
-    TIPO_CUENTA = 4
-    ESTADO_OPORTUNIDADES = 5
-    TIPO_OPORTUNIDADES = 6 
 
-class CamposCustomOrganizacion(models.Model):
+class CampoCustomGenero(models.Model):
     organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
-    tipo_campo = models.PositiveIntegerField(blank=False, null=False)
-    valor = models.CharField(max_length=50, default=None, blank=True, null=True)
-    #sexo = models.CharField(max_length=50, default=None, blank=True, null=True)
+    genero = models.CharField(max_length=50, default=None, blank=True, null=True)
 
     def __str__(self):
-        return (self.valor) 
+        return (self.genero)
+
+class CampoCustomOrigen(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    origen = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.origen)
+
+class CampoCustomTipoContacto(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.tipo)
+
+class CampoCustomTipoCuenta(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.tipo) 
 
 #####################################################
 ###########     CAMPOS CUSTOMIZABLES    #############
@@ -58,8 +70,7 @@ class Cuenta(models.Model):
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
     tipo = models.OneToOneField(
-            CamposCustomOrganizacion,
-            related_name='tipo_de_cuenta',
+            CampoCustomTipoCuenta,
             on_delete=models.CASCADE,
             blank=True,
             null=True
@@ -99,8 +110,7 @@ class Contacto(models.Model):
     fecha_de_nacimiento = models.DateField('fecha de nacimiento')
 
     tipo = models.OneToOneField(
-            CamposCustomOrganizacion,
-            related_name='tipo_del_contacto',
+            CampoCustomTipoContacto,
             on_delete=models.CASCADE,
             blank=True,
             null=True
@@ -111,16 +121,14 @@ class Contacto(models.Model):
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
     sexo = models.OneToOneField(
-            CamposCustomOrganizacion,
-            related_name='genero_del_contacto',
+            CampoCustomGenero,
             on_delete=models.CASCADE,
             blank=True,
             null=True
         )
 
     origen = models.OneToOneField(
-            CamposCustomOrganizacion,
-            related_name='origen_del_contacto',
+            CampoCustomOrigen,
             on_delete=models.CASCADE,
             blank=True,
             null=True

@@ -15,9 +15,9 @@
 		<tbody>
 			{% for campo in camposGenero %}
 			<tr>
-			<td>{{ campo.valor }}</td>
+			<td>{{ campo.genero }}</td>
 			<td class="tdCenter">
-					<a class="btn btn-danger" href="{% url "eliminar_campos_custom"  campo.id  %}">Eliminar</a>
+					<a class="btn btn-danger" href="{% url "eliminar_custom_genero"  campo.id  %}">Eliminar</a>
 				</td>
 			</tr>
 
@@ -35,9 +35,9 @@
 			<tbody>
 				{% for campo in camposOrigen %}
 				<tr>
-				<td>{{ campo.valor }}</td>
+				<td>{{ campo.origen }}</td>
 				<td class="tdCenter">
-						<a class="btn btn-danger" href="{% url "eliminar_campos_custom"  campo.id  %}">Eliminar</a>
+						<a class="btn btn-danger" href="{% url "eliminar_custom_origen"  campo.id  %}">Eliminar</a>
 					</td>
 				</tr>
 				{% endfor %}
@@ -54,9 +54,9 @@
 				<tbody>
 					{% for campo in camposTipoContacto %}
 					<tr>
-					<td>{{ campo.valor }}</td>
+					<td>{{ campo.tipo }}</td>
 					<td class="tdCenter">
-							<a class="btn btn-danger" href="{% url "eliminar_campos_custom"  campo.id  %}">Eliminar</a>
+							<a class="btn btn-danger" href="{% url "eliminar_custom_tipo_contacto"  campo.id  %}">Eliminar</a>
 						</td>
 					</tr>
 					{% endfor %}
@@ -76,9 +76,9 @@
 		<tbody>
 			{% for campo in tiposCuenta %}
 			<tr>
-			<td>{{ campo.valor }}</td>
+			<td>{{ campo.tipo }}</td>
 			<td class="tdCenter">
-					<a class="btn btn-danger" href="{% url "eliminar_campos_custom"  campo.id  %}">Eliminar</a>
+					<a class="btn btn-danger" href="{% url "eliminar_custom_tipo_cuenta"  campo.id  %}">Eliminar</a>
 				</td>
 			</tr>
 			{% endfor %}
