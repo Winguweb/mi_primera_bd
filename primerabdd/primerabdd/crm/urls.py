@@ -12,5 +12,9 @@ urlpatterns = [
     path('dashboard/', views.DashBoard.as_view(),name='ver_dashboard'),
     path('carga/', views.Importador.as_view(),name='ver_importador'),
     path('upload/csv/', views.upload_csv, name='upload_csv'),  
-    path('custom/', views.CamposCustom.as_view(), name='campos_custom') 
+    path('custom/', views.CamposCustom.as_view(), name='campos_custom'),
+    path('custom/deleteGender/<int:pk>', views.CampoCustomGeneroEliminar.as_view(), name='eliminar_custom_genero'),
+    path('custom/deleteOrigin/<int:pk>', views.CampoCustomOrigenEliminar.as_view(), name='eliminar_custom_origen'),
+    path('custom/deleteContactType/<int:pk>', views.CampoCustomTipoContactoEliminar.as_view(), name='eliminar_custom_tipo_contacto'),
+    path('custom/deleteAccountType/<int:pk>', views.CampoCustomtipoCuentaEliminar.as_view(), name='eliminar_custom_tipo_cuenta') 
 ]

@@ -79,7 +79,13 @@
 			{% endif %} 
 	</p>
 	
-	<p><b>Observaciones:</b> {{cuenta.observaciones}}</p>
+	<p>
+		<b>Observaciones:</b> {% if cuenta.observaciones == None%} 
+			{{ "-" }} 
+		{% else %}
+			{{cuenta.observaciones}}
+	{% endif %} 
+	</p>
 
 {% endblock %}
 

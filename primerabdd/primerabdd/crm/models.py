@@ -6,6 +6,7 @@ from djmoney.models.fields import MoneyField
 
 
 
+
 class Organizacion(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     nombre = models.CharField(max_length=200, blank=False, null=False)
@@ -23,14 +24,33 @@ class Organizacion(models.Model):
 ###########     CAMPOS CUSTOMIZABLES    #############
 #####################################################
 
-
-class CampoSexo(models.Model):
+class CampoCustomGenero(models.Model):
     organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
-    
-    sexo = models.CharField(max_length=50, default=None, blank=True, null=True)
+    genero = models.CharField(max_length=50, default=None, blank=True, null=True)
 
     def __str__(self):
-        return self.sexo
+        return (self.genero)
+
+class CampoCustomOrigen(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    origen = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.origen)
+
+class CampoCustomTipoContacto(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.tipo)
+
+class CampoCustomTipoCuenta(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.tipo) 
 
 #####################################################
 ###########     CAMPOS CUSTOMIZABLES    #############
@@ -48,6 +68,13 @@ class Cuenta(models.Model):
 
     email = models.EmailField(default=None, blank=False, null=False)
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
+
+    tipo = models.OneToOneField(
+            CampoCustomTipoCuenta,
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+        )
 
     telefono = models.CharField(max_length=50, default=None, blank=True, null=True)
     telefono_alternativo = models.CharField(max_length=50, default=None, blank=True, null=True)
@@ -82,26 +109,30 @@ class Contacto(models.Model):
 
     fecha_de_nacimiento = models.DateField('fecha de nacimiento')
 
-    TIPOS_CONTACTO = [
-        (0, 'General'),
-        (1, 'Donante'),
-        (2, 'Voluntario'),
-        (3, 'Ambos'),
-        
-    ]
-
-    tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto')
+    tipo = models.OneToOneField(
+            CampoCustomTipoContacto,
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+        )
 
     email = models.EmailField(default=None, blank=False, null=False)
 
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
     sexo = models.OneToOneField(
-            CampoSexo,
+            CampoCustomGenero,
             on_delete=models.CASCADE,
             blank=True,
             null=True
         )
+
+    origen = models.OneToOneField(
+            CampoCustomOrigen,
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+    )
 
     telefono = models.CharField(max_length=50, default=None, blank=True, null=True)
 
