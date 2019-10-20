@@ -57,6 +57,14 @@ class Cuenta(models.Model):
     email = models.EmailField(default=None, blank=False, null=False)
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
+    tipo = models.OneToOneField(
+            CamposCustomOrganizacion,
+            related_name='tipo_de_cuenta',
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+        )
+
     telefono = models.CharField(max_length=50, default=None, blank=True, null=True)
     telefono_alternativo = models.CharField(max_length=50, default=None, blank=True, null=True)
     
@@ -90,15 +98,13 @@ class Contacto(models.Model):
 
     fecha_de_nacimiento = models.DateField('fecha de nacimiento')
 
-    TIPOS_CONTACTO = [
-        (0, 'General'),
-        (1, 'Donante'),
-        (2, 'Voluntario'),
-        (3, 'Ambos'),
-        
-    ]
-
-    tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto')
+    tipo = models.OneToOneField(
+            CamposCustomOrganizacion,
+            related_name='tipo_del_contacto',
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+        )
 
     email = models.EmailField(default=None, blank=False, null=False)
 
@@ -106,10 +112,19 @@ class Contacto(models.Model):
 
     sexo = models.OneToOneField(
             CamposCustomOrganizacion,
+            related_name='genero_del_contacto',
             on_delete=models.CASCADE,
             blank=True,
             null=True
         )
+
+    origen = models.OneToOneField(
+            CamposCustomOrganizacion,
+            related_name='origen_del_contacto',
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+    )
 
     telefono = models.CharField(max_length=50, default=None, blank=True, null=True)
 

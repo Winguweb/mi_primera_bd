@@ -127,8 +127,9 @@
 
         <div class="row">
         <div class="col-lg-4">
-            <p>Origen</p>
-            ORIGEN INDEFINIDO!!!
+            {{ form.origen.errors }}
+            <label for="{{ form.tipo.id_for_label }}">Origen</label>
+            {{ form.origen }}
         </div>
 
         <div class="col-lg-4">

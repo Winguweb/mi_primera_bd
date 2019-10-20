@@ -89,6 +89,16 @@ class ContactoCrear(CreateView):
         generos_de_la_organizacion = CamposCustomOrganizacion.objects.filter(organizacion__usuario=self.request.user).filter(tipo_campo=TiposCamposCustom.GENERO_CONTACTO.value)
         print(generos_de_la_organizacion)
         data['form'].fields['sexo'].queryset = generos_de_la_organizacion
+
+        #filtro los origenes segun org
+        origenes_de_la_organizacion = CamposCustomOrganizacion.objects.filter(organizacion__usuario=self.request.user).filter(tipo_campo=TiposCamposCustom.ORIGEN_CONTACTO.value)
+        print(origenes_de_la_organizacion)
+        data['form'].fields['origen'].queryset = origenes_de_la_organizacion
+
+        #filtro los tipos de contacto segun org
+        tipos_de_contactos = CamposCustomOrganizacion.objects.filter(organizacion__usuario=self.request.user).filter(tipo_campo=TiposCamposCustom.TIPO_CONTACTO.value)
+        print(tipos_de_contactos)
+        data['form'].fields['tipo'].queryset = tipos_de_contactos
         
         data['accion'] = 'Nuevo Contacto'
         if self.request.POST:
@@ -156,6 +166,15 @@ class ContactoEditar(UpdateView):
         generos_de_la_organizacion = CamposCustomOrganizacion.objects.filter(organizacion__usuario=self.request.user).filter(tipo_campo=TiposCamposCustom.GENERO_CONTACTO.value)
         print(generos_de_la_organizacion)
         data['form'].fields['sexo'].queryset = generos_de_la_organizacion
+        
+        #filtro los origenes segun org
+        origenes_de_la_organizacion = CamposCustomOrganizacion.objects.filter(organizacion__usuario=self.request.user).filter(tipo_campo=TiposCamposCustom.ORIGEN_CONTACTO.value)
+        data['form'].fields['origen'].queryset = origenes_de_la_organizacion
+
+        #filtro los tipos de contacto segun org
+        tipos_de_contactos = CamposCustomOrganizacion.objects.filter(organizacion__usuario=self.request.user).filter(tipo_campo=TiposCamposCustom.TIPO_CONTACTO.value)
+        print(tipos_de_contactos)
+        data['form'].fields['tipo'].queryset = tipos_de_contactos
 
         if self.request.POST:
             data['donante'] = DonanteFormSet(self.request.POST, instance=self.object)
