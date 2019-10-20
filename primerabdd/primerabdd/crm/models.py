@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
+from enum import Enum
 
 
 
@@ -22,15 +23,22 @@ class Organizacion(models.Model):
 #####################################################
 ###########     CAMPOS CUSTOMIZABLES    #############
 #####################################################
+class TiposCamposCustom(Enum):
+    GENERO_CONTACTO = 1
+    TIPO_CONTACTO = 2
+    ORIGEN_CONTACTO = 3
+    TIPO_CUENTA = 4
+    ESTADO_OPORTUNIDADES = 5
+    TIPO_OPORTUNIDADES = 6 
 
-
-class CampoSexo(models.Model):
+class CamposCustomOrganizacion(models.Model):
     organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
-    
-    sexo = models.CharField(max_length=50, default=None, blank=True, null=True)
+    tipo_campo = models.PositiveIntegerField(blank=False, null=False)
+    valor = models.CharField(max_length=50, default=None, blank=True, null=True)
+    #sexo = models.CharField(max_length=50, default=None, blank=True, null=True)
 
     def __str__(self):
-        return self.sexo
+        return (self.valor) 
 
 #####################################################
 ###########     CAMPOS CUSTOMIZABLES    #############
@@ -97,7 +105,7 @@ class Contacto(models.Model):
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
     sexo = models.OneToOneField(
-            CampoSexo,
+            CamposCustomOrganizacion,
             on_delete=models.CASCADE,
             blank=True,
             null=True

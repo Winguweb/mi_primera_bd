@@ -86,8 +86,10 @@ class ContactoCrear(CreateView):
         data = super(ContactoCrear, self).get_context_data(**kwargs)
 
         #filtro los sexos segun org
-        data['form'].fields['sexo'].queryset = CampoSexo.objects.filter(organizacion__usuario=self.request.user)
-
+        generos_de_la_organizacion = CamposCustomOrganizacion.objects.filter(organizacion__usuario=self.request.user).filter(tipo_campo=TiposCamposCustom.GENERO_CONTACTO.value)
+        print(generos_de_la_organizacion)
+        data['form'].fields['sexo'].queryset = generos_de_la_organizacion
+        
         data['accion'] = 'Nuevo Contacto'
         if self.request.POST:
             data['donante'] = DonanteFormSet(self.request.POST)
@@ -151,7 +153,9 @@ class ContactoEditar(UpdateView):
         data['accion'] = 'Editar Contacto'
 
         #filtro los sexos segun org
-        data['form'].fields['sexo'].queryset = CampoSexo.objects.filter(organizacion__usuario=self.request.user)
+        generos_de_la_organizacion = CamposCustomOrganizacion.objects.filter(organizacion__usuario=self.request.user).filter(tipo_campo=TiposCamposCustom.GENERO_CONTACTO.value)
+        print(generos_de_la_organizacion)
+        data['form'].fields['sexo'].queryset = generos_de_la_organizacion
 
         if self.request.POST:
             data['donante'] = DonanteFormSet(self.request.POST, instance=self.object)
@@ -271,13 +275,16 @@ class CamposCustom(TemplateView):
     def get_context_data(self, **kwargs):
         user = self.request.user
         context = super(CamposCustom, self).get_context_data(**kwargs)
-        context['camposexo'] = CampoSexo.objects.filter(organizacion__usuario=user)
-        print(context['camposexo'])
+        context['camposGenero'] = CamposCustomOrganizacion.objects.filter(organizacion__usuario=user).filter(tipo_campo=TiposCamposCustom.GENERO_CONTACTO.value)
+        context['camposOrigen'] = CamposCustomOrganizacion.objects.filter(organizacion__usuario=user).filter(tipo_campo=TiposCamposCustom.ORIGEN_CONTACTO.value)
+        context['camposTipoContacto'] = CamposCustomOrganizacion.objects.filter(organizacion__usuario=user).filter(tipo_campo=TiposCamposCustom.TIPO_CONTACTO.value)
+        context['tiposCuenta'] = CamposCustomOrganizacion.objects.filter(organizacion__usuario=user).filter(tipo_campo=TiposCamposCustom.TIPO_CUENTA.value)
+        print(context['camposGenero'])
         #context['modeltwo'] = ModelTwo.objects.get(*query logic*)
         return context
 
 class CamposCustomEliminar(DeleteView): 
-    model = CampoSexo
+    model = CamposCustomOrganizacion
     template_name = 'crm/eliminar_campo_custom.html'
     success_url = reverse_lazy('campos_custom')
 

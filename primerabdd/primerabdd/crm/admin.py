@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cuenta, Contacto, Organizacion, Donante, Voluntario, CampoSexo
+from .models import Cuenta, Contacto, Organizacion, Donante, Voluntario, CamposCustomOrganizacion
 
 class ContactoInline(admin.TabularInline):
     model = Contacto
@@ -30,5 +30,5 @@ class ContactoAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(Organizacion)
-admin.site.register(CampoSexo)
+admin.site.register(CamposCustomOrganizacion)
 

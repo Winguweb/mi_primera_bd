@@ -11,14 +11,66 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for campo in camposexo %}
+			{% for campo in camposGenero %}
 			<tr>
-			<td>{{ campo.sexo }}</td>
+			<td>{{ campo.valor }}</td>
 			<td class="tdCenter">
 					<a class="btn btn-danger" href="{% url "eliminar_campos_custom"  campo.id  %}">Eliminar</a>
 				</td>
 			</tr>
 
+			{% endfor %}
+		</tbody>
+	</table>
+	<table class="table table-striped table-hover " style="width: 18rem;">
+			<thead class="thead-dark">
+				<tr>
+					<th>Origen</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for campo in camposOrigen %}
+				<tr>
+				<td>{{ campo.valor }}</td>
+				<td class="tdCenter">
+						<a class="btn btn-danger" href="{% url "eliminar_campos_custom"  campo.id  %}">Eliminar</a>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<table class="table table-striped table-hover " style="width: 18rem;">
+				<thead class="thead-dark">
+					<tr>
+						<th>Tipo</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for campo in camposTipoContacto %}
+					<tr>
+					<td>{{ campo.valor }}</td>
+					<td class="tdCenter">
+							<a class="btn btn-danger" href="{% url "eliminar_campos_custom"  campo.id  %}">Eliminar</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+	<h2>Campos de Cuenta</h2>
+	<table class="table table-striped table-hover " style="width: 18rem;">
+		<thead class="thead-dark">
+			<tr>
+				<th>Tipo</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for campo in tiposCuenta %}
+			<tr>
+			<td>{{ campo.valor }}</td>
+			<td class="tdCenter">
+					<a class="btn btn-danger" href="{% url "eliminar_campos_custom"  campo.id  %}">Eliminar</a>
+				</td>
+			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
