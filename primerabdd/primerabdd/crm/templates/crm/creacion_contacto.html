@@ -21,6 +21,19 @@
         margin-bottom: 5px;
     }
 
+    #id_calle, #id_ciudad {
+        width: 65%;
+    }
+
+    #id_numero, #id_cod_postal {
+        width: 25%
+    }
+
+    #id_observaciones {
+        width: 97%;
+        height: 100px;
+    }
+
 </style>
 
 <form style="padding: 15px;" action="" method="post">
@@ -82,8 +95,10 @@
         </div>
 
         <div class="col-lg-4">
-            <p>Perfil de voluntariado</p>
-            ESTADO INDEFINIDO!!!
+            {{ form.calle.errors }}
+            <label for="{{ form.direccion.id_for_label }}">Dirección</label><br>
+            {{ form.calle }}
+            {{ form.numero }}
         </div>
     </div>
 
@@ -102,8 +117,10 @@
         </div>
 
         <div class="col-lg-4">
-            <p> . </p>
-            TURNO INDEFINIDO!!!
+            {{ form.ciudad.errors }}
+            <label for="{{ form.ciudad.id_for_label }}">Ciudad</label><br>
+            {{ form.ciudad }}
+            {{ form.cod_postal }}
         </div>
     </div>
 
@@ -115,20 +132,22 @@
         </div>
 
         <div class="col-lg-4">
-            <p>Dirección</p>
-            DIRECCIÓN INDEFINIDO!!!
+            {{ form.movil.errors }}
+            <label for="{{ form.telefono.id_for_label }}">Móvil</label>
+            {{ form.movil }}
         </div>
 
         <div class="col-lg-4">
-            <p> . </p>
-            HABILIDADES INDEFINIDO!!!
+            {{ form.pais.errors }}
+            <label for="{{ form.pais.id_for_label }}">País</label><br>
+            {{ form.pais }}
         </div>
     </div>
 
-        <div class="row">
+    <div class="row">
         <div class="col-lg-4">
             {{ form.origen.errors }}
-            <label for="{{ form.tipo.id_for_label }}">Origen</label>
+            <label for="{{ form.origen.id_for_label }}">Origen</label>
             {{ form.origen }}
         </div>
 
@@ -139,6 +158,17 @@
         </div>
 
         <div class="col-lg-4">
+            {{ form.recibir_novedades.errors }}
+            <label for="{{ form.recibir_novedades.id_for_label }}">¿Desea recibir novedades?</label>
+            {{ form.recibir_novedades }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            {{ form.observaciones.errors }}
+            <label for="{{ form.observaciones.id_for_label }}">Observaciones</label><br>
+            {{ form.observaciones }}
         </div>
     </div>
 
@@ -151,12 +181,18 @@
         {{ voluntario.as_p }}
     </div> -->
 
-    <div class="row">
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4"></div>
-        <div class="col-lg-4 text-right">
+
+
+    <div class="row" style="padding-right: 20px; padding-left: 10px;">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
+            <a class="btn btn-secondary" style="margin-top: 10px; margin-right: 40px;" href="/contactos">Volver</a>
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
             <input class="btn btn-success" type="submit" value="Guardar" style="margin-top: 10px; margin-right: 40px;" /> 
-        </div>     
+        </div>
     </div>
 
 </form>

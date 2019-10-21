@@ -30,6 +30,11 @@ class CuentasLista(ListView):
         user = self.request.user
         listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
 
+        query = self.request.GET.get('query')
+        
+        if query:
+            return Cuenta.objects.filter(id__in=listado_cuentas).filter(Q(nombre__icontains=query))
+
         return Cuenta.objects.filter(id__in=listado_cuentas)
 
 class CuentasDetalles(DetailView): 
@@ -37,7 +42,30 @@ class CuentasDetalles(DetailView):
     context_object_name = 'cuenta'  
     template_name = 'crm/cuentas_detalles.html'  
 
+class CuentasContactos(TemplateView):
+    context_object_name = 'contatos_cuenta'
+    template_name = 'crm/cuentas_contactos.html'
 
+    def get_context_data(self, **kwargs):
+
+        cuenta_id = self.kwargs['pk']
+        listado_contactos = Contacto.objects.filter(cuenta__id=cuenta_id).values_list('id', flat=True)       
+
+        context = super(CuentasContactos, self).get_context_data(**kwargs)
+        query = self.request.GET.get('query')
+        if query:
+            listado_contactos = Contacto.objects.filter(Q(nombre__icontains=query) | 
+            Q(apellido__icontains=query)).filter(id__in=listado_contactos)
+        else:
+            listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
+
+        paginator = Paginator(listado_contactos,10)
+        page = self.request.GET.get('page')
+        listado_contactos_paginado = paginator.get_page(page)     
+        context['genericos'] = listado_contactos_paginado
+        context['query'] = query
+
+        return context
 
 # Lista de contactos
 class ContactosPorNivel(TemplateView): 
@@ -116,7 +144,7 @@ class ContactoCrear(CreateView):
 
         cuenta_nombre = form.cleaned_data['cuenta']
         if cuenta_nombre:
-            cuenta = Cuenta.objects.filter(nombre=cuenta_nombre)[:1].get()
+            cuenta = Cuenta.objects.filter(nombre__icontains=cuenta_nombre).filter(organizacion=organizacion)[:1].get()
         else:
             cuenta = Cuenta(organizacion=organizacion,nombre="Cuenta " + form.cleaned_data['apellido'], email=form.cleaned_data['email'])
             cuenta.save()
@@ -147,6 +175,11 @@ class ContactoCrear(CreateView):
 
         self.object = form.save()
         return super(ContactoCrear, self).form_valid(form)
+
+class ContactoDetalle(DetailView): 
+    model = Contacto
+    context_object_name = 'contacto'  
+    template_name = 'crm/contacto_detalles.html'
 
 class ContactoEditar(UpdateView): 
     model = Contacto
