@@ -42,7 +42,30 @@ class CuentasDetalles(DetailView):
     context_object_name = 'cuenta'  
     template_name = 'crm/cuentas_detalles.html'  
 
+class CuentasContactos(TemplateView):
+    context_object_name = 'contatos_cuenta'
+    template_name = 'crm/cuentas_contactos.html'
 
+    def get_context_data(self, **kwargs):
+
+        cuenta_id = self.kwargs['pk']
+        listado_contactos = Contacto.objects.filter(cuenta__id=cuenta_id).values_list('id', flat=True)       
+
+        context = super(CuentasContactos, self).get_context_data(**kwargs)
+        query = self.request.GET.get('query')
+        if query:
+            listado_contactos = Contacto.objects.filter(Q(nombre__icontains=query) | 
+            Q(apellido__icontains=query)).filter(id__in=listado_contactos)
+        else:
+            listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
+
+        paginator = Paginator(listado_contactos,10)
+        page = self.request.GET.get('page')
+        listado_contactos_paginado = paginator.get_page(page)     
+        context['genericos'] = listado_contactos_paginado
+        context['query'] = query
+
+        return context
 
 # Lista de contactos
 class ContactosPorNivel(TemplateView): 
