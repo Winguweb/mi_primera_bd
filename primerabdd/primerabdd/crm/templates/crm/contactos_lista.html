@@ -53,10 +53,10 @@
 				<td class="tdCenter">{{ contacto.nombre }}</td>
 				<td class="tdCenter">{{ contacto.apellido }}</td>
 				<td class="tdCenter">
-					{% if contacto.tipo == None %}
+					{% if contacto.categoria == None %}
 					    {{ "-" }}
 					{% else %}
-					    {{ contacto.tipo }}
+					    {{ contacto.categoria }}
 					{% endif %}
 				</td>
 				<td class="tdCenter">{{ contacto.email }}</td>

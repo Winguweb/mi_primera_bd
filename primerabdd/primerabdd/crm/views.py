@@ -123,7 +123,7 @@ class ContactoCrear(CreateView):
 
         #filtro los tipos de contacto segun org
         tipos_de_contacto_de_la_organizacion = CampoCustomTipoContacto.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['tipo'].queryset = tipos_de_contacto_de_la_organizacion
+        data['form'].fields['categoria'].queryset = tipos_de_contacto_de_la_organizacion
         
         data['accion'] = 'Nuevo Contacto'
         if self.request.POST:
@@ -202,7 +202,7 @@ class ContactoEditar(UpdateView):
 
         #filtro los tipos de contacto segun org
         tipos_de_contacto_de_la_organizacion = CampoCustomTipoContacto.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['tipo'].queryset = tipos_de_contacto_de_la_organizacion
+        data['form'].fields['categoria'].queryset = tipos_de_contacto_de_la_organizacion
 
         if self.request.POST:
             data['donante'] = DonanteFormSet(self.request.POST, instance=self.object)
