@@ -6,6 +6,9 @@
 	      	max-width: 100%;
 	      	overflow-x: hidden;
 		  }
+		  label, input, form {
+  			display: inline; /* 1. oh noes, my inputs are styled as block... */
+		  }
 		.tdCenter {
 			text-align: center;
 		}
@@ -34,9 +37,18 @@
 	<div class="row" style="padding-right: 20px; padding-left: 10px;">
         <div class="form-group mb-4 col-lg-6">
             <form type="get" action="." style="margin: 0">
-                <input  id="search_box" type="text" name="query"  placeholder="¿Qué está buscando?">
+            	{% if query %}
+            	<input  id="search_box" type="text" name="query"  placeholder={{query}} value ={{query}}>
+            	{% else %}
+            	<input  id="search_box" type="text" name="query"  placeholder="¿Qué está buscando?"> 
+            	{% endif %}
                 <button id="search_submit" type="submit" >Buscar</button>
             </form> 
+   			{% if query %}
+        	<form type="get" action="." style="margin: 0">
+            	<button id="search_submit" type="submit" >Quitar filtro</button>
+            </form> 
+            {% endif %}
         </div>
 		<div class="col-lg-2"></div>
 	</div>
