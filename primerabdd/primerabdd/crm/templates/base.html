@@ -141,5 +141,15 @@
           
         {% bootstrap_javascript jquery='full' %}
     {{ form.media.js }} 
+
+    <!-- Placeholders Calle/Número/Ciudad/Código Postal -->
+    <script type="text/javascript">
+    	$("#id_calle").attr("placeholder", "Calle").val("").focus().blur();
+    	$("#id_numero").attr("placeholder", "Altura").val("").focus().blur();
+
+    	$("#id_ciudad").attr("placeholder", "Ciudad").val("").focus().blur();
+    	$("#id_cod_postal").attr("placeholder", "Cód. Postal").val("").focus().blur();
+	</script>
+
 	</body>
 </html>
