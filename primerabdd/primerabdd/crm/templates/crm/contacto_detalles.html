@@ -182,10 +182,10 @@
         <div class="col-lg-4">
             <label for="{{ contacto.tipo.id_for_label }}">Tipo *</label>
             <br>
-            {% if contacto.tipo == None %}
+            {% if contacto.categoria == None %}
                 <input type="text" name="" value="-" disabled>
             {% else %}
-                <input type="text" name="" value="{{ contacto.tipo }}" disabled>
+                <input type="text" name="" value="{{ contacto.categoria }}" disabled>
             {% endif %}
         </div>
 

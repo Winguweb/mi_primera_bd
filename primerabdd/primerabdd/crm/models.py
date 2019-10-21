@@ -108,8 +108,18 @@ class Contacto(models.Model):
 
 
     fecha_de_nacimiento = models.DateField('fecha de nacimiento')
+    
+    TIPOS_CONTACTO = [
+        (0, 'General'),
+        (1, 'Donante'),
+        (2, 'Voluntario'),
+        (3, 'Ambos'),
+    ]
 
-    tipo = models.OneToOneField(
+    tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto')
+    
+    #LO CAMBIO A CATEGORIA DE FORMA PROVISORIA
+    categoria = models.OneToOneField(
             CampoCustomTipoContacto,
             on_delete=models.CASCADE,
             blank=True,
