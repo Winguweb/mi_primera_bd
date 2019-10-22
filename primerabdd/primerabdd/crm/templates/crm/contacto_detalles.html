@@ -92,16 +92,20 @@
             <input type="text" name="" value="{{ contacto.cuenta }}" disabled>
         </div>
 
-        <div class="col-lg-4">
-            <label for="{{ contacto.calle.id_for_label }}">Dirección</label>
-            <br>
-            {% if contacto.calle == None %}
-                <input type="text" name="" value="-" disabled>
-            {% elif contacto.numero == None %}
-                <input type="text" name="" value="{{ contacto.calle }}" disabled>
+        <div class="col-lg-4" style="white-space:nowrap">
+            <label for="{{ contacto.es_voluntario.id_for_label }}">Perfil Voluntariado</label>
+            {% if contacto.es_voluntario %}
+                <input type="checkbox" data-toggle="toggle" data-size="sm" disabled checked>
             {% else %}
-                <input type="text" name="" value="{{ contacto.calle }}, {{ contacto.numero }}" disabled>
+                <input type="checkbox" data-toggle="toggle" data-size="sm" disabled>
             {% endif %}
+            <div>
+                {% if contacto.estado == None %}
+                    <input type="text" name="" value="-" disabled>
+                {% else %}
+                    <input type="text" name="" value="{{ contacto.get_estado_display }}" disabled>
+                {% endif %}
+            </div>
         </div>
     </div>
 
@@ -122,16 +126,12 @@
                 <input type="text" name="" value="{{ contacto.email_alternativo }}" disabled>
             {% endif %}
         </div>
-
-        <div class="col-lg-4">
-            <label for="{{ contacto.ciudad.id_for_label }}">Ciudad</label>
-            <br>
-            {% if contacto.ciudad == None %}
+        <div class="col-lg-4" >
+            <label for="{{ contacto.turno.id_for_label }}">Turno</label>
+            {% if contacto.turno == None %}
                 <input type="text" name="" value="-" disabled>
-            {% elif contacto.cod_postal == None %}
-                <input type="text" name="" value="{{ contacto.ciudad }}" disabled>
             {% else %}
-                <input type="text" name="" value="{{ contacto.ciudad }} ({{ contacto.cod_postal }})" disabled>
+                <input type="text" name="" value="{{ contacto.get_turno_display }}" disabled>
             {% endif %}
         </div>
     </div>
@@ -144,6 +144,40 @@
                 <input type="text" name="" value="-" disabled>
             {% else %}
                 <input type="text" name="" value="{{ contacto.telefono }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ contacto.calle.id_for_label }}">Dirección</label>
+            <br>
+            {% if contacto.calle == None %}
+                <input type="text" name="" value="-" disabled>
+            {% elif contacto.numero == None %}
+                <input type="text" name="" value="{{ contacto.calle }}" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.calle }}, {{ contacto.numero }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4" >
+            <label for="{{ contacto.habilidades.id_for_label }}">Habilidades</label>
+            {% if contacto.habilidades == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.get_habilidades_display }}" disabled>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ contacto.ciudad.id_for_label }}">Ciudad</label>
+            <br>
+            {% if contacto.ciudad == None %}
+                <input type="text" name="" value="-" disabled>
+            {% elif contacto.cod_postal == None %}
+                <input type="text" name="" value="{{ contacto.ciudad }}" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ contacto.ciudad }} ({{ contacto.cod_postal }})" disabled>
             {% endif %}
         </div>
 
@@ -193,10 +227,10 @@
             <label for="{{ contacto.recibir_novedades.id_for_label }}">¿Desea recibir novedades?</label>
             <br>
             <div>
-                {% if contacto.recibir_novedades == False %}
-                    <input type="checkbox" checked="false" data-toggle="toggle" data-size="sm" disabled>
+                {% if contacto.recibir_novedades %}
+                    <input type="checkbox" data-toggle="toggle" data-size="sm" disabled checked>
                 {% else %}
-                    <input type="checkbox" checked="true" data-toggle="toggle" data-size="sm" disabled>
+                    <input type="checkbox" data-toggle="toggle" data-size="sm" disabled>
                 {% endif %}
             </div>
         </div>
