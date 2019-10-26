@@ -121,8 +121,8 @@
     <div class="row">
         <div class="col-lg-12">
             <label for="{{ cuenta.observaciones.id_for_label }}">Observaciones</label>
-            <br>
-            {% if cuenta.observaciones == "" or cuenta.observaiones == None %}
+            <br> 
+            {% if cuenta.observaciones == "" or cuenta.observaciones == None %}
                 <input style="width: 97%; height: 35px;" type="text" name="" value="-" disabled>
             {% else %}
                 <input style="width: 97%; height: 100px;" type="text" name="" value="{{ cuenta.observaciones }}" disabled>

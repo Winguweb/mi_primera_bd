@@ -58,6 +58,11 @@ class CuentasCrear(CreateView):
         
         return super(CuentasCrear, self).form_valid(form)
 
+class CuentasEditar(UpdateView): 
+    model = Cuenta
+    form_class = CuentaCrearForm
+    template_name = 'crm/creacion_cuenta.html'
+    success_url = reverse_lazy('ver_cuentas')
 
 
 class CuentasContactos(TemplateView):

@@ -37,15 +37,28 @@
 		<tbody>
 			{% for cuenta in mis_cuentas %}
 			<tr>
-			<td>{{ cuenta.nombre }}</td>
-			<td class="tdCenter">-</td>
-			<td class="tdCenter">{{ cuenta.email }}</td>
-			<td class="tdCenter">{{ cuenta.telefono }}</td>
-			<td class="tdCenter">
-				<a class="btn btn-primary" href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
-				<a class="btn btn-secondary" href="{% url 'cuentas_contactos' cuenta.id %}">Ver contactos</a>
-				<a class="btn btn-danger" href="#">Eliminar</a>
-			</td>
+				<td>{{ cuenta.nombre }}</td>
+				<td class="tdCenter">
+					{% if cuenta.tipo == None %}
+					    {{ "-" }}
+					{% else %}
+					    {{ cuenta.tipo }}
+					{% endif %}
+				</td>
+				<td class="tdCenter">{{ cuenta.email }}</td>
+				<td class="tdCenter">
+					{% if cuenta.telefono == None %}
+					    {{ "-" }}
+					{% else %}
+					    {{ cuenta.telefono }}
+					{% endif %}
+				</td>
+				<td class="tdCenter">
+					<a class="btn btn-primary" href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
+					<a class="btn btn-secondary" href="{% url 'editar_cuenta'  cuenta.id  %}">Editar</a>
+					<a class="btn btn-dark" href="{% url 'cuentas_contactos' cuenta.id %}">Ver contactos</a>
+					<a class="btn btn-danger" href="#">Eliminar</a>
+				</td>
 			</tr>
 
 			{% endfor %}
