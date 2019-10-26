@@ -1,94 +1,147 @@
 {% extends "base.html" %}
 
 {% block body %}
-	<h1>Detalle de cuenta</h1>
 
-	<p><b>Nombre:</b> {{cuenta.nombre}}</p>
+<style type="text/css">
+    
+    .col-lg-4 input, .col-lg-4 select {
+        width: 90%;
+    }
 
-	<p>
-		<b>Dirección:</b> 
-			{% if cuenta.calle == None or cuenta.numero == None %} 
-				{{ "-" }} 
-			{% else %}
-				{{cuenta.calle}}, {{cuenta.numero}}
-			{% endif %} 
-	</p>
-	
-	<p>
-		<b>Ciudad:</b> 
-			{% if cuenta.ciudad == None%} 
-				{{ "-" }} 
-			{% else %}
-				{{cuenta.ciudad}}
-			{% endif %} 
-	</p>
-	
-	<p>
-		<b>Código Postal:</b> 
-			{% if cuenta.cod_postal == None%} 
-				{{ "-" }} 
-			{% else %}
-				{{cuenta.cod_postal}}
-			{% endif %} 
-	</p>
-	
-	<p>
-		<b>País:</b>
-			{% if cuenta.pais == None%} 
-				{{ "-" }} 
-			{% else %}
-				{{cuenta.pais}}
-			{% endif %} 
-	</p>
-	
-	<p><b>Mail:</b> {{cuenta.email}}</p>
-	
-	<p>
-		<b>Mail Alternativo:</b>
-			{% if cuenta.email_alternativo == None%} 
-				{{ "-" }} 
-			{% else %}
-				{{cuenta.email_alternativo}}
-			{% endif %} 
-	</p>
-	
-	<p>
-		<b>Teléfono:</b>
-			{% if cuenta.telefono == None%} 
-				{{ "-" }} 
-			{% else %}
-				{{cuenta.telefono}}
-			{% endif %} 
-		</p>
-	
-	<p>
-		<b>Télefono Alternativo:</b> 
-			{% if cuenta.telefono_alternativo == None%} 
-				{{ "-" }} 
-			{% else %}
-				{{cuenta.telefono_alternativo}}
-			{% endif %} 
-	</p>
-	
-	<p>
-		<b>Web:</b>
-			{% if cuenta.web == None%} 
-				{{ "-" }} 
-			{% else %}
-				{{cuenta.web}}
-			{% endif %} 
-	</p>
-	
-	<p>
-		<b>Observaciones:</b> {% if cuenta.observaciones == None%} 
-			{{ "-" }} 
-		{% else %}
-			{{cuenta.observaciones}}
-	{% endif %} 
-	</p>
+    .col-lg-4 .btn {
+        width: 50%;
+    }
+
+    p {
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    #id_observaciones {
+        width: 97%;
+        height: 100px;
+    }
+
+</style>
+
+<form style="padding: 15px;" action="" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <h2>Gestión de Cuentas</h2>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ cuenta.nombre.id_for_label }}">Nombre *</label>
+            <br>
+            <input type="text" name="" value="{{ cuenta.nombre }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ cuenta.calle.id_for_label }}">Dirección</label>
+            <br>
+            {% if cuenta.calle == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ cuenta.calle }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ cuenta.pais.id_for_label }}">País</label>
+            <br>
+            {% if cuenta.pais == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ cuenta.pais }}" disabled>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ cuenta.email.id_for_label }}">Email *</label>
+            <br>
+            <input type="text" name="" value="{{ cuenta.email }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ cuenta.email_alternativo.id_for_label }}">Email  Alternativo</label>
+            <br>
+            {% if cuenta.email_alternativo == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ cuenta.email_alternativo }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ cuenta.tipo.id_for_label }}">Tipo</label>
+            <br>
+            {% if cuenta.tipo == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ cuenta.tipo }}" disabled>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ cuenta.telefono.id_for_label }}">Teléfono</label>
+            <br>
+            {% if cuenta.telefono == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ cuenta.telefono }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ cuenta.telefono_alternativo.id_for_label }}">Tel. Alternativo</label>
+            <br>
+            {% if cuenta.telefono_alternativo == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ cuenta.telefono_alternativo }}" disabled>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ cuenta.web.id_for_label }}">Web</label>
+            <br>
+            {% if cuenta.web == None %}
+                <input type="text" name="" value="-" disabled>
+            {% else %}
+                <input type="text" name="" value="{{ cuenta.web }}" disabled>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <label for="{{ cuenta.observaciones.id_for_label }}">Observaciones</label>
+            <br>
+            {% if cuenta.observaciones == "" or cuenta.observaiones == None %}
+                <input style="width: 97%; height: 35px;" type="text" name="" value="-" disabled>
+            {% else %}
+                <input style="width: 97%; height: 100px;" type="text" name="" value="{{ cuenta.observaciones }}" disabled>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row" style="padding-right: 20px; padding-left: 10px;">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
+            <a class="btn btn-secondary" style="margin-top: 10px; margin-right: 40px;" href="/cuentas">Volver</a>
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
+            <input class="btn btn-success" type="submit" value="Guardar" style="margin-top: 10px; margin-right: 40px;" /> 
+        </div>
+    </div>
+
+</form>
 
 {% endblock %}
-
-
-
-

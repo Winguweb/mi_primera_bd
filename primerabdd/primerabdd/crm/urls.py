@@ -18,5 +18,6 @@ urlpatterns = [
     path('custom/deleteGender/<int:pk>', views.CampoCustomGeneroEliminar.as_view(), name='eliminar_custom_genero'),
     path('custom/deleteOrigin/<int:pk>', views.CampoCustomOrigenEliminar.as_view(), name='eliminar_custom_origen'),
     path('custom/deleteContactType/<int:pk>', views.CampoCustomTipoContactoEliminar.as_view(), name='eliminar_custom_tipo_contacto'),
-    path('custom/deleteAccountType/<int:pk>', views.CampoCustomtipoCuentaEliminar.as_view(), name='eliminar_custom_tipo_cuenta') 
+    path('custom/deleteAccountType/<int:pk>', views.CampoCustomtipoCuentaEliminar.as_view(), name='eliminar_custom_tipo_cuenta'),
+    path('cuentas/create/', views.CuentasCrear.as_view(), name='crear_cuenta'),
 ]

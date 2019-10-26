@@ -43,6 +43,23 @@ class CuentasDetalles(DetailView):
     context_object_name = 'cuenta'  
     template_name = 'crm/cuentas_detalles.html'  
 
+class CuentasCrear(CreateView):
+    model = Cuenta
+    form_class = CuentaCrearForm
+    template_name = 'crm/creacion_cuenta.html'
+    success_url = reverse_lazy('ver_cuentas')
+
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+
+        form.instance.organizacion = organizacion
+        self.object = form.save()
+        
+        return super(CuentasCrear, self).form_valid(form)
+
+
+
 class CuentasContactos(TemplateView):
     context_object_name = 'contatos_cuenta'
     template_name = 'crm/cuentas_contactos.html'

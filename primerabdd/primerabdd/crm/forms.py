@@ -27,3 +27,15 @@ class ContactoCrearForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ContactoCrearForm, self).__init__(*args, **kwargs)
+
+class CuentaCrearForm(ModelForm):
+    class Meta:
+        model = Cuenta
+        exclude = ['organizacion']
+
+        widgets = {
+            'tipo': Select2Widget(attrs={'data-placeholder':""}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CuentaCrearForm, self).__init__(*args, **kwargs)
