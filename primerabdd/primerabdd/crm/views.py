@@ -143,6 +143,10 @@ class ContactoCrear(CreateView):
         #filtro los tipos de contacto segun org
         tipos_de_contacto_de_la_organizacion = CampoCustomTipoContacto.objects.filter(organizacion__usuario=self.request.user)
         data['form'].fields['categoria'].queryset = tipos_de_contacto_de_la_organizacion
+
+        #filtro las cuentas segun org
+        cuentas_de_la_organizacion = Cuenta.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['cuenta'].queryset = cuentas_de_la_organizacion
     
         data['accion'] = 'Nuevo Contacto'
 
