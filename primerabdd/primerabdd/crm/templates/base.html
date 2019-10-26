@@ -97,41 +97,6 @@
 			</div>
 	  	</nav>
 
-<!--         <nav class="navbar navbar-expand-lg"> -->
-            <!-- Brand/logo -->
-<!--             <img src="{% static "logo_blanco.png" %}" alt="Not found"> -->
-                 
-            <!-- Links -->
-<!--             <ul style="padding-left: 10px;" class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/dashboard"><b>Indicadores</b></a>
-                </li>
-                <li class="nav-item">
-                   <a class="nav-link" href="/contactos"><b>Gestión de Contactos</b></a>
-                </li>
-                <li class="nav-item">
-                   <a class="nav-link" href="/cuentas"><b>Gestión de Cuentas</b></a>
-                </li>
-                <li class="nav-item">
-                   <a class="nav-link" href="#"><b>Gestión de Oportunidades</b></a>
-                </li>
-                <li class="nav-item">
-                   <a class="nav-link" href="/custom"><b>Configuración de Campos</b></a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-            	<div class="row">
-	                <li class="nav-item">
-                        <b>Usuario:{{ user }}</b></a>
-                	</li>
-            	</div>
-            	<div class="row">
-	                <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}"><b>Cerrar Sesión</b></a>
-                	</li>
-            	</div>
-            </ul>
-        </nav> -->
         {% endif %}
         
         
@@ -150,6 +115,32 @@
     	$("#id_ciudad").attr("placeholder", "Ciudad").val("").focus().blur();
     	$("#id_cod_postal").attr("placeholder", "Cód. Postal").val("").focus().blur();
 	</script>
+
+    <!-- Habilitar/Deshabilitad campos de voluntario -->
+    <script type="text/javascript">
+
+        if ($('#id_es_voluntario').prop('checked')) {
+            $("#id_estado").prop('disabled', false);
+            $("#id_turno").prop('disabled', false);
+            $("#id_habilidades").prop('disabled', false);
+        } else {
+            $("#id_estado").prop('disabled', true);
+            $("#id_turno").prop('disabled', true);
+            $("#id_habilidades").prop('disabled', true);           
+        }
+
+        $('#id_es_voluntario').change(function() {
+            if(this.checked) {
+                $("#id_estado").prop('disabled', false);
+                $("#id_turno").prop('disabled', false);
+                $("#id_habilidades").prop('disabled', false);
+            } else {
+                $("#id_estado").prop('disabled', true);
+                $("#id_turno").prop('disabled', true);
+                $("#id_habilidades").prop('disabled', true);
+            }     
+        });
+    </script>
 
 	</body>
 </html>
