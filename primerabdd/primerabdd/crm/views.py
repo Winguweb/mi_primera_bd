@@ -29,19 +29,34 @@ class CuentasLista(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+        id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
 
         query = self.request.GET.get('query')
         
         if query:
             return Cuenta.objects.filter(id__in=listado_cuentas).filter(Q(nombre__icontains=query))
 
-        return Cuenta.objects.filter(id__in=listado_cuentas)
+        listado_cuentas = Cuenta.objects.filter(id__in=id_listado_cuentas)
+
+        for cuenta_actual in listado_cuentas:
+            #Tomo lps Contactos segun cuenta
+            contactos = Contacto.objects.filter(cuenta__id=cuenta_actual.id).values_list('id', flat=True)
+            if not contactos:
+                cuenta_actual.tiene_contactos = True
+            else:
+                cuenta_actual.tiene_contactos = False
+
+        return listado_cuentas
 
 class CuentasDetalles(DetailView): 
     model = Cuenta
     context_object_name = 'cuenta'  
-    template_name = 'crm/cuentas_detalles.html'  
+    template_name = 'crm/cuentas_detalles.html'
+
+class CuentasEliminar(DeleteView): 
+    model = Cuenta
+    template_name = 'crm/confirmar_eliminacion.html'
+    success_url = reverse_lazy('ver_cuentas')  
 
 class CuentasCrear(CreateView):
     model = Cuenta

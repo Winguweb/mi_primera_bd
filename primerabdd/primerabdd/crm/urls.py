@@ -21,4 +21,5 @@ urlpatterns = [
     path('custom/deleteAccountType/<int:pk>', views.CampoCustomtipoCuentaEliminar.as_view(), name='eliminar_custom_tipo_cuenta'),
     path('cuentas/create/', views.CuentasCrear.as_view(), name='crear_cuenta'),
     path('cuentas/edit/<int:pk>', views.CuentasEditar.as_view(), name='editar_cuenta'),
+    path('cuentas/delete/<int:pk>', views.CuentasEliminar.as_view(), name='eliminar_cuenta'),
 ]

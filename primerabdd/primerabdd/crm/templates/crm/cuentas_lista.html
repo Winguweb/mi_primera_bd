@@ -57,7 +57,11 @@
 					<a class="btn btn-primary" href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
 					<a class="btn btn-secondary" href="{% url 'editar_cuenta'  cuenta.id  %}">Editar</a>
 					<a class="btn btn-dark" href="{% url 'cuentas_contactos' cuenta.id %}">Ver contactos</a>
-					<a class="btn btn-danger" href="#">Eliminar</a>
+					{% if cuenta.tiene_contactos == True %}
+						<a class="btn btn-danger" href="{% url 'eliminar_cuenta'  cuenta.id  %}">Eliminar</a>
+					{% else %}
+						<button type="button" class="btn btn-danger" href="#" title="No se puede eliminar una cuenta que contenga contactos" disabled>Eliminar</a>
+					{% endif %}
 				</td>
 			</tr>
 
