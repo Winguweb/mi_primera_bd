@@ -131,7 +131,7 @@ class Contacto(models.Model):
     sexo = models.IntegerField(choices=OPCIONES_GENERO, blank=False, null=False, default=2)
 
 
-    origen = models.OneToOneField(
+    origen = models.ForeignKey(
             CampoCustomOrigen,
             on_delete=models.CASCADE,
             blank=True,
