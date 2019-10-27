@@ -56,10 +56,11 @@
 				<td class="tdCenter">
 					<a class="btn btn-primary" href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
 					<a class="btn btn-secondary" href="{% url 'editar_cuenta'  cuenta.id  %}">Editar</a>
-					<a class="btn btn-dark" href="{% url 'cuentas_contactos' cuenta.id %}">Ver contactos</a>
 					{% if cuenta.tiene_contactos == True %}
-						<a class="btn btn-danger" href="{% url 'eliminar_cuenta'  cuenta.id  %}">Eliminar</a>
+						<button class="btn btn-dark" href="#" title="Sin contactos" disabled>Ver contactos</button>
+						<a class="btn btn-danger" onclick="return confirm('¿Está seguro que desea eliminar esta cuenta?')" href="{% url 'eliminar_cuenta'  cuenta.id  %}">Eliminar</a>
 					{% else %}
+						<a class="btn btn-dark" href="{% url 'cuentas_contactos' cuenta.id %}">Ver contactos</a>
 						<button type="button" class="btn btn-danger" href="#" title="No se puede eliminar una cuenta que contenga contactos" disabled>Eliminar</a>
 					{% endif %}
 				</td>
