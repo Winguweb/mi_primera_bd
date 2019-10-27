@@ -70,6 +70,16 @@ class CuentasCrear(CreateView):
     template_name = 'crm/creacion_cuenta.html'
     success_url = reverse_lazy('ver_cuentas')
 
+    def get_context_data(self, **kwargs):
+        data = super(CuentasCrear, self).get_context_data(**kwargs)
+        
+        #Filtro los campos custom de tipo de cuenta por organizacion
+        tiposCuenta_de_org = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['tipo'].queryset = tiposCuenta_de_org
+
+        return data
+
+
     def form_valid(self, form):
         user = self.request.user
         organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
@@ -84,6 +94,15 @@ class CuentasEditar(UpdateView):
     form_class = CuentaCrearForm
     template_name = 'crm/creacion_cuenta.html'
     success_url = reverse_lazy('ver_cuentas')
+
+    def get_context_data(self, **kwargs):
+        data = super(CuentasEditar, self).get_context_data(**kwargs)
+        
+        #Filtro los campos custom de tipo de cuenta por organizacion
+        tiposCuenta_de_org = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['tipo'].queryset = tiposCuenta_de_org
+
+        return data
 
 
 class CuentasContactos(TemplateView):
