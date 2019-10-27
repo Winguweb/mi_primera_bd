@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import *
 from django.urls import reverse_lazy
-from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomGenero, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
+from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
 from djmoney.forms.fields import MoneyField
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -153,10 +153,6 @@ class ContactoCrear(CreateView):
     def get_context_data(self, **kwargs):
         data = super(ContactoCrear, self).get_context_data(**kwargs)
 
-        #filtro los sexos segun org
-        generos_de_la_organizacion = CampoCustomGenero.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['sexo'].queryset = generos_de_la_organizacion
-
         #filtro los origenes segun org
         origenes_de_la_organizacion = CampoCustomOrigen.objects.filter(organizacion__usuario=self.request.user)
         data['form'].fields['origen'].queryset = origenes_de_la_organizacion
@@ -208,10 +204,6 @@ class ContactoEditar(UpdateView):
     def get_context_data(self, **kwargs):
         data = super(ContactoEditar, self).get_context_data(**kwargs)
         data['accion'] = 'Editar Contacto'
-
-        #filtro los sexos segun org
-        generos_de_la_organizacion = CampoCustomGenero.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['sexo'].queryset = generos_de_la_organizacion
 
         #filtro los origenes segun org
         origenes_de_la_organizacion = CampoCustomOrigen.objects.filter(organizacion__usuario=self.request.user)
@@ -308,18 +300,11 @@ class CamposCustom(TemplateView):
     def get_context_data(self, **kwargs):
         user = self.request.user
         context = super(CamposCustom, self).get_context_data(**kwargs)
-        context['camposGenero'] = CampoCustomGenero.objects.filter(organizacion__usuario=user)
         context['camposOrigen'] = CampoCustomOrigen.objects.filter(organizacion__usuario=user)
         context['camposTipoContacto'] = CampoCustomTipoContacto.objects.filter(organizacion__usuario=user)
         context['tiposCuenta'] = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=user)
-        print(context['camposGenero'])
         #context['modeltwo'] = ModelTwo.objects.get(*query logic*)
         return context
-
-class CampoCustomGeneroEliminar(DeleteView): 
-    model = CampoCustomGenero
-    template_name = 'crm/eliminar_campo_custom.html'
-    success_url = reverse_lazy('campos_custom')
 
 class CampoCustomOrigenEliminar(DeleteView): 
     model = CampoCustomOrigen
