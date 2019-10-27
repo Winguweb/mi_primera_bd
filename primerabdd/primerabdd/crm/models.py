@@ -61,7 +61,7 @@ class Cuenta(models.Model):
     email = models.EmailField(default=None, blank=False, null=False)
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
-    tipo = models.OneToOneField(
+    tipo = models.ForeignKey(
             CampoCustomTipoCuenta,
             on_delete=models.CASCADE,
             blank=True,
@@ -111,7 +111,7 @@ class Contacto(models.Model):
     tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto', blank=True, null=True)
     
     #LO CAMBIO A CATEGORIA DE FORMA PROVISORIA
-    categoria = models.OneToOneField(
+    categoria = models.ForeignKey(
             CampoCustomTipoContacto,
             on_delete=models.CASCADE,
             blank=True,
