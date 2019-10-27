@@ -46,7 +46,11 @@ class CuentasLista(ListView):
             else:
                 cuenta_actual.tiene_contactos = False
 
-        return listado_cuentas
+        paginator = Paginator(listado_cuentas,10)
+        page = self.request.GET.get('page')
+        listado_cuentas_paginado = paginator.get_page(page) 
+        listado_cuentas_paginado.query = query
+        return listado_cuentas_paginado
 
 class CuentasDetalles(DetailView): 
     model = Cuenta

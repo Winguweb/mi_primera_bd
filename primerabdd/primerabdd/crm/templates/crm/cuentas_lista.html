@@ -1,18 +1,24 @@
 {% extends "base.html" %}
 
 {% block body %}
-	<h2 style="margin-top: 10px; padding-left: 10px;">Cuentas</h2>
+	<style type="text/css">
+		label, input, form {
+			display: inline;
+		}
+	</style>
+
+	<h2 style="margin-top: 10px; padding-left: 10px;">Gestión de Cuentas</h2>
 	<div class="row" style="padding-right: 20px; padding-left: 10px;">
         <div class="form-group mb-4 col-6 col-sm-6 col-md-6 col-lg-6">
             <form type="get" action="." style="margin: 0">
-            	{% if query %}
-            	<input  id="search_box" type="text" name="query"  placeholder={{query}} value ={{query}}>
+            	{% if mis_cuentas.query %}
+            	<input  id="search_box" type="text" name="query"  placeholder={{mis_cuentas.query}} value ={{mis_cuentas.query}}>
             	{% else %}
             	<input  id="search_box" type="text" name="query"  placeholder="¿Qué está buscando?"> 
             	{% endif %}
                 <button id="search_submit" type="submit" >Buscar</button>
             </form> 
-   			{% if query %}
+   			{% if mis_cuentas.query %}
         	  <form type="get" action="." style="margin: 0">
             	<button id="search_submit" type="submit" >Quitar filtro</button>
             </form> 
@@ -69,6 +75,99 @@
 			{% endfor %}
 		</tbody>
 	</table>
+
+	<!-- Paginado -->
+	<div style="background-color: white;" class="navbar navbar-expand-sm" aria-label="Page navigation example">
+	  <ul class="navbar-nav mx-auto">
+	  	{% if mis_cuentas.has_previous %}
+	    <li class="page-item">
+	      {% if mis_cuentas.query %}
+	      <a class="page-link" href="?page=1&query={{mis_cuentas.query}}" aria-label="Previous">
+	      {% else %}
+	      <a class="page-link" href="?page=1" aria-label="Previous">
+	      {% endif %}
+	        <span aria-hidden="true">&laquo;</span>
+	        <span class="sr-only">Previous</span>
+	      </a>
+	    </li>
+	    <li class="page-item">
+	      {% if mis_cuentas.query %}
+	      <a class="page-link" href="?page={{ mis_cuentas.previous_page_number }}&query={{mis_cuentas.query}}" aria-label="Previous">
+	      {% else %}
+	      <a class="page-link" href="?page={{ mis_cuentas.previous_page_number }}" aria-label="Previous">
+	      {% endif %}
+	        <span aria-hidden="true">&lt;</span>
+	        <span class="sr-only">Previous</span>
+	      </a>
+	    </li>
+	    {% else %}
+	    <li class="page-item">
+	      {% if mis_cuentas.query %}
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="query={{mis_cuentas.query}}#" aria-label="Previous">
+	      {% else %}
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="#" aria-label="Previous">
+	      {% endif %}
+	        <span aria-hidden="true">&laquo;</span>
+	        <span class="sr-only">Previous</span>
+	      </a>
+	    </li>
+	    <li class="page-item">
+	   	  {% if mis_cuentas.query %}
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="query={{mis_cuentas.query}}#" aria-label="Previous">
+	      {% else %}
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="#" aria-label="Previous">
+	      {% endif %}
+	        <span aria-hidden="true">&lt;</span>
+	        <span class="sr-only">Previous</span>
+	      </a>
+	    </li>
+	    {% endif %}
+	    <li class="page-item"><a style="pointer-events: none;" class="page-link" href="#">{{ mis_cuentas.number }} de {{ mis_cuentas.paginator.num_pages }}</a></li>
+	    {% if mis_cuentas.has_next %}
+	    <li class="page-item">
+	      {% if mis_cuentas.query %}	
+	      <a class="page-link" href="?page={{ mis_cuentas.next_page_number }}&query={{mis_cuentas.query}}" aria-label="Next">
+	      {% else %}
+	      <a class="page-link" href="?page={{ mis_cuentas.next_page_number }}" aria-label="Next">
+	      {% endif %}
+	        <span aria-hidden="true">&gt;</span>
+	        <span class="sr-only">Next</span>
+	      </a>
+	    </li>
+	    <li class="page-item">
+	      {% if mis_cuentas.query %}	
+	      <a class="page-link" href="?page={{ mis_cuentas.paginator.num_pages }}&query={{mis_cuentas.query}}" aria-label="Next">
+	      {% else %}
+	      <a class="page-link" href="?page={{ mis_cuentas.paginator.num_pages }}" aria-label="Next">
+	      {% endif %}
+	        <span aria-hidden="true">&raquo;</span>
+	        <span class="sr-only">Next</span>
+	      </a>
+	    </li>
+	    {% else %}
+	    <li class="page-item">
+	      {% if mis_cuentas.query %}
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="query={{mis_cuentas.query}}#" aria-label="Next">
+	      {% else %}
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="#" aria-label="Next">	
+	      {% endif %}     
+	        <span aria-hidden="true">&gt;</span>
+	        <span class="sr-only">Next</span>
+	      </a>
+	    </li>
+	    <li class="page-item">	      
+	      {% if mis_cuentas.query %}
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="query={{mis_cuentas.query}}#" aria-label="Next">
+	      {% else %}
+	      <a style="pointer-events: none; background-color: LightGray;" class="page-link" href="#" aria-label="Next">
+	      {% endif %}
+	        <span aria-hidden="true">&raquo;</span>
+	        <span class="sr-only">Next</span>
+	      </a>
+	    </li>
+	    {% endif %}
+	  </ul>
+	</div>
 {% endblock %}
 
 
