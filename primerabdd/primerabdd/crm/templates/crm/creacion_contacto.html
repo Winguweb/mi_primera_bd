@@ -39,6 +39,7 @@
 <form style="padding: 15px;" action="" method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
+
     <h2> {{ "Gestión de Contactos / "|add:accion }} </h2>
 
     <div class="row">
@@ -94,12 +95,15 @@
             {{ form.cuenta }}
         </div>
 
-        <div class="col-lg-4">
-            {{ form.calle.errors }}
-            <label for="{{ form.direccion.id_for_label }}">Dirección</label><br>
-            {{ form.calle }}
-            {{ form.numero }}
+        <div class="col-lg-4" style="white-space:nowrap">
+            {{ form.es_voluntario.errors }}
+            <label for="{{ form.es_voluntario.id_for_label }}">Perfil Voluntariado</label>
+            {{ form.es_voluntario }}
+            <div>
+                {{ form.estado }}
+            </div>
         </div>
+        
     </div>
 
 
@@ -117,10 +121,9 @@
         </div>
 
         <div class="col-lg-4">
-            {{ form.ciudad.errors }}
-            <label for="{{ form.ciudad.id_for_label }}">Ciudad</label><br>
-            {{ form.ciudad }}
-            {{ form.cod_postal }}
+            {{ form.turno.errors }}
+            <label for="{{ form.turno.id_for_label }}"></label>
+            <div>{{ form.turno }}</div>
         </div>
     </div>
 
@@ -132,18 +135,36 @@
         </div>
 
         <div class="col-lg-4">
+            {{ form.calle.errors }}
+            <label for="{{ form.direccion.id_for_label }}">Dirección</label><br>
+            {{ form.calle }}
+            {{ form.numero }}
+        </div> 
+
+        <div class="col-lg-4">
+            {{ form.habilidades.errors }}
+            <label for="{{ form.habilidades.id_for_label }}"></label>
+            <div>{{ form.habilidades }}</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            {{ form.ciudad.errors }}
+            <label for="{{ form.ciudad.id_for_label }}">Ciudad</label><br>
+            {{ form.ciudad }}
+            {{ form.cod_postal }}
+        </div> 
+        <div class="col-lg-4">
             {{ form.movil.errors }}
             <label for="{{ form.telefono.id_for_label }}">Móvil</label>
             {{ form.movil }}
-        </div>
-
+        </div> 
         <div class="col-lg-4">
             {{ form.pais.errors }}
             <label for="{{ form.pais.id_for_label }}">País</label><br>
             {{ form.pais }}
-        </div>
+        </div> 
     </div>
-
     <div class="row">
         <div class="col-lg-4">
             {{ form.origen.errors }}
@@ -171,17 +192,6 @@
             {{ form.observaciones }}
         </div>
     </div>
-
-<!--     <div id="divDonante" style="display: none;">
-        <h1>Donante</h1>
-        {{ donante.as_p }}
-    </div>
-    <div id="divVoluntario" style="display: none;">
-        <h1>Voluntario</h1>
-        {{ voluntario.as_p }}
-    </div> -->
-
-
 
     <div class="row" style="padding-right: 20px; padding-left: 10px;">
         <div class="col-6 col-sm-6 col-md-6 col-lg-6">

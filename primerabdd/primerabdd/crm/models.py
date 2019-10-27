@@ -116,7 +116,7 @@ class Contacto(models.Model):
         (3, 'Ambos'),
     ]
 
-    tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto')
+    tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto', blank=True, null=True)
     
     #LO CAMBIO A CATEGORIA DE FORMA PROVISORIA
     categoria = models.OneToOneField(
@@ -151,6 +151,32 @@ class Contacto(models.Model):
     recibir_novedades = models.BooleanField(default=False, blank=False)
 
     observaciones = models.TextField(default=None, blank=True, null=True)
+
+    es_voluntario = models.BooleanField(default=False, blank=False, null=False)
+
+    TURNOS_VOLUNTARIOS = [
+        (0, 'Mañana'),
+        (1, 'Tarde'),
+    ]
+
+    turno = models.IntegerField(choices=TURNOS_VOLUNTARIOS, blank=True, null=True)
+
+    ESTADO = [
+        (0, 'Activo'),
+        (1, 'Inactivo'),
+    ]
+
+    estado = models.IntegerField(choices=ESTADO, blank=True, null=True)
+
+    LISTA_HABILIDADES = [
+        (0, 'Informatica'),
+        (1, 'Electricidad'),
+        (2, 'Carpinteria'),
+        (3, 'Otras'),
+    ]
+
+    habilidades = models.IntegerField(choices=LISTA_HABILIDADES, blank=True, null=True) 
+    
 
     def __str__(self):
         return self.apellido
@@ -214,19 +240,14 @@ class Voluntario(models.Model):
         (1, 'Tarde'),
     ]
 
-    turno = models.IntegerField(choices=TURNOS_VOLUNTARIOS, default=0, blank=True, null=True)
+    turno = models.IntegerField(choices=TURNOS_VOLUNTARIOS, blank=True, null=True)
 
-    DIAS_PARTICIPACION = [
-        (0, 'Lunes'),
-        (1, 'Martes'),
-        (2, 'Miercoles'),
-        (3, 'Jueves'),
-        (4, 'Viernes'),
-        (5, 'Sabado'),
-        (6, 'Domingo'),
+    ESTADO = [
+        (0, 'Activo'),
+        (1, 'Inactivo'),
     ]
 
-    dias_que_participa = models.IntegerField(choices=DIAS_PARTICIPACION, default=0, blank=True, null=True)
+    estado = models.IntegerField(choices=ESTADO, blank=True, null=True)
 
     LISTA_HABILIDADES = [
         (0, 'Informatica'),
@@ -235,7 +256,7 @@ class Voluntario(models.Model):
         (3, 'Otras'),
     ]
 
-    habilidades = models.IntegerField(choices=LISTA_HABILIDADES, default=0, blank=True, null=True)    
+    habilidades = models.IntegerField(choices=LISTA_HABILIDADES, blank=True, null=True)    
 
 
 

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<style type="text/css">
+    
+    .col-lg-4 input, .col-lg-4 select {
+        width: 90%;
+    }
+
+    .col-lg-4 .btn {
+        width: 50%;
+    }
+
+    p {
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    #id_observaciones {
+        width: 97%;
+        height: 100px;
+    }
+
+</style>
+
+<form style="padding: 15px;" action="" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <h2>Gestión de Cuentas</h2>
+
+    <div class="row">
+        <div class="col-lg-4">
+            {{ form.nombre.errors }}
+            <label for="{{ form.nombre.id_for_label }}">Nombre *</label>
+            {{ form.nombre }}
+        </div>
+
+        <div class="col-lg-4">
+            {{ form.calle.errors }}
+            <label for="{{ form.calle.id_for_label }}">Dirección</label><br>
+            {{ form.calle }}
+        </div>
+
+        <div class="col-lg-4">
+            {{ form.pais.errors }}
+            <label for="{{ form.sexo.id_for_label }}">País</label><br>
+            {{ form.pais }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            {{ form.email.errors }}
+            <label for="{{ form.email.id_for_label }}">Email *</label>
+            {{ form.email }}
+        </div>
+
+        <div class="col-lg-4">
+            {{ form.email_alternativo.errors }}
+            <label for="{{ form.email_alternativo.id_for_label }}">Email Alternativo</label>
+            {{ form.email_alternativo }}
+        </div>
+
+        <div class="col-lg-4">
+            {{ form.tipo.errors }}
+            <label for="{{ form.tipo.id_for_label }}">Tipo</label><br>
+            {{ form.tipo }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            {{ form.telefono.errors }}
+            <label for="{{ form.telefono.id_for_label }}">Teléfono</label>
+            {{ form.telefono }}
+        </div>
+
+        <div class="col-lg-4">
+            {{ form.telefono_alternativo.errors }}
+            <label for="{{ form.telefono_alternativo.id_for_label }}">Tel. Alternativo</label>
+            {{ form.telefono_alternativo }}
+        </div>
+
+        <div class="col-lg-4">
+            {{ form.web.errors }}
+            <label for="{{ form.web.id_for_label }}">Web</label><br>
+            {{ form.web }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            {{ form.observaciones.errors }}
+            <label for="{{ form.observaciones.id_for_label }}">Observaciones</label><br>
+            {{ form.observaciones }}
+        </div>
+    </div>
+
+    <div class="row" style="padding-right: 20px; padding-left: 10px;">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
+            <a class="btn btn-secondary" style="margin-top: 10px; margin-right: 40px;" href="/cuentas">Volver</a>
+        </div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
+            <input class="btn btn-success" type="submit" value="Guardar" style="margin-top: 10px; margin-right: 40px;" /> 
+        </div>
+    </div>
+
+</form>
+
+{% endblock %}
