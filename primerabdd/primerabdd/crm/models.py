@@ -58,7 +58,7 @@ class CampoCustomTipoCuenta(models.Model):
 
 class Cuenta(models.Model):
     organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=200, default=None, blank=False, null=False)
+    nombre = models.CharField(max_length=200, default=None, blank=False, null=False, unique=True)
 
     calle = models.CharField(max_length=200 ,default=None, blank=True, null=True)
     numero = models.CharField(max_length=10, default=None, blank=True, null=True)
@@ -126,7 +126,7 @@ class Contacto(models.Model):
             null=True
         )
 
-    email = models.EmailField(default=None, blank=False, null=False)
+    email = models.EmailField(default=None, blank=False, null=False, unique=True)
 
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
