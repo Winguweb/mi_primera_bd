@@ -325,10 +325,61 @@ class CamposCustom(TemplateView):
         #context['modeltwo'] = ModelTwo.objects.get(*query logic*)
         return context
 
+class CampoCustomOrigenCrear(CreateView):
+    model = CampoCustomOrigen
+    form_class = CampoCustomCrearOrigenForm
+    template_name = 'crm/crear_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomOrigenCrear, self).get_context_data(**kwargs)
+        data['accion'] = 'Agregar Campo Origen'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+    
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        print(organizacion)
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomOrigenCrear, self).form_valid(form)
+
 class CampoCustomOrigenEliminar(DeleteView): 
     model = CampoCustomOrigen
     template_name = 'crm/eliminar_campo_custom.html'
     success_url = reverse_lazy('campos_custom')
+
+class CampoCustomTipoContactoCrear(CreateView):
+    model = CampoCustomTipoContacto
+    form_class = CampoCustomCrearTipoContactoForm
+    template_name = 'crm/crear_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomTipoContactoCrear, self).get_context_data(**kwargs)
+        data['accion'] = 'Agregar Campo Tipo De Contacto'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+    
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        print(organizacion)
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomTipoContactoCrear, self).form_valid(form)
+
+
+
 
 class CampoCustomTipoContactoEliminar(DeleteView): 
     model = CampoCustomTipoContacto

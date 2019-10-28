@@ -1,4 +1,4 @@
-from .models import Organizacion, Cuenta, Contacto, Voluntario
+from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
 from django import forms
 from django.forms import ModelForm, CheckboxInput
 
@@ -39,3 +39,19 @@ class CuentaCrearForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CuentaCrearForm, self).__init__(*args, **kwargs)
+
+class CampoCustomCrearOrigenForm(ModelForm):
+    class Meta:
+        model = CampoCustomOrigen
+        exclude = ['organizacion']
+
+    def __init__(self, *args, **kwargs):
+        super(CampoCustomCrearOrigenForm, self).__init__(*args, **kwargs)
+
+class CampoCustomCrearTipoContactoForm(ModelForm):
+    class Meta:
+        model = CampoCustomTipoContacto
+        exclude = ['organizacion']
+
+    def __init__(self, *args, **kwargs):
+        super(CampoCustomCrearTipoContactoForm, self).__init__(*args, **kwargs)
