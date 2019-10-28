@@ -70,8 +70,14 @@
 				<td class="tdCenter">
 					{% if contacto.sexo == None %}
 					    {{ "-" }}
+					{% elif contacto.sexo == 0 %}
+						{{ "Masculino" }}
+					{% elif contacto.sexo == 1 %}
+						{{ "Femenino" }}
+					{% elif contacto.sexo == 2 %}
+						{{ "Otro" }}
 					{% else %}
-					    {{ contacto.sexo }}
+						{{ contacto.sexo }}
 					{% endif %}
 				</td>
 				<td class="tdCenter">{{ contacto.cuenta }}</td>
