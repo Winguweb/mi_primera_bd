@@ -55,3 +55,11 @@ class CampoCustomCrearTipoContactoForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CampoCustomCrearTipoContactoForm, self).__init__(*args, **kwargs)
+
+class CampoCustomCrearTipoCuentaForm(ModelForm):
+    class Meta:
+        model = CampoCustomTipoCuenta
+        exclude = ['organizacion']
+
+    def __init__(self, *args, **kwargs):
+        super(CampoCustomCrearTipoCuentaForm, self).__init__(*args, **kwargs)

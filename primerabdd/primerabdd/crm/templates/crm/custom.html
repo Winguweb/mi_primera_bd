@@ -17,7 +17,7 @@
 				<tr>
 				<td>{{ campo.origen }}</td>
 				<td class="tdCenter">
-						<a class="btn btn-secondary" href=# >Editar</a>
+						<a class="btn btn-secondary" href="{% url "editar_custom_origen"  campo.id  %}" >Editar</a>
 						<a class="btn btn-danger" href="{% url "eliminar_custom_origen"  campo.id  %}">Eliminar</a>
 					</td>
 				</tr>
@@ -38,7 +38,7 @@
 					<tr>
 					<td>{{ campo.tipo }}</td>
 					<td class="tdCenter">
-							<a class="btn btn-secondary" href=# >Editar</a>
+							<a class="btn btn-secondary" href="{% url "editar_custom_tipo_contacto"  campo.id  %}" >Editar</a>
 							<a class="btn btn-danger" href="{% url "eliminar_custom_tipo_contacto"  campo.id  %}">Eliminar</a>
 						</td>
 					</tr>
@@ -62,13 +62,14 @@
 			<tr>
 			<td>{{ campo.tipo }}</td>
 			<td class="tdCenter">
-					<a class="btn btn-secondary" href=# >Editar</a>
+					<a class="btn btn-secondary" href="{% url "editar_custom_tipo_cuenta"  campo.id  %}" >Editar</a>
 					<a class="btn btn-danger" href="{% url "eliminar_custom_tipo_cuenta"  campo.id  %}">Eliminar</a>
 				</td>
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
+	<a class="btn btn-success pull-right" href="{% url "crear_custom_tipo_cuenta"  %}">Agregar Campo Tipo</a>
 	</div>
 	</div>
 {% endblock %}
