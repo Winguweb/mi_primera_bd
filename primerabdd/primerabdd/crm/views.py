@@ -358,11 +358,6 @@ def upload_csv(request):
             else:
                 cuenta = Cuenta.objects.filter(id=id_listado_cuentas[0])[0]
 
-            genero = CampoCustomGenero.objects.filter(organizacion__usuario=user).filter(genero=sexo)
-            if not genero:
-                genero = CampoCustomGenero.objects.create(organizacion=user.organizacion,genero=sexo)
-            else:
-                genero = genero[0]
 
             tipoCustom = CampoCustomTipoContacto.objects.filter(organizacion__usuario=user).filter(tipo=tipo)
             if not tipoCustom:
@@ -389,7 +384,7 @@ def upload_csv(request):
                 cargo=cargo, ocupacion=ocupacion, calle=calle, numero=numero, ciudad=ciudad, 
                 pais=pais,cod_postal=cod_postal, email_alternativo=email_alternativo, observaciones=observaciones,
                 movil=movil,origen=origen, habilidades=3, turno=turno, estado=estado, es_voluntario=True,
-                 sexo=genero, telefono=telefono, fecha_de_nacimiento=parse_date(fecha_nacimiento))
+                 sexo=sexo, telefono=telefono, fecha_de_nacimiento=parse_date(fecha_nacimiento))
             contacto.save()              
         except Exception as e:
             print("Error cargando un usuario: " + linea)
