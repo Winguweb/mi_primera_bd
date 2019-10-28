@@ -13,17 +13,35 @@ from django.db.models import Q
 from django.forms.models import inlineformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
+from django.utils.dateparse import parse_date
 
 
-
-CSV_CUENTA_INDEX = 0
-CSV_NOMBRE_INDEX = 1
-CSV_APELLIDO_INDEX = 2
-CSV_TIPO_INDEX = 3
-CSV_EMAIL_INDEX = 4
-CSV_SEXO_INDEX = 5
-CSV_TELEFONO_INDEX = 6
-
+CSV_NOMBRE_INDEX = 0
+CSV_APELLIDO_INDEX = 1
+CSV_DOCUMENTO_INDEX = 2
+CSV_CARGO_INDEX = 3
+CSV_OCUPACION_INDEX = 4
+CSV_CALLE_INDEX = 5
+CSV_NUMERO_INDEX = 6
+CSV_CIUDAD_INDEX = 7
+CSV_COD_POSTAL_INDEX = 8
+CSV_PAIS_INDEX = 9
+CSV_FECHA_NACIMIENTO_INDEX = 10
+CSV_TIPO_INDEX = 11
+CSV_EMAIL_INDEX = 12
+CSV_EMAIL_ALTERNATIVO_INDEX = 13 
+CSV_TELEFONO_INDEX = 14
+CSV_MOVIL_INDEX = 15
+CSV_RECIBIR_NOVEDADES_INDEX = 16
+CSV_OBSERVACIONES_INDEX = 17
+CSV_ES_VOLUNTARIO_INDEX = 18
+CSV_TURNO_INDEX = 19
+CSV_ESTADO_INDEX = 20
+CSV_HABILIDADES_INDEX = 21
+CSV_CATEGORIA_INDEX = 22
+CSV_NOMBRE_CUENTA_INDEX = 23
+CSV_NOMBRE_ORIGEN_INDEX = 24
+CSV_GENERO_INDEX = 25
 
 # Lista de cuentas
 class CuentasLista(ListView): 
@@ -302,19 +320,71 @@ def upload_csv(request):
     for linea in lineas:                      
         try:
             fields = linea.split(",")
-            id_cuenta = fields[CSV_CUENTA_INDEX]
-            cuenta = Cuenta.objects.get(id=id_cuenta)
 
             nombre = fields[CSV_NOMBRE_INDEX]
             apellido = fields[CSV_APELLIDO_INDEX]
-            tipo = int(fields[CSV_TIPO_INDEX])
+            documento = fields[CSV_DOCUMENTO_INDEX]
+            cargo = fields[CSV_CARGO_INDEX]
+            ocupacion = fields[CSV_OCUPACION_INDEX]
+            calle = fields[CSV_CALLE_INDEX]
+            numero = fields[CSV_NUMERO_INDEX]
+            ciudad = fields[CSV_CIUDAD_INDEX]
+            cod_postal = fields[CSV_COD_POSTAL_INDEX]
+            pais = fields[CSV_PAIS_INDEX]
+            fecha_nacimiento = fields[CSV_FECHA_NACIMIENTO_INDEX]
+
+            tipo = fields[CSV_TIPO_INDEX]
             email = fields[CSV_EMAIL_INDEX]
-            sexo = int(fields[CSV_SEXO_INDEX])
+            email_alternativo = fields[CSV_EMAIL_ALTERNATIVO_INDEX]
             telefono = fields[CSV_TELEFONO_INDEX]
+            movil = fields[CSV_MOVIL_INDEX]
+            recibir_novedades = fields[CSV_RECIBIR_NOVEDADES_INDEX]
+            observaciones = fields[CSV_OBSERVACIONES_INDEX]
+            es_voluntario = fields[CSV_ES_VOLUNTARIO_INDEX]
+
+            turno = fields[CSV_TURNO_INDEX]
+            estado = fields[CSV_ESTADO_INDEX]
+            habilidades = fields[CSV_HABILIDADES_INDEX]
+            categoria = fields[CSV_CATEGORIA_INDEX]
+            nombre_cuenta = fields[CSV_NOMBRE_CUENTA_INDEX]
+            origen = fields[CSV_NOMBRE_ORIGEN_INDEX]
+            sexo = fields[CSV_GENERO_INDEX]
             
+            id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).filter(nombre=nombre_cuenta).values_list('id', flat=True)
+            print(id_listado_cuentas)
+            cuenta = None
+            if not id_listado_cuentas:
+                cuenta = Cuenta.objects.create(organizacion=user.organizacion,nombre=nombre_cuenta,email=email_alternativo)
+            else:
+                cuenta = Cuenta.objects.filter(id=id_listado_cuentas[0])[0]
+
+
+            tipoCustom = CampoCustomTipoContacto.objects.filter(organizacion__usuario=user).filter(tipo=tipo)
+            if not tipoCustom:
+                categoria = CampoCustomTipoContacto.objects.create(organizacion=user.organizacion,tipo=tipo)
+            else:
+                categoria = tipoCustom[0]
+            
+            campoOrigen = CampoCustomOrigen.objects.filter(organizacion__usuario=user).filter(origen=origen)
+            if not campoOrigen:
+                origen = CampoCustomOrigen.objects.create(organizacion=user.organizacion,origen=origen)
+            else:
+                origen = campoOrigen[0]
+
+            if turno == "Mañana":
+                turno = 0
+            else:
+                turno = 1
+            if estado == "Activo":
+                estado = 1
+            else: 
+                estado = 0           
             contacto = Contacto(cuenta=cuenta, nombre=nombre, 
-                apellido=apellido, tipo=tipo, email=email,
-                 sexo=sexo, telefono=telefono)
+                apellido=apellido, email=email, tipo=0, categoria=categoria, documento=documento,
+                cargo=cargo, ocupacion=ocupacion, calle=calle, numero=numero, ciudad=ciudad, 
+                pais=pais,cod_postal=cod_postal, email_alternativo=email_alternativo, observaciones=observaciones,
+                movil=movil,origen=origen, habilidades=3, turno=turno, estado=estado, es_voluntario=True,
+                 sexo=sexo, telefono=telefono, fecha_de_nacimiento=parse_date(fecha_nacimiento))
             contacto.save()              
         except Exception as e:
             print("Error cargando un usuario: " + linea)
