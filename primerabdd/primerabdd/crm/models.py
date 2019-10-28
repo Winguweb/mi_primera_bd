@@ -119,7 +119,7 @@ class Contacto(models.Model):
     tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto', blank=True, null=True)
     
     #LO CAMBIO A CATEGORIA DE FORMA PROVISORIA
-    categoria = models.OneToOneField(
+    categoria = models.ForeignKey(
             CampoCustomTipoContacto,
             on_delete=models.CASCADE,
             blank=True,
@@ -130,14 +130,14 @@ class Contacto(models.Model):
 
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
-    sexo = models.OneToOneField(
+    sexo = models.ForeignKey(
             CampoCustomGenero,
             on_delete=models.CASCADE,
             blank=True,
             null=True
         )
 
-    origen = models.OneToOneField(
+    origen = models.ForeignKey(
             CampoCustomOrigen,
             on_delete=models.CASCADE,
             blank=True,
