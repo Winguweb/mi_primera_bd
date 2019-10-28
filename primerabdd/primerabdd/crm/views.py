@@ -11,6 +11,10 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.forms.models import inlineformset_factory
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
+
+
 
 CSV_CUENTA_INDEX = 0
 CSV_NOMBRE_INDEX = 1
@@ -87,7 +91,12 @@ class CuentasCrear(CreateView):
         form.instance.organizacion = organizacion
         self.object = form.save()
         
+        
         return super(CuentasCrear, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return HttpResponse("Repetido.. this is just an HttpResponse object")
 
 class CuentasEditar(UpdateView): 
     model = Cuenta
@@ -205,8 +214,10 @@ class ContactoCrear(CreateView):
         
         return super(ContactoCrear, self).form_valid(form)
 
+
     def form_invalid(self, form):
         print(form.errors)
+        return HttpResponse("Repetido.. this is just an HttpResponse object")
 
 class ContactoDetalle(DetailView): 
     model = Contacto
