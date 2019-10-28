@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
 
+
+
+
+
 class Organizacion(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     nombre = models.CharField(max_length=200, blank=False, null=False)
@@ -16,11 +20,45 @@ class Organizacion(models.Model):
     def __str__(self):
         return self.nombre
 
-            
+#####################################################
+###########     CAMPOS CUSTOMIZABLES    #############
+#####################################################
+
+class CampoCustomGenero(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    genero = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.genero)
+
+class CampoCustomOrigen(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    origen = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.origen)
+
+class CampoCustomTipoContacto(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.tipo)
+
+class CampoCustomTipoCuenta(models.Model):
+    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=50, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return (self.tipo) 
+
+#####################################################
+###########     CAMPOS CUSTOMIZABLES    #############
+#####################################################      
 
 class Cuenta(models.Model):
     organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=200, default=None, blank=False, null=False)
+    nombre = models.CharField(max_length=200, default=None, blank=False, null=False, unique=True)
 
     calle = models.CharField(max_length=200 ,default=None, blank=True, null=True)
     numero = models.CharField(max_length=10, default=None, blank=True, null=True)
@@ -30,6 +68,13 @@ class Cuenta(models.Model):
 
     email = models.EmailField(default=None, blank=False, null=False)
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
+
+    tipo = models.OneToOneField(
+            CampoCustomTipoCuenta,
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+        )
 
     telefono = models.CharField(max_length=50, default=None, blank=True, null=True)
     telefono_alternativo = models.CharField(max_length=50, default=None, blank=True, null=True)
@@ -41,9 +86,6 @@ class Cuenta(models.Model):
     def __str__(self):
         return self.nombre
 
-#########################################
-###########     CONTACTO    #############
-#########################################
 
 class Contacto(models.Model):
     cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE, blank=True)
@@ -66,28 +108,41 @@ class Contacto(models.Model):
 
 
     fecha_de_nacimiento = models.DateField('fecha de nacimiento')
-
+    
     TIPOS_CONTACTO = [
         (0, 'General'),
         (1, 'Donante'),
         (2, 'Voluntario'),
         (3, 'Ambos'),
-        
     ]
 
-    tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto')
+    tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto', blank=True, null=True)
+    
+    #LO CAMBIO A CATEGORIA DE FORMA PROVISORIA
+    categoria = models.OneToOneField(
+            CampoCustomTipoContacto,
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+        )
 
-    email = models.EmailField(default=None, blank=False, null=False)
+    email = models.EmailField(default=None, blank=False, null=False, unique=True)
 
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
-    SEXOS_CONTACTO = [
-        (0, 'Hombre'),
-        (1, 'Mujer'),
-        (2, 'No Aplica')
-    ]
+    sexo = models.OneToOneField(
+            CampoCustomGenero,
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+        )
 
-    sexo = models.IntegerField(choices=SEXOS_CONTACTO, default=None, blank=True, null=True)
+    origen = models.OneToOneField(
+            CampoCustomOrigen,
+            on_delete=models.CASCADE,
+            blank=True,
+            null=True
+    )
 
     telefono = models.CharField(max_length=50, default=None, blank=True, null=True)
 
@@ -96,6 +151,32 @@ class Contacto(models.Model):
     recibir_novedades = models.BooleanField(default=False, blank=False)
 
     observaciones = models.TextField(default=None, blank=True, null=True)
+
+    es_voluntario = models.BooleanField(default=False, blank=False, null=False)
+
+    TURNOS_VOLUNTARIOS = [
+        (0, 'Mañana'),
+        (1, 'Tarde'),
+    ]
+
+    turno = models.IntegerField(choices=TURNOS_VOLUNTARIOS, blank=True, null=True)
+
+    ESTADO = [
+        (0, 'Activo'),
+        (1, 'Inactivo'),
+    ]
+
+    estado = models.IntegerField(choices=ESTADO, blank=True, null=True)
+
+    LISTA_HABILIDADES = [
+        (0, 'Informatica'),
+        (1, 'Electricidad'),
+        (2, 'Carpinteria'),
+        (3, 'Otras'),
+    ]
+
+    habilidades = models.IntegerField(choices=LISTA_HABILIDADES, blank=True, null=True) 
+    
 
     def __str__(self):
         return self.apellido
@@ -159,19 +240,14 @@ class Voluntario(models.Model):
         (1, 'Tarde'),
     ]
 
-    turno = models.IntegerField(choices=TURNOS_VOLUNTARIOS, default=0, blank=True, null=True)
+    turno = models.IntegerField(choices=TURNOS_VOLUNTARIOS, blank=True, null=True)
 
-    DIAS_PARTICIPACION = [
-        (0, 'Lunes'),
-        (1, 'Martes'),
-        (2, 'Miercoles'),
-        (3, 'Jueves'),
-        (4, 'Viernes'),
-        (5, 'Sabado'),
-        (6, 'Domingo'),
+    ESTADO = [
+        (0, 'Activo'),
+        (1, 'Inactivo'),
     ]
 
-    dias_que_participa = models.IntegerField(choices=DIAS_PARTICIPACION, default=0, blank=True, null=True)
+    estado = models.IntegerField(choices=ESTADO, blank=True, null=True)
 
     LISTA_HABILIDADES = [
         (0, 'Informatica'),
@@ -180,5 +256,16 @@ class Voluntario(models.Model):
         (3, 'Otras'),
     ]
 
-    habilidades = models.IntegerField(choices=LISTA_HABILIDADES, default=0, blank=True, null=True)    
-        
+    habilidades = models.IntegerField(choices=LISTA_HABILIDADES, blank=True, null=True)    
+
+
+
+
+
+
+
+
+
+
+
+

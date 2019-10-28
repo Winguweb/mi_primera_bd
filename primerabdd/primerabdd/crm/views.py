@@ -3,13 +3,18 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import *
 from django.urls import reverse_lazy
-from .models import Organizacion, Cuenta, Contacto, Voluntario, Donante
+from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomGenero, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
 from djmoney.forms.fields import MoneyField
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.forms.models import inlineformset_factory
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
+
+
 
 CSV_CUENTA_INDEX = 0
 CSV_NOMBRE_INDEX = 1
@@ -28,19 +33,67 @@ class CuentasLista(ListView):
 
     def get_queryset(self):
         user = self.request.user
-        listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+        id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
 
         query = self.request.GET.get('query')
+
+        listado_cuentas = Cuenta.objects.filter(id__in=id_listado_cuentas)
         
         if query:
-            return Cuenta.objects.filter(id__in=listado_cuentas).filter(Q(nombre__icontains=query))
+            listado_cuentas = Cuenta.objects.filter(id__in=listado_cuentas).filter(Q(nombre__icontains=query))
 
-        return Cuenta.objects.filter(id__in=listado_cuentas)
+        for cuenta_actual in listado_cuentas:
+            #Tomo lps Contactos segun cuenta
+            contactos = Contacto.objects.filter(cuenta__id=cuenta_actual.id).values_list('id', flat=True)
+            if not contactos:
+                cuenta_actual.tiene_contactos = True
+            else:
+                cuenta_actual.tiene_contactos = False
+
+        paginator = Paginator(listado_cuentas,10)
+        page = self.request.GET.get('page')
+        listado_cuentas_paginado = paginator.get_page(page) 
+        listado_cuentas_paginado.query = query
+        return listado_cuentas_paginado
 
 class CuentasDetalles(DetailView): 
     model = Cuenta
     context_object_name = 'cuenta'  
-    template_name = 'crm/cuentas_detalles.html'  
+    template_name = 'crm/cuentas_detalles.html'
+
+class CuentasEliminar(DeleteView): 
+    model = Cuenta
+    success_url = reverse_lazy('ver_cuentas')  
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+class CuentasCrear(CreateView):
+    model = Cuenta
+    form_class = CuentaCrearForm
+    template_name = 'crm/creacion_cuenta.html'
+    success_url = reverse_lazy('ver_cuentas')
+
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+
+        form.instance.organizacion = organizacion
+        self.object = form.save()
+        
+        
+        return super(CuentasCrear, self).form_valid(form)
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return HttpResponse("Repetido.. this is just an HttpResponse object")
+
+class CuentasEditar(UpdateView): 
+    model = Cuenta
+    form_class = CuentaCrearForm
+    template_name = 'crm/creacion_cuenta.html'
+    success_url = reverse_lazy('ver_cuentas')
+
 
 class CuentasContactos(TemplateView):
     context_object_name = 'contatos_cuenta'
@@ -99,10 +152,6 @@ class ContactoEliminar(DeleteView):
     template_name = 'crm/confirmar_eliminacion.html'
     success_url = reverse_lazy('contactos')
 
-
-DonanteFormSet = inlineformset_factory(Contacto, Donante, form=DonanteCrearForm, extra=1, max_num=1)
-VoluntarioFormSet = inlineformset_factory(Contacto, Voluntario, form=VoluntarioCrearForm, extra=1, max_num=1)
-
 class ContactoCrear(CreateView): 
     model = Contacto
     form_class = ContactoCrearForm
@@ -112,22 +161,30 @@ class ContactoCrear(CreateView):
 
     def get_context_data(self, **kwargs):
         data = super(ContactoCrear, self).get_context_data(**kwargs)
+
+        #filtro los sexos segun org
+        generos_de_la_organizacion = CampoCustomGenero.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['sexo'].queryset = generos_de_la_organizacion
+
+        #filtro los origenes segun org
+        origenes_de_la_organizacion = CampoCustomOrigen.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['origen'].queryset = origenes_de_la_organizacion
+
+        #filtro los tipos de contacto segun org
+        tipos_de_contacto_de_la_organizacion = CampoCustomTipoContacto.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['categoria'].queryset = tipos_de_contacto_de_la_organizacion
+
+        #filtro las cuentas segun org
+        cuentas_de_la_organizacion = Cuenta.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['cuenta'].queryset = cuentas_de_la_organizacion
+    
         data['accion'] = 'Nuevo Contacto'
-        if self.request.POST:
-            data['donante'] = DonanteFormSet(self.request.POST)
-            data['voluntario'] = VoluntarioFormSet(self.request.POST)
-        else:
-            data['donante'] = DonanteFormSet()
-            data['voluntario'] = VoluntarioFormSet()
+
         return data
 
     def form_valid(self, form):
         user = self.request.user
         organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
-
-        context = self.get_context_data()
-        donante = context['donante']
-        voluntario = context['voluntario']
 
         cuenta_nombre = form.cleaned_data['cuenta']
         if cuenta_nombre:
@@ -139,29 +196,18 @@ class ContactoCrear(CreateView):
         
         form.instance.cuenta = cuenta
         self.object = form.save()
-
-        es_donante = self.request.POST.get("donanteCheckBox", False)
-        es_voluntario = self.request.POST.get("voluntarioCheckBox", False)
-
-        if es_donante and not es_voluntario and donante.is_valid():
-            form.instance.tipo = 1
-            donante.instance = self.object
-            donante.save()
-        elif es_voluntario and not es_donante and voluntario.is_valid():
-            form.instance.tipo = 2
-            voluntario.instance = self.object
-            voluntario.save()
-        elif es_donante and es_voluntario and donante.is_valid() and voluntario.is_valid():
-            form.instance.tipo = 3
-            donante.instance = self.object
-            donante.save()
-            voluntario.instance = self.object
-            voluntario.save()
-        else:
-            form.instance.tipo = 0
-
-        self.object = form.save()
+        
         return super(ContactoCrear, self).form_valid(form)
+
+
+    def form_invalid(self, form):
+        print(form.errors)
+        return HttpResponse("Repetido.. this is just an HttpResponse object")
+
+class ContactoDetalle(DetailView): 
+    model = Contacto
+    context_object_name = 'contacto'  
+    template_name = 'crm/contacto_detalles.html'
 
 class ContactoEditar(UpdateView): 
     model = Contacto
@@ -173,21 +219,24 @@ class ContactoEditar(UpdateView):
     def get_context_data(self, **kwargs):
         data = super(ContactoEditar, self).get_context_data(**kwargs)
         data['accion'] = 'Editar Contacto'
-        if self.request.POST:
-            data['donante'] = DonanteFormSet(self.request.POST, instance=self.object)
-            data['voluntario'] = VoluntarioFormSet(self.request.POST, instance=self.object)
-        else:
-            data['donante'] = DonanteFormSet(instance=self.object)
-            data['voluntario'] = VoluntarioFormSet(instance=self.object)
+
+        #filtro los sexos segun org
+        generos_de_la_organizacion = CampoCustomGenero.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['sexo'].queryset = generos_de_la_organizacion
+
+        #filtro los origenes segun org
+        origenes_de_la_organizacion = CampoCustomOrigen.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['origen'].queryset = origenes_de_la_organizacion
+
+        #filtro los tipos de contacto segun org
+        tipos_de_contacto_de_la_organizacion = CampoCustomTipoContacto.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['categoria'].queryset = tipos_de_contacto_de_la_organizacion
+
         return data
 
     def form_valid(self, form):
         user = self.request.user
         organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
-
-        context = self.get_context_data()
-        donante = context['donante']
-        voluntario = context['voluntario']
 
         cuenta_nombre = form.cleaned_data['cuenta']
         if cuenta_nombre:
@@ -197,27 +246,6 @@ class ContactoEditar(UpdateView):
             cuenta.save()
         
         form.instance.cuenta = cuenta
-        self.object = form.save()
-
-        es_donante = self.request.POST.get("donanteCheckBox", False)
-        es_voluntario = self.request.POST.get("voluntarioCheckBox", False)
-
-        if es_donante and not es_voluntario and donante.is_valid():
-            form.instance.tipo = 1
-            donante.instance = self.object
-            donante.save()
-        elif es_voluntario and not es_donante and voluntario.is_valid():
-            form.instance.tipo = 2
-            voluntario.instance = self.object
-            voluntario.save()
-        elif es_donante and es_voluntario and donante.is_valid() and voluntario.is_valid():
-            form.instance.tipo = 3
-            donante.instance = self.object
-            donante.save()
-            voluntario.instance = self.object
-            voluntario.save()
-        else:
-            form.instance.tipo = 0
 
         self.object = form.save()
         return super(ContactoEditar, self).form_valid(form)
@@ -281,3 +309,42 @@ def upload_csv(request):
             print("Error cargando un usuario: " + linea)
             print(e)
     return HttpResponseRedirect(reverse("contactos"))
+
+
+# Lista de campos custom por organizacion
+class CamposCustom(TemplateView):
+    template_name = 'crm/custom.html'
+    context_object_name = 'campos'
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super(CamposCustom, self).get_context_data(**kwargs)
+        context['camposGenero'] = CampoCustomGenero.objects.filter(organizacion__usuario=user)
+        context['camposOrigen'] = CampoCustomOrigen.objects.filter(organizacion__usuario=user)
+        context['camposTipoContacto'] = CampoCustomTipoContacto.objects.filter(organizacion__usuario=user)
+        context['tiposCuenta'] = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=user)
+        print(context['camposGenero'])
+        #context['modeltwo'] = ModelTwo.objects.get(*query logic*)
+        return context
+
+class CampoCustomGeneroEliminar(DeleteView): 
+    model = CampoCustomGenero
+    template_name = 'crm/eliminar_campo_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+class CampoCustomOrigenEliminar(DeleteView): 
+    model = CampoCustomOrigen
+    template_name = 'crm/eliminar_campo_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+class CampoCustomTipoContactoEliminar(DeleteView): 
+    model = CampoCustomTipoContacto
+    template_name = 'crm/eliminar_campo_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+class CampoCustomtipoCuentaEliminar(DeleteView): 
+    model = CampoCustomTipoCuenta
+    template_name = 'crm/eliminar_campo_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+
