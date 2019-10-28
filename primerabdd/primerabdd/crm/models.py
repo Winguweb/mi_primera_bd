@@ -23,14 +23,6 @@ class Organizacion(models.Model):
 #####################################################
 ###########     CAMPOS CUSTOMIZABLES    #############
 #####################################################
-
-class CampoCustomGenero(models.Model):
-    organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
-    genero = models.CharField(max_length=50, default=None, blank=True, null=True)
-
-    def __str__(self):
-        return (self.genero)
-
 class CampoCustomOrigen(models.Model):
     organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
     origen = models.CharField(max_length=50, default=None, blank=True, null=True)
@@ -69,7 +61,7 @@ class Cuenta(models.Model):
     email = models.EmailField(default=None, blank=False, null=False)
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
-    tipo = models.OneToOneField(
+    tipo = models.ForeignKey(
             CampoCustomTipoCuenta,
             on_delete=models.CASCADE,
             blank=True,
@@ -119,7 +111,7 @@ class Contacto(models.Model):
     tipo = models.IntegerField(choices=TIPOS_CONTACTO, default=0, verbose_name='Tipo de Contacto', blank=True, null=True)
     
     #LO CAMBIO A CATEGORIA DE FORMA PROVISORIA
-    categoria = models.OneToOneField(
+    categoria = models.ForeignKey(
             CampoCustomTipoContacto,
             on_delete=models.CASCADE,
             blank=True,
@@ -130,14 +122,16 @@ class Contacto(models.Model):
 
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
-    sexo = models.OneToOneField(
-            CampoCustomGenero,
-            on_delete=models.CASCADE,
-            blank=True,
-            null=True
-        )
+    OPCIONES_GENERO = [
+        (0, 'Masculino'),
+        (1, 'Femenino'),
+        (2, 'Otro'),
+    ]
+    
+    sexo = models.IntegerField(choices=OPCIONES_GENERO, blank=False, null=False, default=2)
 
-    origen = models.OneToOneField(
+
+    origen = models.ForeignKey(
             CampoCustomOrigen,
             on_delete=models.CASCADE,
             blank=True,

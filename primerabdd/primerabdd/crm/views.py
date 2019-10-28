@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import *
 from django.urls import reverse_lazy
-from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomGenero, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
+from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
 from djmoney.forms.fields import MoneyField
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -74,6 +74,16 @@ class CuentasCrear(CreateView):
     template_name = 'crm/creacion_cuenta.html'
     success_url = reverse_lazy('ver_cuentas')
 
+    def get_context_data(self, **kwargs):
+        data = super(CuentasCrear, self).get_context_data(**kwargs)
+        
+        #Filtro los campos custom de tipo de cuenta por organizacion
+        tiposCuenta_de_org = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['tipo'].queryset = tiposCuenta_de_org
+
+        return data
+
+
     def form_valid(self, form):
         user = self.request.user
         organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
@@ -93,6 +103,15 @@ class CuentasEditar(UpdateView):
     form_class = CuentaCrearForm
     template_name = 'crm/creacion_cuenta.html'
     success_url = reverse_lazy('ver_cuentas')
+
+    def get_context_data(self, **kwargs):
+        data = super(CuentasEditar, self).get_context_data(**kwargs)
+        
+        #Filtro los campos custom de tipo de cuenta por organizacion
+        tiposCuenta_de_org = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['tipo'].queryset = tiposCuenta_de_org
+
+        return data
 
 
 class CuentasContactos(TemplateView):
@@ -162,10 +181,6 @@ class ContactoCrear(CreateView):
     def get_context_data(self, **kwargs):
         data = super(ContactoCrear, self).get_context_data(**kwargs)
 
-        #filtro los sexos segun org
-        generos_de_la_organizacion = CampoCustomGenero.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['sexo'].queryset = generos_de_la_organizacion
-
         #filtro los origenes segun org
         origenes_de_la_organizacion = CampoCustomOrigen.objects.filter(organizacion__usuario=self.request.user)
         data['form'].fields['origen'].queryset = origenes_de_la_organizacion
@@ -219,10 +234,6 @@ class ContactoEditar(UpdateView):
     def get_context_data(self, **kwargs):
         data = super(ContactoEditar, self).get_context_data(**kwargs)
         data['accion'] = 'Editar Contacto'
-
-        #filtro los sexos segun org
-        generos_de_la_organizacion = CampoCustomGenero.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['sexo'].queryset = generos_de_la_organizacion
 
         #filtro los origenes segun org
         origenes_de_la_organizacion = CampoCustomOrigen.objects.filter(organizacion__usuario=self.request.user)
@@ -319,32 +330,183 @@ class CamposCustom(TemplateView):
     def get_context_data(self, **kwargs):
         user = self.request.user
         context = super(CamposCustom, self).get_context_data(**kwargs)
-        context['camposGenero'] = CampoCustomGenero.objects.filter(organizacion__usuario=user)
         context['camposOrigen'] = CampoCustomOrigen.objects.filter(organizacion__usuario=user)
         context['camposTipoContacto'] = CampoCustomTipoContacto.objects.filter(organizacion__usuario=user)
         context['tiposCuenta'] = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=user)
-        print(context['camposGenero'])
         #context['modeltwo'] = ModelTwo.objects.get(*query logic*)
         return context
 
-class CampoCustomGeneroEliminar(DeleteView): 
-    model = CampoCustomGenero
-    template_name = 'crm/eliminar_campo_custom.html'
+class CampoCustomOrigenCrear(CreateView):
+    model = CampoCustomOrigen
+    form_class = CampoCustomCrearOrigenForm
+    template_name = 'crm/crear_custom.html'
     success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomOrigenCrear, self).get_context_data(**kwargs)
+        data['accion'] = 'Agregar Campo Origen'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+    
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomOrigenCrear, self).form_valid(form)
+
+class CampoCustomOrigenEditar(UpdateView):
+    model = CampoCustomOrigen
+    template_name = 'crm/crear_custom.html'
+    form_class = CampoCustomCrearOrigenForm
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomOrigenEditar, self).get_context_data(**kwargs)
+        data['accion'] = 'Editar Campo Origen'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomOrigenEditar, self).form_valid(form)
+    
 
 class CampoCustomOrigenEliminar(DeleteView): 
     model = CampoCustomOrigen
     template_name = 'crm/eliminar_campo_custom.html'
     success_url = reverse_lazy('campos_custom')
 
+    def get_context_data(self, **kwargs):
+        context = super(CampoCustomOrigenEliminar, self).get_context_data(**kwargs)
+        context["nombre"] = self.object
+        return context
+
+class CampoCustomTipoContactoCrear(CreateView):
+    model = CampoCustomTipoContacto
+    form_class = CampoCustomCrearTipoContactoForm
+    template_name = 'crm/crear_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomTipoContactoCrear, self).get_context_data(**kwargs)
+        data['accion'] = 'Agregar Campo Tipo De Contacto'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+    
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        print(organizacion)
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomTipoContactoCrear, self).form_valid(form)
+
+class CampoCustomTipoContactoEditar(UpdateView):
+    model = CampoCustomTipoContacto
+    template_name = 'crm/crear_custom.html'
+    form_class = CampoCustomCrearTipoContactoForm
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomTipoContactoEditar, self).get_context_data(**kwargs)
+        data['accion'] = 'Editar Campo Tipo de Contacto'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomTipoContactoEditar, self).form_valid(form)
+
 class CampoCustomTipoContactoEliminar(DeleteView): 
     model = CampoCustomTipoContacto
     template_name = 'crm/eliminar_campo_custom.html'
     success_url = reverse_lazy('campos_custom')
 
-class CampoCustomtipoCuentaEliminar(DeleteView): 
+    def get_context_data(self, **kwargs):
+        context = super(CampoCustomTipoContactoEliminar, self).get_context_data(**kwargs)
+        context["nombre"] = self.object
+        return context
+
+class CampoCustomTipoCuentaCrear(CreateView):
+    model = CampoCustomTipoCuenta
+    form_class = CampoCustomCrearTipoCuentaForm
+    template_name = 'crm/crear_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomTipoCuentaCrear, self).get_context_data(**kwargs)
+        data['accion'] = 'Agregar Campo Tipo De Cuenta'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+    
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomTipoCuentaCrear, self).form_valid(form)
+
+class CampoCustomTipoCuentaEditar(UpdateView):
+    model = CampoCustomTipoCuenta
+    template_name = 'crm/crear_custom.html'
+    form_class = CampoCustomCrearTipoCuentaForm
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomTipoCuentaEditar, self).get_context_data(**kwargs)
+        data['accion'] = 'Editar Campo Tipo de Cuenta'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomTipoCuentaEditar, self).form_valid(form)
+
+
+class CampoCustomTipoCuentaEliminar(DeleteView): 
     model = CampoCustomTipoCuenta
     template_name = 'crm/eliminar_campo_custom.html'
     success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        context = super(CampoCustomTipoCuentaEliminar, self).get_context_data(**kwargs)
+        context["nombre"] = self.object
+        return context
 
 

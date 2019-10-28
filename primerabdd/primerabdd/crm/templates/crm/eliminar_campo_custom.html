@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block body %}
-<h1>Eliminar {{ campo }}</h1>
+<h1>Eliminar el campo custom "{{ nombre }}"</h1>
 <form  method="post">
 {% csrf_token %}
 ¿Está seguro de que desea eliminar este campo?
