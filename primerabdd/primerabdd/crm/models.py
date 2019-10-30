@@ -92,8 +92,7 @@ class Contacto(models.Model):
 
     ocupacion = models.CharField(max_length=200, default=None, blank=True, null=True)
 
-    calle = models.CharField(max_length=200 ,default=None, blank=True, null=True)
-    numero = models.CharField(max_length=10, default=None, blank=True, null=True)
+    direccion = models.CharField(max_length=200 ,default=None, blank=True, null=True)
     ciudad = models.CharField(max_length=200, default=None, blank=True, null=True)
     cod_postal = models.CharField(max_length=10, default=None, blank=True, null=True)
     

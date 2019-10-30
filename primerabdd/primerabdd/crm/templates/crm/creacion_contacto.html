@@ -21,7 +21,7 @@
         margin-bottom: 5px;
     }
 
-    #id_calle, #id_ciudad {
+    #id_direccion, #id_ciudad {
         width: 65%;
     }
 
@@ -135,10 +135,9 @@
         </div>
 
         <div class="col-lg-4">
-            {{ form.calle.errors }}
+            {{ form.direccion.errors }}
             <label for="{{ form.direccion.id_for_label }}">Dirección</label><br>
-            {{ form.calle }}
-            {{ form.numero }}
+            {{ form.direccion }}
         </div> 
 
         <div class="col-lg-4">
