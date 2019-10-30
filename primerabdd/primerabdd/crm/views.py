@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import *
 from django.urls import reverse_lazy
-from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
+from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta, Oportunidad
 from djmoney.forms.fields import MoneyField
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -580,3 +580,8 @@ class CampoCustomTipoCuentaEliminar(DeleteView):
         return context
 
 
+# Lista de Oportunidades
+class OportunidadesLista(ListView): 
+    model = Oportunidad 
+    context_object_name = 'mis_oportunidades'  
+    template_name = 'crm/oportunidades_lista.html'

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+	<style type="text/css">
+		label, input, form {
+			display: inline;
+		}
+	</style>
+
+	<h2 style="margin-top: 10px; padding-left: 10px;">Gestión de Oportunidades</h2>
+
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th class="tdCenter">Nombre</th>
+				<th class="tdCenter">Estado</th>
+				<th class="tdCenter">Tipo</th>
+				<th class="tdCenter">Cuenta</th>
+				<th class="tdCenter">Fecha</th>
+				<th class="tdCenter">Acciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for oportunidad in mis_oportunidades %}
+			<tr>
+				<td>{{ oportunidad.nombre }}</td>
+				<td class="tdCenter">{{ oportunidad.estado }}</td>
+				<td class="tdCenter">{{ oportunidad.tipo }}</td>
+				<td class="tdCenter">{{ oportunidad.cuenta }}</td>
+				<td class="tdCenter">{{ oportunidad.fecha }}</td>
+				<td class="tdCenter">
+<!-- 					<a class="btn btn-primary" href="#">Detalles</a> -->
+					<a class="btn btn-secondary" href="#">Editar</a>
+					<a class="btn btn-danger" onclick="return confirm('¿Está seguro que desea eliminar esta oportunidad?')" href="#">Eliminar</a>
+				</td>
+			</tr>
+
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}
