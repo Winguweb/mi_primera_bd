@@ -39,10 +39,14 @@
         <div class="col-lg-4">
             <label for="{{ contacto.sexo.id_for_label }}">Género</label>
             <br>
-            {% if contacto.sexo == None %}
-                <input type="text" name="" value="-" disabled>
+            {% if contacto.sexo == 0 %}
+                <input type="text" name="" value="Masculino" disabled>
+            {% elif contacto.sexo == 1 %}
+                <input type="text" name="" value="Femenino" disabled>
+            {% elif contacto.sexo == 2 %}
+                <input type="text" name="" value="Otro" disabled>
             {% else %}
-                <input type="text" name="" value="{{ contacto.sexo }}" disabled>
+                <input type="text" name="" value="-" disabled>
             {% endif %}
         </div>
     </div>
