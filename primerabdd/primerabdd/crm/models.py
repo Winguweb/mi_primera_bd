@@ -96,7 +96,19 @@ class Contacto(models.Model):
     numero = models.CharField(max_length=10, default=None, blank=True, null=True)
     ciudad = models.CharField(max_length=200, default=None, blank=True, null=True)
     cod_postal = models.CharField(max_length=10, default=None, blank=True, null=True)
-    pais = models.CharField(max_length=200, default=None, blank=True, null=True)
+    
+    PAISES = [
+        (0,'Argentina'),
+        (1,'Ecuador'),
+        (2,'Peru'),
+        (3,'Venezuela'),
+        (4,'Mexico'),
+        (5,'Panama'),
+        (6,'Chile'),
+        (7,'Uruguay'),
+    ]
+
+    pais = models.IntegerField(choices=PAISES, default=None, blank=True, null=True)
 
 
     fecha_de_nacimiento = models.DateField('fecha de nacimiento')
