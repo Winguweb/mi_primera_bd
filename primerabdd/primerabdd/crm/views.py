@@ -585,3 +585,22 @@ class OportunidadesLista(ListView):
     model = Oportunidad 
     context_object_name = 'mis_oportunidades'  
     template_name = 'crm/oportunidades_lista.html'
+
+class OportunidadesEditar(UpdateView): 
+    model = Oportunidad
+    template_name = 'crm/creacion_oportunidad.html'
+    fields = '__all__'
+    success_url = reverse_lazy('ver_oportunidades')
+
+class OportunidadesCrear(CreateView):
+    model = Oportunidad
+    template_name = 'crm/creacion_oportunidad.html'
+    fields = '__all__'
+    success_url = reverse_lazy('ver_oportunidades')
+
+class OportunidadesEliminar(DeleteView): 
+    model = Oportunidad
+    success_url = reverse_lazy('ver_oportunidades')  
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)

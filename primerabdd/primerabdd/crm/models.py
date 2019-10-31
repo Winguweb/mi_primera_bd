@@ -248,9 +248,11 @@ class Voluntario(models.Model):
     habilidades = models.IntegerField(choices=LISTA_HABILIDADES, blank=True, null=True)    
 
 class Oportunidad(models.Model):
-	cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE, blank=True)
-	nombre = models.CharField(max_length=200, default=None, blank=False, null=False)
-	estado = models.CharField(max_length=200, default=None, blank=False, null=False)
-	tipo = models.CharField(max_length=200, default=None, blank=False, null=False)
-	fecha = models.DateField('fecha de nacimiento')
-	monto = MoneyField(max_digits=14, decimal_places=2, default_currency='ARS')
+    cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE, blank=False)
+    nombre = models.CharField(max_length=200, default=None, blank=False, null=False)
+    estado_oportunidad = models.CharField(max_length=200, default=None, blank=False, null=False)
+    tipo = models.CharField(max_length=200, default=None, blank=False, null=False)
+    fecha = models.DateField('fecha de nacimiento')
+    monto = MoneyField(max_digits=14, decimal_places=2, default_currency='ARS', default=0, blank=True)
+    observaciones = models.TextField(default= None, blank=True, null=True)
+
