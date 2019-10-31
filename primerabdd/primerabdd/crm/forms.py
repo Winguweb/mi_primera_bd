@@ -23,6 +23,8 @@ class ContactoCrearForm(ModelForm):
             'estado': Select2Widget(attrs={'data-placeholder':"Estado"}),
             'turno': Select2Widget(attrs={'data-placeholder':"Turno"}),
             'habilidades': Select2Widget(attrs={'data-placeholder':"Habilidades"}),
+            'pais': Select2Widget(attrs={'data-placeholder':"Pais"}),
+
         }
 
     def __init__(self, *args, **kwargs):

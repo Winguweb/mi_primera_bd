@@ -183,7 +183,13 @@
 	    {% endif %}
 	  </ul>
 	</div>
-
+{% if messages %}
+   {% for message in messages %}
+		<script>
+		    alert('{{ message }}');
+		</script>
+   {% endfor %}
+{% endif %}
 {% endblock %}
 
 

@@ -316,8 +316,11 @@ def upload_csv(request):
 
     file_data = csv_file.read().decode("utf-8")     
     lineas = file_data.split("\n")
+    total_contacts = 0
+    failed_contacts = 0
 
-    for linea in lineas:                      
+    for linea in lineas:
+        total_contacts +=1                      
         try:
             fields = linea.split(",")
 
@@ -381,7 +384,7 @@ def upload_csv(request):
                 estado = 0           
             contacto = Contacto(cuenta=cuenta, nombre=nombre, 
                 apellido=apellido, email=email, tipo=0, categoria=categoria, documento=documento,
-                cargo=cargo, ocupacion=ocupacion, calle=calle, numero=numero, ciudad=ciudad, 
+                cargo=cargo, ocupacion=ocupacion, direccion=calle + " " + numero, ciudad=ciudad, 
                 pais=pais,cod_postal=cod_postal, email_alternativo=email_alternativo, observaciones=observaciones,
                 movil=movil,origen=origen, habilidades=3, turno=turno, estado=estado, es_voluntario=True,
                  sexo=sexo, telefono=telefono, fecha_de_nacimiento=parse_date(fecha_nacimiento))
@@ -389,6 +392,8 @@ def upload_csv(request):
         except Exception as e:
             print("Error cargando un usuario: " + linea)
             print(e)
+            failed_contacts += 1
+    messages.error(request,"Se importaron {} de {} contactos".format(total_contacts - failed_contacts, total_contacts))
     return HttpResponseRedirect(reverse("contactos"))
 
 

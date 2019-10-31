@@ -152,14 +152,14 @@
         </div>
 
         <div class="col-lg-4">
-            <label for="{{ contacto.calle.id_for_label }}">Dirección</label>
+            <label for="{{ contacto.direccion.id_for_label }}">Dirección</label>
             <br>
-            {% if contacto.calle == None %}
+            {% if contacto.direccion == None %}
                 <input type="text" name="" value="-" disabled>
-            {% elif contacto.numero == None %}
-                <input type="text" name="" value="{{ contacto.calle }}" disabled>
+            {% elif contacto.direccion == None %}
+                <input type="text" name="" value="{{ contacto.direccion }}" disabled>
             {% else %}
-                <input type="text" name="" value="{{ contacto.calle }}, {{ contacto.numero }}" disabled>
+                <input type="text" name="" value="{{ contacto.direccion }}" disabled>
             {% endif %}
         </div>
 
