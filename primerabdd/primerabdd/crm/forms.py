@@ -1,4 +1,4 @@
-from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
+from .models import Organizacion, Cuenta, Contacto, Voluntario, Oportunidad, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
 from django import forms
 from django.forms import ModelForm, CheckboxInput
 
@@ -41,6 +41,21 @@ class CuentaCrearForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CuentaCrearForm, self).__init__(*args, **kwargs)
+
+class OportunidadCrearForm(ModelForm):
+    class Meta:
+        model = Oportunidad
+        fields = '__all__'
+
+        widgets = {
+            'tipo': Select2Widget(attrs={'data-placeholder':"Tipo"}),
+            'estado_oportunidad': Select2Widget(attrs={'data-placeholder':"Estado"}),
+            'cuenta': Select2Widget(attrs={'data-placeholder':"Cuenta"}),
+            'fecha': DateInput()
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(OportunidadCrearForm, self).__init__(*args, **kwargs)
 
 class CampoCustomCrearOrigenForm(ModelForm):
     class Meta:
