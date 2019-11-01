@@ -135,7 +135,7 @@ STATICFILES_DIRS = [
     STAT,
 ]
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'login_success'
 LOGOUT_REDIRECT_URL = 'login'
 
 

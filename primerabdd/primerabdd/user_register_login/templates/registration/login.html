@@ -88,28 +88,15 @@
         </div>
       {% endfor %}
 
-      <div>
-        <input onclick="validacionTyC()" id="checkTyC" type="checkbox" class="form-check-input" value="">  <a href="#">Términos y Condiciones</a></input>
-      </div>
 
       <div class="text-center" style="padding-top: 10px;">
-        <button id="btnIngresar" type="submit" class="btn btn-success" style="background-color: #1b68ff; border: #1b68ff" disabled>Ingresar</button>
+        <button id="btnIngresar" type="submit" class="btn btn-success" style="background-color: #1b68ff; border: #1b68ff" >Ingresar</button>
       </div>
       
     </form>
 
   </div>
 </div>
-
-<script>
-function validacionTyC() {
-  if ($("#checkTyC").is(":checked")) { 
-    $('#btnIngresar').attr("disabled", false);
-  } else { 
-    $("#btnIngresar").attr("disabled", true);
-  } 
-}
-</script>
 
 {% endblock %}
 

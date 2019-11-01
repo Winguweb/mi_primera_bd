@@ -7,7 +7,7 @@ class Organizacion(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     nombre = models.CharField(max_length=200, blank=False, null=False)
     fecha_alta = models.DateField('fecha de alta')
-
+    tyc_leido = models.BooleanField(blank=False, null=False, default=False)
     
 
     class Meta:
