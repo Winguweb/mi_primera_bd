@@ -12,7 +12,6 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.forms.models import inlineformset_factory
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib import messages
 from django.utils.dateparse import parse_date
 
 

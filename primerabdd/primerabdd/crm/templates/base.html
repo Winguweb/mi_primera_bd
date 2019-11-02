@@ -9,6 +9,7 @@
         {{ form.media.css }}
 	</head>
 	<body>
+		<script src="{% static 'dist/sweetalert2.all.min.js' %}"></script>
         <style type="text/css">
                 /* navbar */
             nav {
@@ -141,6 +142,7 @@
             }     
         });
     </script>
-
+	{% load sweetify %}
+	{% sweetify %}
 	</body>
 </html>

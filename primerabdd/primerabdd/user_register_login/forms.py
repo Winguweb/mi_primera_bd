@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UsernameField#, PasswordInput
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 
 class LoginForm(AuthenticationForm):
     

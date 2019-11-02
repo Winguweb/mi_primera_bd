@@ -57,6 +57,13 @@
 
 </style>
 {% if user.is_authenticated %}
+{% if messages %}
+   {% for message in messages %}
+    <script>
+        alert('{{ message }}');
+    </script>
+   {% endfor %}
+{% endif %}
 <div>
   <h1>Bienvenido a "MI PRIMERA BASE DE DATOS"</h1>
   <h2>Entraste al sistema como: {{ user.username }}</h2>
