@@ -591,6 +591,13 @@ class OportunidadesLista(ListView):
     context_object_name = 'mis_oportunidades'  
     template_name = 'crm/oportunidades_lista.html'
 
+    def get_queryset(self):
+        user = self.request.user
+        id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+
+        listado_oportunidades = Oportunidad.objects.filter(cuenta__id__in=id_listado_cuentas)
+        return listado_oportunidades
+
 class OportunidadesEditar(UpdateView): 
     model = Oportunidad
     form_class = OportunidadCrearForm
