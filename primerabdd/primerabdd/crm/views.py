@@ -414,6 +414,8 @@ class CamposCustom(TemplateView):
         context['camposOrigen'] = CampoCustomOrigen.objects.filter(organizacion__usuario=user)
         context['camposTipoContacto'] = CampoCustomTipoContacto.objects.filter(organizacion__usuario=user)
         context['tiposCuenta'] = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=user)
+        context['estadosOportunidad'] = CampoCustomEstadoOportunidad.objects.filter(organizacion__usuario=user)
+        context['tiposOportunidad'] = CampoCustomTipoOportunidad.objects.filter(organizacion__usuario=user)
         #context['modeltwo'] = ModelTwo.objects.get(*query logic*)
         return context
 
@@ -587,6 +589,122 @@ class CampoCustomTipoCuentaEliminar(DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super(CampoCustomTipoCuentaEliminar, self).get_context_data(**kwargs)
+        context["nombre"] = self.object
+        return context
+
+class CampoCustomEstadoOportunidadCrear(CreateView):
+    model = CampoCustomEstadoOportunidad
+    form_class = CampoCustomCrearEstadoOportunidadForm
+    template_name = 'crm/crear_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomEstadoOportunidadCrear, self).get_context_data(**kwargs)
+        data['accion'] = 'Agregar Campo Estado De Oportunidad'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+    
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomEstadoOportunidadCrear, self).form_valid(form)
+
+class CampoCustomEstadoOportunidadEditar(UpdateView):
+    model = CampoCustomEstadoOportunidad
+    template_name = 'crm/crear_custom.html'
+    form_class = CampoCustomCrearEstadoOportunidadForm
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomEstadoOportunidadEditar, self).get_context_data(**kwargs)
+        data['accion'] = 'Editar Campo Estado de Oportunidad'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomEstadoOportunidadEditar, self).form_valid(form)
+
+
+class CampoCustomEstadoOportunidadEliminar(DeleteView): 
+    model = CampoCustomEstadoOportunidad
+    template_name = 'crm/eliminar_campo_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        context = super(CampoCustomEstadoOportunidadEliminar, self).get_context_data(**kwargs)
+        context["nombre"] = self.object
+        return context
+
+class CampoCustomTipoOportunidadCrear(CreateView):
+    model = CampoCustomTipoOportunidad
+    form_class = CampoCustomCrearTipoOportunidadForm
+    template_name = 'crm/crear_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomTipoOportunidadCrear, self).get_context_data(**kwargs)
+        data['accion'] = 'Agregar Campo Tipo De Oportunidad'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+    
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomTipoOportunidadCrear, self).form_valid(form)
+
+class CampoCustomTipoOportunidadEditar(UpdateView):
+    model = CampoCustomTipoOportunidad
+    template_name = 'crm/crear_custom.html'
+    form_class = CampoCustomCrearTipoOportunidadForm
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        data = super(CampoCustomTipoOportunidadEditar, self).get_context_data(**kwargs)
+        data['accion'] = 'Editar Campo Tipo de Oportunidad'
+
+        return data
+    
+    def form_invalid(self, form):
+        print(form.errors)
+
+    def form_valid(self, form):
+        user = self.request.user
+        organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
+        form.instance.organizacion = organizacion
+
+        self.object = form.save()
+        return super(CampoCustomTipoOportunidadEditar, self).form_valid(form)
+
+
+class CampoCustomTipoOportunidadEliminar(DeleteView): 
+    model = CampoCustomTipoOportunidad
+    template_name = 'crm/eliminar_campo_custom.html'
+    success_url = reverse_lazy('campos_custom')
+
+    def get_context_data(self, **kwargs):
+        context = super(CampoCustomTipoOportunidadEliminar, self).get_context_data(**kwargs)
         context["nombre"] = self.object
         return context
 
