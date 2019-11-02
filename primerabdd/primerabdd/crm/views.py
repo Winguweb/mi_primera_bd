@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.forms.models import inlineformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.dateparse import parse_date
+import sweetify
 
 
 CSV_NOMBRE_INDEX = 0
@@ -112,8 +113,8 @@ class CuentasCrear(CreateView):
         return super(CuentasCrear, self).form_valid(form)
 
     def form_invalid(self, form):
-        print(form.errors)
-        return HttpResponse("Repetido.. this is just an HttpResponse object")
+        sweetify.error(self.request, 'Error', text='Ya existe una cuenta con este nombre.', persistent='Ok')
+        return render(self.request, self.template_name, {'form': form})
 
 class CuentasEditar(UpdateView): 
     model = Cuenta
@@ -129,6 +130,10 @@ class CuentasEditar(UpdateView):
         data['form'].fields['tipo'].queryset = tiposCuenta_de_org
 
         return data
+
+    def form_invalid(self, form):
+        sweetify.error(self.request, 'Error', text='Ya existe una cuenta con este nombre.', persistent='Ok')
+        return render(self.request, self.template_name, {'form': form})
 
 
 class CuentasContactos(TemplateView):
@@ -233,8 +238,8 @@ class ContactoCrear(CreateView):
 
 
     def form_invalid(self, form):
-        print(form.errors)
-        return HttpResponse("Repetido.. this is just an HttpResponse object")
+        sweetify.error(self.request, 'Error', text='Ya existe un contacto con este mail.', persistent='Ok')
+        return render(self.request, self.template_name, {'form': form, 'accion': 'Nuevo Contacto'})
 
 class ContactoDetalle(DetailView): 
     model = Contacto
@@ -279,7 +284,9 @@ class ContactoEditar(UpdateView):
         return super(ContactoEditar, self).form_valid(form)
 
 
-
+    def form_invalid(self, form):
+        sweetify.error(self.request, 'Error', text='Ya existe un contacto con este mail.', persistent='Ok')
+        return render(self.request, self.template_name, {'form': form, 'accion': 'Editar Contacto'})
 
 
 
