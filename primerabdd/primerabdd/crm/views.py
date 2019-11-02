@@ -632,6 +632,10 @@ class OportunidadesCrear(CreateView):
         data['form'].fields['tipo'].queryset = tiposOportunidad_de_org
         data['form'].fields['estado_oportunidad'].queryset = estadosOportunidad_de_org
 
+        #filtro las cuentas segun org
+        cuentas_de_la_organizacion = Cuenta.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['cuenta'].queryset = cuentas_de_la_organizacion
+
         return data
 
 class OportunidadesEliminar(DeleteView): 
