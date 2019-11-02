@@ -591,6 +591,13 @@ class OportunidadesLista(ListView):
     context_object_name = 'mis_oportunidades'  
     template_name = 'crm/oportunidades_lista.html'
 
+    def get_queryset(self):
+        user = self.request.user
+        id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+
+        listado_oportunidades = Oportunidad.objects.filter(cuenta__id__in=id_listado_cuentas)
+        return listado_oportunidades
+
 class OportunidadesEditar(UpdateView): 
     model = Oportunidad
     form_class = OportunidadCrearForm
@@ -625,6 +632,10 @@ class OportunidadesCrear(CreateView):
         data['form'].fields['tipo'].queryset = tiposOportunidad_de_org
         data['form'].fields['estado_oportunidad'].queryset = estadosOportunidad_de_org
 
+        #filtro las cuentas segun org
+        cuentas_de_la_organizacion = Cuenta.objects.filter(organizacion__usuario=self.request.user)
+        data['form'].fields['cuenta'].queryset = cuentas_de_la_organizacion
+
         return data
 
 class OportunidadesEliminar(DeleteView): 
@@ -633,3 +644,8 @@ class OportunidadesEliminar(DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+class OportunidadesDetalles(DetailView): 
+    model = Oportunidad
+    context_object_name = 'oportunidad'  
+    template_name = 'crm/oportunidades_detalles.html'
