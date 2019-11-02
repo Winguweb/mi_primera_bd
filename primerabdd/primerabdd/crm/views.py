@@ -3,7 +3,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .forms import *
 from django.urls import reverse_lazy
-from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta
+from .models import Organizacion, Cuenta, Contacto, Voluntario, CampoCustomOrigen, CampoCustomTipoContacto, CampoCustomTipoCuenta, Oportunidad, CampoCustomTipoOportunidad, CampoCustomEstadoOportunidad
 from djmoney.forms.fields import MoneyField
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -585,3 +585,63 @@ class CampoCustomTipoCuentaEliminar(DeleteView):
         return context
 
 
+# Lista de Oportunidades
+class OportunidadesLista(ListView): 
+    model = Oportunidad 
+    context_object_name = 'mis_oportunidades'  
+    template_name = 'crm/oportunidades_lista.html'
+
+    def get_queryset(self):
+        user = self.request.user
+        id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+
+        listado_oportunidades = Oportunidad.objects.filter(cuenta__id__in=id_listado_cuentas)
+        return listado_oportunidades
+
+class OportunidadesEditar(UpdateView): 
+    model = Oportunidad
+    form_class = OportunidadCrearForm
+    template_name = 'crm/creacion_oportunidad.html'
+    success_url = reverse_lazy('ver_oportunidades')
+
+    def get_context_data(self, **kwargs):
+        data = super(OportunidadesEditar, self).get_context_data(**kwargs)
+        
+        #Filtro los campos custom por organizacion
+        tiposOportunidad_de_org = CampoCustomTipoOportunidad.objects.filter(organizacion__usuario=self.request.user)
+        estadosOportunidad_de_org = CampoCustomEstadoOportunidad.objects.filter(organizacion__usuario=self.request.user)
+
+        data['form'].fields['tipo'].queryset = tiposOportunidad_de_org
+        data['form'].fields['estado_oportunidad'].queryset = estadosOportunidad_de_org
+
+        return data
+
+class OportunidadesCrear(CreateView):
+    model = Oportunidad
+    form_class = OportunidadCrearForm
+    template_name = 'crm/creacion_oportunidad.html'
+    success_url = reverse_lazy('ver_oportunidades')
+
+    def get_context_data(self, **kwargs):
+        data = super(OportunidadesCrear, self).get_context_data(**kwargs)
+        
+        #Filtro los campos custom por organizacion
+        tiposOportunidad_de_org = CampoCustomTipoOportunidad.objects.filter(organizacion__usuario=self.request.user)
+        estadosOportunidad_de_org = CampoCustomEstadoOportunidad.objects.filter(organizacion__usuario=self.request.user)
+
+        data['form'].fields['tipo'].queryset = tiposOportunidad_de_org
+        data['form'].fields['estado_oportunidad'].queryset = estadosOportunidad_de_org
+
+        return data
+
+class OportunidadesEliminar(DeleteView): 
+    model = Oportunidad
+    success_url = reverse_lazy('ver_oportunidades')  
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+class OportunidadesDetalles(DetailView): 
+    model = Oportunidad
+    context_object_name = 'oportunidad'  
+    template_name = 'crm/oportunidades_detalles.html'
