@@ -31,4 +31,5 @@ urlpatterns = [
     path('oportunidades/create/', views.OportunidadesCrear.as_view(), name='crear_oportunidad'),
     path('oportunidades/edit/<int:pk>', views.OportunidadesEditar.as_view(), name='editar_oportunidad'),
     path('oportunidades/delete/<int:pk>', views.OportunidadesEliminar.as_view(), name='eliminar_oportunidad'),
+    path('oportunidades/<int:pk>', views.OportunidadesDetalles.as_view(), name='oportunidades_detalles'),
 ]

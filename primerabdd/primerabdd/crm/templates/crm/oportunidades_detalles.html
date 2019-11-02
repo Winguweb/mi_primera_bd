@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<style type="text/css">
+    
+    .col-lg-4 input, .col-lg-4 select {
+        width: 90%;
+    }
+
+    .col-lg-4 .btn {
+        width: 50%;
+    }
+
+    #id_monto_0 {
+        width: 20%;
+    }
+
+    #id_monto_1 {
+        width: 70%;
+        height: 53%;
+    }
+
+    p {
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    #id_observaciones {
+        width: 97%;
+        height: 100px;
+    }
+
+</style>
+
+<form style="padding: 15px;" action="" method="post">
+    {% csrf_token %}
+    {{ oportunidad.non_field_errors }}
+
+    <h2>Gestión de Cuentas</h2>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ oportunidad.nombre.id_for_label }}">Nombre *</label>
+            <input type="text" name="" value="{{ oportunidad.nombre }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ oportunidad.estado_oportunidad.id_for_label }}">Estado *</label><br>
+            <input type="text" name="" value="{{ oportunidad.estado_oportunidad }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ oportunidad.sexo.id_for_label }}">Tipo *</label><br>
+            <input type="text" name="" value="{{ oportunidad.tipo }}" disabled>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <label for="{{ oportunidad.email.id_for_label }}">Cuenta *</label>
+            <input type="text" name="" value="{{ oportunidad.cuenta }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ oportunidad.fecha.id_for_label }}">Fecha *</label>
+            <input type="text" name="" value="{{ oportunidad.fecha }}" disabled>
+        </div>
+
+        <div class="col-lg-4">
+            <label for="{{ oportunidad.tipo.id_for_label }}">Monto</label><br>
+            <input type="text" name="" value="{{ oportunidad.monto }}" disabled>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <label for="{{ oportunidad.observaciones.id_for_label }}">Observaciones</label><br>
+            <input style="width: 97%; height: 35px;" type="text" name="" value="{{ oportunidad.observaciones }}" disabled>
+        </div>
+    </div>
+
+    <div class="row" style="padding-right: 20px; padding-left: 10px;">
+        <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+        </div>
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4"></div>
+        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
+            <a class="btn btn-secondary" style="margin-top: 10px; margin-right: 40px;" href="/oportunidades">Volver</a>
+        </div>
+    </div>
+
+</form>
+
+{% endblock %}

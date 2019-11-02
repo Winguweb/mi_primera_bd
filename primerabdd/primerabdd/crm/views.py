@@ -633,3 +633,8 @@ class OportunidadesEliminar(DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+class OportunidadesDetalles(DetailView): 
+    model = Oportunidad
+    context_object_name = 'oportunidad'  
+    template_name = 'crm/oportunidades_detalles.html'
