@@ -3,6 +3,8 @@ from .forms import LoginForm
 from django.contrib import messages
 from django.shortcuts import redirect
 from crm.models import Organizacion
+import sweetify
+import os
 
 
 
@@ -18,7 +20,12 @@ def login_success(request):
     if organizacion.tyc_leido:
         return redirect("home")
     else:
-        messages.error(request,'TyC')
-        organizacion.tyc_leido = True
-        organizacion.save()
-        return redirect("home")
+        module_dir = os.path.dirname(__file__)
+        file_path = os.path.join(module_dir, 'tyc/tyc.txt')
+        
+        with open(file_path, 'r') as file:
+            tyc = file.read()
+            sweetify.info(request, 'Términos y Condiciones', text=tyc, persistent='Estoy de acuerdo!')
+            organizacion.tyc_leido = True
+            organizacion.save()
+            return redirect("home")

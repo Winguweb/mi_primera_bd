@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'djmoney',
     'django_select2',
     'django_extensions',
+    'sweetify',
     'crm',
     'user_register_login',
 ]
@@ -141,5 +142,7 @@ LOGOUT_REDIRECT_URL = 'login'
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 
 
