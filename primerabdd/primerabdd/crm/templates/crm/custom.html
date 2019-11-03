@@ -76,7 +76,7 @@
 			<table class="table table-striped table-hover " style="width: 18rem;">
 				<thead class="thead">
 					<tr>
-						<th colspan="2">Estado <a class="btn btn-success" href="{% url "crear_custom_tipo_cuenta"  %}"><i class="fa fa-plus"></i></a></th>
+						<th colspan="2">Estado <a class="btn btn-success" href="{% url "crear_custom_estado_oportunidad"  %}"><i class="fa fa-plus"></i></a></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -84,8 +84,8 @@
 					<tr>
 					<td>{{ campo.estado }}</td>
 					<td class="tdCenter">
-							<a class="btn btn-secondary" href="{% url "editar_custom_tipo_cuenta"  campo.id  %}" ><i class="fa fa-edit"></i></a>
-							<a class="btn btn-danger" href="{% url "eliminar_custom_tipo_cuenta"  campo.id  %}"><i class="fa fa-trash"></i></a>
+							<a class="btn btn-secondary" href="{% url "editar_custom_estado_oportunidad"  campo.id  %}" ><i class="fa fa-edit"></i></a>
+							<a class="btn btn-danger" href="{% url "eliminar_custom_estado_oportunidad"  campo.id  %}"><i class="fa fa-trash"></i></a>
 						</td>
 					</tr>
 					{% endfor %}
@@ -96,7 +96,7 @@
 			<table class="table table-striped table-hover " style="width: 18rem;">
 				<thead class="thead">
 					<tr>
-						<th colspan="2">Tipo <a class="btn btn-success" href="{% url "crear_custom_tipo_cuenta"  %}"><i class="fa fa-plus"></i></a></th>
+						<th colspan="2">Tipo <a class="btn btn-success" href="{% url "crear_custom_tipo_oportunidad"  %}"><i class="fa fa-plus"></i></a></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -104,8 +104,8 @@
 					<tr>
 					<td>{{ campo.tipo }}</td>
 					<td class="tdCenter">
-							<a class="btn btn-secondary" href="{% url "editar_custom_tipo_cuenta"  campo.id  %}" ><i class="fa fa-edit"></i></a>
-							<a class="btn btn-danger" href="{% url "eliminar_custom_tipo_cuenta"  campo.id  %}"><i class="fa fa-trash"></i></a>
+							<a class="btn btn-secondary" href="{% url "editar_custom_tipo_oportunidad"  campo.id  %}" ><i class="fa fa-edit"></i></a>
+							<a class="btn btn-danger" href="{% url "eliminar_custom_tipo_oportunidad"  campo.id  %}"><i class="fa fa-trash"></i></a>
 						</td>
 					</tr>
 					{% endfor %}

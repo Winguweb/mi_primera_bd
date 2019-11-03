@@ -491,7 +491,7 @@ class CampoCustomOrigenEliminar(DeleteView):
             # Return the appropriate response
             messages.error(request, 'No se pudo Eliminar: Esta en uso!')
             template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {}
+            context = {"nombre":self.object}
             return HttpResponse(template.render(context, request))
 
 class CampoCustomTipoContactoCrear(CreateView):
@@ -560,7 +560,7 @@ class CampoCustomTipoContactoEliminar(DeleteView):
             # Return the appropriate response
             messages.error(request, 'No se pudo Eliminar: Esta en uso!')
             template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {}
+            context = {"nombre":self.object}
             return HttpResponse(template.render(context, request))
 
 class CampoCustomTipoCuentaCrear(CreateView):
@@ -630,7 +630,7 @@ class CampoCustomTipoCuentaEliminar(DeleteView):
             # Return the appropriate response
             messages.error(request, 'No se pudo Eliminar: Esta en uso!')
             template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {}
+            context = {"nombre":self.object}
             return HttpResponse(template.render(context, request))
 
 class CampoCustomEstadoOportunidadCrear(CreateView):
@@ -700,7 +700,7 @@ class CampoCustomEstadoOportunidadEliminar(DeleteView):
             # Return the appropriate response
             messages.error(request, 'No se pudo Eliminar: Esta en uso!')
             template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {}
+            context = {"nombre":self.object}
             return HttpResponse(template.render(context, request))
 
 class CampoCustomTipoOportunidadCrear(CreateView):
@@ -770,7 +770,7 @@ class CampoCustomTipoOportunidadEliminar(DeleteView):
             # Return the appropriate response
             messages.error(request, 'No se pudo Eliminar: Esta en uso!')
             template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {}
+            context = {"nombre":self.object}
             return HttpResponse(template.render(context, request))
 
 
