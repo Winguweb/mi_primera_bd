@@ -9,21 +9,21 @@
   }
   
   body {
-      background-color: #007bff;
+      background-color: white;
       color: #000000;
   }
 
   h1 {
       padding-top: 20px;
       padding-bottom: 20px;
-      color: #ffffff;
+      color: #007bff;
   }
   div {
       text-align: center;
   }
   h2 {
       padding-bottom: 60px;
-      color: #ffffff;
+      color: #007bff;
   }
   .column {
       float: left;
@@ -66,30 +66,26 @@
 {% endif %}
 <div>
   <h1>Bienvenido a "MI PRIMERA BASE DE DATOS"</h1>
-  <h2>Entraste al sistema como: {{ user.username }}</h2>
   <h2>¿ Qué desea hacer ?</h2>
   <div class="row justify-content-center">
           <div class="column">
             <div class="card">
-              <div class="card-header">Gestion de Voluntarios y Donantes</div>
-              <div class="card-body">Seleccione esta opción para poder dar de alta a un voluntario o donante en la organización.</div>
-              <div class="card-footer"><button type="button" class="btn btn-primary" onclick="location.href='{% url 'crear_contacto' %}'">Agregar Voluntario/Donante</button></div>
+              <div class="card-body">Dar de alta un contacto a "{{user.organizacion}}"</div>
+              <div class="card-footer"><button type="button" class="btn btn-primary" onclick="location.href='{% url 'crear_contacto' %}'">Nuevo Contacto</button></div>
             </div>
           </div>
         
           <div class="column">
             <div class="card">
-                  <div class="card-header">Gestion Cuentas</div>
-                  <div class="card-body">Seleccione esta opción para poder gestionar las cuentas de la organización.</div>
+                  <div class="card-body">Ver las cuentas pertenecientes a "{{user.organizacion}}""</div>
                   <div class="card-footer"><button type="button" class="btn btn-primary"  onclick="location.href='/cuentas'">Ver Cuentas</button></div>
             </div>
           </div>
           
           <div class="column">
             <div class="card">
-                  <div class="card-header">Indicadores/Dashboard</div>
-                  <div class="card-body">Vea los distintos indicadores de su organizacion para saber el estado actual de la misma.</div>
-                  <div class="card-footer"><button type="button" class="btn btn-primary" onclick="location.href='/dashboard'">Ir a Indicadores</button></div>
+                  <div class="card-body">Setear los campos personalizados de "{{user.organizacion}}"</div>
+                  <div class="card-footer"><button type="button" class="btn btn-primary" onclick="location.href='/custom'">Configurar Campos</button></div>
             </div>
           </div>
         </div>
