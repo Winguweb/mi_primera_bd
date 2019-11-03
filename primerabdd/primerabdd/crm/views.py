@@ -13,6 +13,9 @@ from django.db.models import Q
 from django.forms.models import inlineformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.dateparse import parse_date
+from django.db import models
+from django.http.response import HttpResponseForbidden
+from django.db.models.deletion import ProtectedError
 import sweetify
 
 
@@ -477,6 +480,17 @@ class CampoCustomOrigenEliminar(DeleteView):
         context["nombre"] = self.object
         return context
 
+    def delete(self, request, *args, **kwargs):
+        try:
+            return super(CampoCustomOrigenEliminar, self).delete(
+                request, *args, **kwargs
+            )
+        except models.ProtectedError as e:
+            # Return the appropriate response
+            return HttpResponseForbidden(
+                "Este campo esta en uso por 1 o mas contactos"
+            )
+
 class CampoCustomTipoContactoCrear(CreateView):
     model = CampoCustomTipoContacto
     form_class = CampoCustomCrearTipoContactoForm
@@ -533,6 +547,17 @@ class CampoCustomTipoContactoEliminar(DeleteView):
         context = super(CampoCustomTipoContactoEliminar, self).get_context_data(**kwargs)
         context["nombre"] = self.object
         return context
+    
+    def delete(self, request, *args, **kwargs):
+        try:
+            return super(CampoCustomTipoContactoEliminar, self).delete(
+                request, *args, **kwargs
+            )
+        except models.ProtectedError as e:
+            # Return the appropriate response
+            return HttpResponseForbidden(
+                "Este campo esta en uso por 1 o mas contactos"
+            )
 
 class CampoCustomTipoCuentaCrear(CreateView):
     model = CampoCustomTipoCuenta
@@ -591,6 +616,17 @@ class CampoCustomTipoCuentaEliminar(DeleteView):
         context = super(CampoCustomTipoCuentaEliminar, self).get_context_data(**kwargs)
         context["nombre"] = self.object
         return context
+    
+    def delete(self, request, *args, **kwargs):
+        try:
+            return super(CampoCustomTipoCuentaEliminar, self).delete(
+                request, *args, **kwargs
+            )
+        except models.ProtectedError as e:
+            # Return the appropriate response
+            return HttpResponseForbidden(
+                "Este campo esta en uso por 1 o mas cuentas"
+            )
 
 class CampoCustomEstadoOportunidadCrear(CreateView):
     model = CampoCustomEstadoOportunidad
@@ -650,6 +686,17 @@ class CampoCustomEstadoOportunidadEliminar(DeleteView):
         context["nombre"] = self.object
         return context
 
+    def delete(self, request, *args, **kwargs):
+        try:
+            return super(CampoCustomEstadoOportunidadEliminar, self).delete(
+                request, *args, **kwargs
+            )
+        except models.ProtectedError as e:
+            # Return the appropriate response
+            return HttpResponseForbidden(
+                "Este campo esta en uso por 1 o mas oportunidades"
+            )
+
 class CampoCustomTipoOportunidadCrear(CreateView):
     model = CampoCustomTipoOportunidad
     form_class = CampoCustomCrearTipoOportunidadForm
@@ -707,6 +754,17 @@ class CampoCustomTipoOportunidadEliminar(DeleteView):
         context = super(CampoCustomTipoOportunidadEliminar, self).get_context_data(**kwargs)
         context["nombre"] = self.object
         return context
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            return super(CampoCustomTipoOportunidadEliminar, self).delete(
+                request, *args, **kwargs
+            )
+        except models.ProtectedError as e:
+            # Return the appropriate response
+            return HttpResponseForbidden(
+                "Este campo esta en uso por 1 o mas oportunidades"
+            )
 
 
 # Lista de Oportunidades

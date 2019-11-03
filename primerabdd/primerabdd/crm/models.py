@@ -74,7 +74,7 @@ class Cuenta(models.Model):
 
     tipo = models.ForeignKey(
             CampoCustomTipoCuenta,
-            on_delete=models.CASCADE,
+            on_delete=models.PROTECT,
             blank=True,
             null=True
         )
@@ -135,7 +135,7 @@ class Contacto(models.Model):
     #LO CAMBIO A CATEGORIA DE FORMA PROVISORIA
     categoria = models.ForeignKey(
             CampoCustomTipoContacto,
-            on_delete=models.CASCADE,
+            on_delete=models.PROTECT,
             blank=True,
             null=True
         )
@@ -154,7 +154,7 @@ class Contacto(models.Model):
 
     origen = models.ForeignKey(
             CampoCustomOrigen,
-            on_delete=models.CASCADE,
+            on_delete=models.PROTECT,
             blank=True,
             null=True
     )
@@ -280,7 +280,7 @@ class Oportunidad(models.Model):
     #estado_oportunidad = models.CharField(max_length=200, default=None, blank=False, null=False)
     estado_oportunidad = models.ForeignKey(
             CampoCustomEstadoOportunidad,
-            on_delete=models.CASCADE,
+            on_delete=models.PROTECT,
             blank=False,
             null=False
     )
@@ -288,7 +288,7 @@ class Oportunidad(models.Model):
     #tipo = models.CharField(max_length=200, default=None, blank=False, null=False)
     tipo = models.ForeignKey(
             CampoCustomTipoOportunidad,
-            on_delete=models.CASCADE,
+            on_delete=models.PROTECT,
             blank=False,
             null=False
     )
