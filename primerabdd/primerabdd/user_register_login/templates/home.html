@@ -78,14 +78,14 @@
           <div class="column">
             <div class="card">
                   <div class="card-body">Ver las cuentas pertenecientes a "{{user.organizacion}}""</div>
-                  <div class="card-footer"><button type="button" class="btn btn-primary"  onclick="location.href='/cuentas'">Ver Cuentas</button></div>
+                  <div class="card-footer"><button type="button" class="btn btn-primary"  onclick="location.href='{% url 'ver_cuentas' %}'">Ver Cuentas</button></div>
             </div>
           </div>
           
           <div class="column">
             <div class="card">
                   <div class="card-body">Setear los campos personalizados de "{{user.organizacion}}"</div>
-                  <div class="card-footer"><button type="button" class="btn btn-primary" onclick="location.href='/custom'">Configurar Campos</button></div>
+                  <div class="card-footer"><button type="button" class="btn btn-primary" onclick="location.href='{% url 'campos_custom' %}'">Configurar Campos</button></div>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@
 <html>
 	<head>
 	  	<meta charset="utf-8">
-	  	<title>Mi Primer BDD</title>
+	  	<title>Mi Primera BDD</title>
   		{% load bootstrap4 %}
         {% bootstrap_css %}
         {{ form.media.css }}
@@ -75,23 +75,26 @@
 			  <div class="collapse navbar-collapse" id="navbarResponsive">
 			    <ul class="navbar-nav text-uppercase mr-auto">
 			      <li class="nav-item">
-			        <a class="nav-link js-scroll-trigger" href="/dashboard"><b>Indicadores</b></a>
+			        <a class="nav-link js-scroll-trigger" href="{% url 'ver_dashboard' %}"><b>Indicadores</b></a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link js-scroll-trigger" href="/contactos"><b>Contactos</b></a>
+			        <a class="nav-link js-scroll-trigger" href="{% url 'contactos' %}"><b>Contactos</b></a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link js-scroll-trigger" href="/cuentas"><b>Cuentas</b></a>
+			        <a class="nav-link js-scroll-trigger" href="{% url 'ver_cuentas' %}"><b>Cuentas</b></a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link js-scroll-trigger" href="/oportunidades"><b>Oportunidades</b></a>
+			        <a class="nav-link js-scroll-trigger" href="{% url 'ver_oportunidades' %}"><b>Oportunidades</b></a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link js-scroll-trigger" href="/custom"><b>Conf. de Campos</b></a>
+			        <a class="nav-link js-scroll-trigger" href="{% url 'campos_custom' %}"><b>Conf. de Campos</b></a>
 			      </li>
 			    </ul>
 			    <ul class="navbar-nav ml-auto">
-  			      <li class="nav-item">
+					<li class="nav-item">
+						Usuario: {{ user.username }}
+					</li>
+					<li class="nav-item">
 			        <a class="nav-link js-scroll-trigger" href="{% url 'logout' %}"><b>Cerrar Sesión</b></a>
 			      </li>
 			    </ul>
