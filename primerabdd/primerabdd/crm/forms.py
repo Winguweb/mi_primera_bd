@@ -86,6 +86,11 @@ class CampoCustomCrearEstadoOportunidadForm(ModelForm):
         model = CampoCustomEstadoOportunidad
         exclude = ['organizacion']
 
+        widgets={
+            'estado': forms.TextInput(attrs={'id': 'estado_custom_oportunidad'})
+        }
+        
+
     def __init__(self, *args, **kwargs):
         super(CampoCustomCrearEstadoOportunidadForm, self).__init__(*args, **kwargs)
 

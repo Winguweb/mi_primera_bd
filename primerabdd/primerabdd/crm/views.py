@@ -642,7 +642,7 @@ class CampoCustomEstadoOportunidadCrear(CreateView):
     def get_context_data(self, **kwargs):
         data = super(CampoCustomEstadoOportunidadCrear, self).get_context_data(**kwargs)
         data['accion'] = 'Agregar Campo Estado De Oportunidad'
-
+        print(data['form'])
         return data
     
     def form_invalid(self, form):
