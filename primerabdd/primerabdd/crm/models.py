@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from djmoney.models.fields import MoneyField
+from django.db.models.signals import post_save
 
 class Organizacion(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -296,3 +297,37 @@ class Oportunidad(models.Model):
     monto = MoneyField(max_digits=14, decimal_places=2, default_currency='ARS', default=0, blank=True)
     observaciones = models.TextField(default= None, blank=True, null=True)
 
+# Al crear una nueva organizacion, entra aca para crear los campos custom default
+def crear_customs(sender, instance, created, **kwargs):
+     if instance and created: 
+         # Campos Origen Custom DEFAULT
+         CampoCustomOrigen(organizacion=instance, origen="Llamado").save()
+         CampoCustomOrigen(organizacion=instance, origen="Mail").save()
+         CampoCustomOrigen(organizacion=instance, origen="Reunion").save()
+         CampoCustomOrigen(organizacion=instance, origen="Evento").save()
+
+         # Campos Tipo Contacto Custom DEFAULT
+         CampoCustomTipoContacto(organizacion=instance, tipo="General").save()
+         CampoCustomTipoContacto(organizacion=instance, tipo="Staff").save()
+         CampoCustomTipoContacto(organizacion=instance, tipo="Socio").save()
+
+         # Campos Tipo Cuenta Custom DEFAULT
+         CampoCustomTipoCuenta(organizacion=instance, tipo="ONG").save()
+         CampoCustomTipoCuenta(organizacion=instance, tipo="Empresa").save()
+         CampoCustomTipoCuenta(organizacion=instance, tipo="Gobierno").save()
+         CampoCustomTipoCuenta(organizacion=instance, tipo="General").save()
+
+         # Campos Estado Custom DEFAULT
+         CampoCustomEstadoOportunidad(organizacion=instance, estado="Abierta").save()
+         CampoCustomEstadoOportunidad(organizacion=instance, estado="En Proceso").save()
+         CampoCustomEstadoOportunidad(organizacion=instance, estado="Cerrada").save()
+
+         # Campos Tipo Oportunidad Custom DEFAULT
+         CampoCustomTipoOportunidad(organizacion=instance, tipo="Donación").save()
+         CampoCustomTipoOportunidad(organizacion=instance, tipo="Servicio").save()
+         CampoCustomTipoOportunidad(organizacion=instance, tipo="Proyecto").save()
+
+
+
+
+post_save.connect(crear_customs, sender=Organizacion)
