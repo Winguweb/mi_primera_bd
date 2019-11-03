@@ -13,9 +13,11 @@ from django.db.models import Q
 from django.forms.models import inlineformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.dateparse import parse_date
+
 from django.db import models
-from django.http.response import HttpResponseForbidden
 from django.db.models.deletion import ProtectedError
+from django.template import loader
+
 import sweetify
 
 
@@ -487,9 +489,10 @@ class CampoCustomOrigenEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            return HttpResponseForbidden(
-                "Este campo esta en uso por 1 o mas contactos"
-            )
+            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
+            template = loader.get_template('crm/eliminar_campo_custom.html')
+            context = {}
+            return HttpResponse(template.render(context, request))
 
 class CampoCustomTipoContactoCrear(CreateView):
     model = CampoCustomTipoContacto
@@ -555,9 +558,10 @@ class CampoCustomTipoContactoEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            return HttpResponseForbidden(
-                "Este campo esta en uso por 1 o mas contactos"
-            )
+            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
+            template = loader.get_template('crm/eliminar_campo_custom.html')
+            context = {}
+            return HttpResponse(template.render(context, request))
 
 class CampoCustomTipoCuentaCrear(CreateView):
     model = CampoCustomTipoCuenta
@@ -624,9 +628,10 @@ class CampoCustomTipoCuentaEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            return HttpResponseForbidden(
-                "Este campo esta en uso por 1 o mas cuentas"
-            )
+            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
+            template = loader.get_template('crm/eliminar_campo_custom.html')
+            context = {}
+            return HttpResponse(template.render(context, request))
 
 class CampoCustomEstadoOportunidadCrear(CreateView):
     model = CampoCustomEstadoOportunidad
@@ -693,9 +698,10 @@ class CampoCustomEstadoOportunidadEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            return HttpResponseForbidden(
-                "Este campo esta en uso por 1 o mas oportunidades"
-            )
+            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
+            template = loader.get_template('crm/eliminar_campo_custom.html')
+            context = {}
+            return HttpResponse(template.render(context, request))
 
 class CampoCustomTipoOportunidadCrear(CreateView):
     model = CampoCustomTipoOportunidad
@@ -762,9 +768,10 @@ class CampoCustomTipoOportunidadEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            return HttpResponseForbidden(
-                "Este campo esta en uso por 1 o mas oportunidades"
-            )
+            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
+            template = loader.get_template('crm/eliminar_campo_custom.html')
+            context = {}
+            return HttpResponse(template.render(context, request))
 
 
 # Lista de Oportunidades

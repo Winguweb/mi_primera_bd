@@ -7,4 +7,11 @@
 ¿Está seguro de que desea eliminar este campo?
 <input type="submit" value="Si"/>
 </form>
+{% if messages %}
+   {% for message in messages %}
+		<script>
+		    alert('{{ message }}');
+		</script>
+   {% endfor %}
+{% endif %}
 {% endblock %}
