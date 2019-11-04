@@ -121,7 +121,7 @@ class Contacto(models.Model):
     pais = models.IntegerField(choices=PAISES, default=None, blank=True, null=True)
 
 
-    fecha_de_nacimiento = models.DateField('fecha de nacimiento')
+    fecha_de_nacimiento = models.DateField('fecha de nacimiento', blank=True, null=True)
     
     TIPOS_CONTACTO = [
         (0, 'General'),
