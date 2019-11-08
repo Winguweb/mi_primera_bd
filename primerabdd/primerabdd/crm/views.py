@@ -351,9 +351,6 @@ class DashBoard(ListView):
                                                 .values('estado_oportunidad__estado')\
                                                 .annotate(total=Count('estado_oportunidad'))\
                                                 .order_by('estado_oportunidad__estado')
-        lista_estados = []
-        for estado in oportunidades_por_estado:
-            lista_estados.append([estado['estado_oportunidad__estado'], estado['total']])
         context['oportunidades_por_estado'] = oportunidades_por_estado
 
         return context
