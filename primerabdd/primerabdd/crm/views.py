@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.forms.models import inlineformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.dateparse import parse_date
+from django.db import IntegrityError
 
 from django.db import models
 from django.db.models.deletion import ProtectedError
@@ -97,12 +98,13 @@ class CuentasCrear(CreateView):
     template_name = 'crm/creacion_cuenta.html'
     success_url = reverse_lazy('ver_cuentas')
 
+    def get_form_kwargs(self):
+        kwargs = super(CuentasCrear, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def get_context_data(self, **kwargs):
         data = super(CuentasCrear, self).get_context_data(**kwargs)
-        
-        #Filtro los campos custom de tipo de cuenta por organizacion
-        tiposCuenta_de_org = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['tipo'].queryset = tiposCuenta_de_org
 
         return data
 
@@ -112,33 +114,41 @@ class CuentasCrear(CreateView):
         organizacion = Organizacion.objects.filter(usuario=user)[:1].get()
 
         form.instance.organizacion = organizacion
-        self.object = form.save()
-        
-        
-        return super(CuentasCrear, self).form_valid(form)
 
-    def form_invalid(self, form):
-        sweetify.error(self.request, 'Error', text='Ya existe una cuenta con este nombre.', persistent='Ok')
-        return render(self.request, self.template_name, {'form': form})
+        try:
+            self.object = form.save()
+        except IntegrityError as e:
+            sweetify.error(self.request, 'Error', text='Ya existe una cuenta con este nombre.', persistent='Ok')
+            return render(self.request, self.template_name, {'form': form})
+        else:
+            return super(CuentasCrear, self).form_valid(form)
 
+    
 class CuentasEditar(UpdateView): 
     model = Cuenta
     form_class = CuentaCrearForm
     template_name = 'crm/creacion_cuenta.html'
     success_url = reverse_lazy('ver_cuentas')
 
+    def get_form_kwargs(self):
+        kwargs = super(CuentasEditar, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def get_context_data(self, **kwargs):
         data = super(CuentasEditar, self).get_context_data(**kwargs)
-        
-        #Filtro los campos custom de tipo de cuenta por organizacion
-        tiposCuenta_de_org = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['tipo'].queryset = tiposCuenta_de_org
 
         return data
 
-    def form_invalid(self, form):
-        sweetify.error(self.request, 'Error', text='Ya existe una cuenta con este nombre.', persistent='Ok')
-        return render(self.request, self.template_name, {'form': form})
+    def form_valid(self, form):
+        try:
+            self.object = form.save()
+        except IntegrityError as e:
+            sweetify.error(self.request, 'Error', text='Ya existe una cuenta con este nombre.', persistent='Ok')
+            return render(self.request, self.template_name, {'form': form})
+        else:
+            return super(CuentasEditar, self).form_valid(form)
+        
 
 
 class CuentasContactos(TemplateView):
@@ -204,22 +214,13 @@ class ContactoCrear(CreateView):
     template_name = 'crm/creacion_contacto.html'
     success_url = reverse_lazy('contactos')
 
+    def get_form_kwargs(self):
+        kwargs = super(ContactoCrear, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_context_data(self, **kwargs):
-        data = super(ContactoCrear, self).get_context_data(**kwargs)
-
-        #filtro los origenes segun org
-        origenes_de_la_organizacion = CampoCustomOrigen.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['origen'].queryset = origenes_de_la_organizacion
-
-        #filtro los tipos de contacto segun org
-        tipos_de_contacto_de_la_organizacion = CampoCustomTipoContacto.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['categoria'].queryset = tipos_de_contacto_de_la_organizacion
-
-        #filtro las cuentas segun org
-        cuentas_de_la_organizacion = Cuenta.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['cuenta'].queryset = cuentas_de_la_organizacion
-    
+        data = super(ContactoCrear, self).get_context_data(**kwargs)    
         data['accion'] = 'Nuevo Contacto'
 
         return data
@@ -233,18 +234,26 @@ class ContactoCrear(CreateView):
             cuenta = Cuenta.objects.filter(nombre__icontains=cuenta_nombre).filter(organizacion=organizacion)[:1].get()
         else:
             cuenta = Cuenta(organizacion=organizacion,nombre="Cuenta " + form.cleaned_data['apellido'], email=form.cleaned_data['email'])
-            cuenta.save()
-
+            try:
+                cuenta.save()
+            except IntegrityError as e:
+                sweetify.error(self.request, 'Error', text='Ya existe una cuenta con este apellido.\nPor favor cree la cuenta manualmente.', persistent='Ok')
+                return render(self.request, self.template_name, {'form': form, 'accion': 'Nuevo Contacto'})
         
-        form.instance.cuenta = cuenta
-        self.object = form.save()
-        
-        return super(ContactoCrear, self).form_valid(form)
-
+        form.instance.cuenta = cuenta    
+        try:
+            self.object = form.save()
+        except IntegrityError as e:
+            sweetify.error(self.request, 'Error', text='Ya existe un contacto con este mail en esta cuenta.', persistent='Ok')
+            return render(self.request, self.template_name, {'form': form, 'accion': 'Nuevo Contacto'})
+        else:
+            return super(ContactoCrear, self).form_valid(form)
 
     def form_invalid(self, form):
-        sweetify.error(self.request, 'Error', text='Ya existe un contacto con este mail.', persistent='Ok')
+        sweetify.error(self.request, 'Error', text='Ya existe un contacto con este mail en esta cuenta.', persistent='Ok')
         return render(self.request, self.template_name, {'form': form, 'accion': 'Nuevo Contacto'})
+
+        
 
 class ContactoDetalle(DetailView): 
     model = Contacto
@@ -257,20 +266,21 @@ class ContactoEditar(UpdateView):
     template_name = 'crm/creacion_contacto.html'
     success_url = reverse_lazy('contactos')
 
+    def get_form_kwargs(self):
+        kwargs = super(ContactoEditar, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_context_data(self, **kwargs):
         data = super(ContactoEditar, self).get_context_data(**kwargs)
         data['accion'] = 'Editar Contacto'
 
-        #filtro los origenes segun org
-        origenes_de_la_organizacion = CampoCustomOrigen.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['origen'].queryset = origenes_de_la_organizacion
-
-        #filtro los tipos de contacto segun org
-        tipos_de_contacto_de_la_organizacion = CampoCustomTipoContacto.objects.filter(organizacion__usuario=self.request.user)
-        data['form'].fields['categoria'].queryset = tipos_de_contacto_de_la_organizacion
-
         return data
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        print(qs)
+        return qs
 
     def form_valid(self, form):
         user = self.request.user
@@ -281,16 +291,25 @@ class ContactoEditar(UpdateView):
             cuenta = Cuenta.objects.filter(nombre=cuenta_nombre)[:1].get()
         else:
             cuenta = Cuenta(organizacion=organizacion,nombre="Cuenta " + form.cleaned_data['apellido'])
-            cuenta.save()
+            try:
+                cuenta.save()
+            except IntegrityError as e:
+                sweetify.error(self.request, 'Error', text='Ya existe una cuenta con este apellido.\nPor favor cree la cuenta manualmente.', persistent='Ok')
+                return render(self.request, self.template_name, {'form': form, 'accion': 'Nuevo Contacto'})
         
         form.instance.cuenta = cuenta
 
-        self.object = form.save()
-        return super(ContactoEditar, self).form_valid(form)
+        try:
+            self.object = form.save()
+        except IntegrityError as e:
+            sweetify.error(self.request, 'Error', text='Ya existe un contacto con este mail en esta cuenta.', persistent='Ok')
+            return render(self.request, self.template_name, {'form': form, 'accion': 'Nuevo Contacto'})
+        else:
+            return super(ContactoEditar, self).form_valid(form)
 
 
     def form_invalid(self, form):
-        sweetify.error(self.request, 'Error', text='Ya existe un contacto con este mail.', persistent='Ok')
+        sweetify.error(self.request, 'Error', text='Ya existe un contacto con este mail en esta cuenta.', persistent='Ok')
         return render(self.request, self.template_name, {'form': form, 'accion': 'Editar Contacto'})
 
 

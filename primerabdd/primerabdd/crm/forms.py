@@ -28,7 +28,21 @@ class ContactoCrearForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.current_user = kwargs.pop('user')
         super(ContactoCrearForm, self).__init__(*args, **kwargs)
+        if self.current_user:
+            #filtro los origenes segun org
+            origenes_de_la_organizacion = CampoCustomOrigen.objects.filter(organizacion__usuario=self.current_user)
+            self.fields['origen'].queryset = origenes_de_la_organizacion
+
+            #filtro los tipos de contacto segun org
+            tipos_de_contacto_de_la_organizacion = CampoCustomTipoContacto.objects.filter(organizacion__usuario=self.current_user)
+            self.fields['categoria'].queryset = tipos_de_contacto_de_la_organizacion
+
+            #filtro las cuentas segun org
+            cuentas_de_la_organizacion = Cuenta.objects.filter(organizacion__usuario=self.current_user)
+            self.fields['cuenta'].queryset = cuentas_de_la_organizacion
+
 
 class CuentaCrearForm(ModelForm):
     class Meta:
@@ -40,7 +54,13 @@ class CuentaCrearForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.current_user = kwargs.pop('user')
         super(CuentaCrearForm, self).__init__(*args, **kwargs)
+        if self.current_user:
+            #Filtro los campos custom de tipo de cuenta por organizacion
+            tiposCuenta_de_org = CampoCustomTipoCuenta.objects.filter(organizacion__usuario=self.current_user)
+            self.fields['tipo'].queryset = tiposCuenta_de_org
+
 
 class OportunidadCrearForm(ModelForm):
     class Meta:

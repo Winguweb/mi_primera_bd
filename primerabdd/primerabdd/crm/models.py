@@ -61,7 +61,7 @@ class CampoCustomTipoOportunidad(models.Model):
 
 class Cuenta(models.Model):
     organizacion = models.ForeignKey(Organizacion, on_delete=models.CASCADE)
-    nombre = models.CharField(max_length=200, default=None, blank=False, null=False, unique=True)
+    nombre = models.CharField(max_length=200, default=None, blank=False, null=False)
 
     calle = models.CharField(max_length=200 ,default=None, blank=True, null=True)
     numero = models.CharField(max_length=10, default=None, blank=True, null=True)
@@ -86,6 +86,12 @@ class Cuenta(models.Model):
 
     observaciones = models.TextField(default= None, blank=True, null=True)
     
+    class Meta:
+        constraints=[
+            models.UniqueConstraint(fields=['organizacion', 'nombre'], name='nombre_cuenta_unica')
+        ]
+
+
     def __str__(self):
         return self.nombre
 
@@ -140,7 +146,7 @@ class Contacto(models.Model):
             null=True
         )
 
-    email = models.EmailField(default=None, blank=False, null=False, unique=True)
+    email = models.EmailField(default=None, blank=False, null=False)
 
     email_alternativo = models.EmailField(default=None, blank=True, null=True)
 
@@ -192,6 +198,10 @@ class Contacto(models.Model):
 
     habilidades = models.IntegerField(choices=LISTA_HABILIDADES, blank=True, null=True) 
     
+    class Meta:
+        constraints=[
+            models.UniqueConstraint(fields=['cuenta', 'email'], name='email_contacto_unico')
+        ]
 
     def __str__(self):
         return self.apellido
