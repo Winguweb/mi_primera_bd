@@ -18,6 +18,7 @@ from django.db import IntegrityError
 from django.db import models
 from django.db.models.deletion import ProtectedError
 from django.template import loader
+from django.db.models import Count
 
 import sweetify
 
@@ -319,11 +320,43 @@ class DashBoard(ListView):
     context_object_name = 'metricas'
     template_name = 'crm/dashboard.html'
 
-    def get_queryset(self):
-        user = self.request.user
-        listado_contactos = Contacto.objects.filter(cuenta__organizacion__usuario=user).values_list('id', flat=True)
-        cantidad_contactos = Contacto.objects.filter(id__in=listado_contactos).count()
-        return cantidad_contactos
+    def get_context_data(self, **kwargs):
+        context = super(DashBoard, self).get_context_data(**kwargs)
+        usuario = self.request.user
+
+        # Cuentas con Oportunidades
+        cuentas = Cuenta.objects.filter(organizacion__usuario=usuario)\
+                                .annotate(cantidad_oportunidades=Count('oportunidad'))\
+                                .filter(cantidad_oportunidades__gte=1)
+        cantidad_cuentas_con_oportunidad = cuentas.count()
+        context['cantidad_cuentas_con_oportunidad'] = cantidad_cuentas_con_oportunidad
+
+
+        # Contactos por Tipo
+        contactos_por_tipo = Contacto.objects.filter(cuenta__organizacion__usuario=usuario, categoria__tipo__isnull=False)\
+                                            .values('categoria__tipo')\
+                                            .annotate(total=Count('categoria'))\
+                                            .order_by('categoria__tipo')
+        context['contactos_por_tipo'] = contactos_por_tipo
+
+        # Cuentas por Tipo
+        cuentas_por_tipo = Cuenta.objects.filter(organizacion__usuario=usuario, tipo__tipo__isnull=False)\
+                                        .values('tipo__tipo')\
+                                        .annotate(total=Count('tipo'))\
+                                        .order_by('tipo__tipo')
+        context['cuentas_por_tipo'] = cuentas_por_tipo
+
+        # Oportunidades por Estado
+        oportunidades_por_estado = Oportunidad.objects.filter(cuenta__organizacion__usuario=usuario, estado_oportunidad__estado__isnull=False)\
+                                                .values('estado_oportunidad__estado')\
+                                                .annotate(total=Count('estado_oportunidad'))\
+                                                .order_by('estado_oportunidad__estado')
+        lista_estados = []
+        for estado in oportunidades_por_estado:
+            lista_estados.append([estado['estado_oportunidad__estado'], estado['total']])
+        context['oportunidades_por_estado'] = oportunidades_por_estado
+
+        return context
 
 class Importador(TemplateView):
 
