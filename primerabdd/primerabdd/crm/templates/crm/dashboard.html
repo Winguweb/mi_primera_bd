@@ -3,18 +3,153 @@
 {% block body %}
     
     <h2>Indicadores</h2>
-    <table class="table table-striped table-hover ">
-		<thead class="thead-dark">
-			<tr>
-                <th>Métrica</th>
-                <th>Valor </th>
-			</tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Cantidad de contactos de la organización</td>
-                <td>{{ metricas }}</td>
-			</tr>
-        </tbody>
+
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-around">
+            <div class="col-auto mb-2">
+                <div class="card h-100" style="width: 35rem;">
+                    <div class="card-header">Oportunidades por Estado</div>
+                    <div class="card-body">
+                        <div id="grafico-oportunidades-estado"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-auto mb-2">
+                <div class="card h-100" style="width: 35rem;">
+                    <div class="card-header">Contactos por Tipo</div>
+                    <div class="card-body">
+                        <div class="card-body">
+                            <div id="grafico-contactos-tipo"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row justify-content-around">
+            <div class="col-auto mb-2">
+                <div class="card h-100" style="width: 35rem;">
+                    <div class="card-header">Cuentas por Tipo</div>
+                    <div class="card-body">
+                        <div id="grafico-cuentas-tipo"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-auto mb-2">
+                <div class="card h-100" style="width: 35rem;">
+                    <div class="card-header">Cuentas con Oportunidades</div>
+                        <div class="card-body justify-content-center">
+                            <h1 class="card-text">{{ cantidad_cuentas_con_oportunidad }}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+
+    <script>
+        Highcharts.setOptions({lang: {noData: "No hay datos para mostrar"}})
+    </script>
+
+    <script>
+        Highcharts.chart('grafico-contactos-tipo', {
+            chart: {
+                type: 'column'
+            },
+            title:{
+                text: ''
+            },
+            xAxis: {
+                categories: [
+                    {% for el in contactos_por_tipo %}'{{ el.categoria__tipo }}'{% if not forloop.last %},
+                    {% endif %}{% endfor %}
+                ]
+            },
+            yAxis:{
+                title: {
+                    text: 'Cantidades'
+                }
+            },
+            series: [{
+                showInLegend: false,
+                name: 'Cantidad',
+                data: [
+                    {% for el in contactos_por_tipo %}{{ el.total }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                ]
+            }]
+        });
+    </script>
+
+    <script>
+        Highcharts.chart('grafico-cuentas-tipo', {
+            chart: {
+                type: 'column'
+            },
+            title:{
+                text: ''
+            },
+            xAxis: {
+                categories: [
+                    {% for el in cuentas_por_tipo %}'{{ el.tipo__tipo }}'{% if not forloop.last %},
+                    {% endif %}{% endfor %}
+                ]
+            },
+            yAxis:{
+                title: {
+                    text: 'Cantidades'
+                }
+            },
+            series: [{
+                showInLegend: false,
+                name: 'Cantidad',
+                data: [
+                    {% for el in cuentas_por_tipo %}{{ el.total }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                ]
+            }]
+        });
+    </script>
+
+    <script>
+        Highcharts.chart('grafico-oportunidades-estado', {
+            chart: {
+                type: 'funnel'
+            },
+            title:{
+                text: ''
+            },
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b> (cantidad: {point.y})',
+                        softConnector: true
+                    },
+                    center: ['25%', '50%'],
+                    neckWidth: '20%',
+                    neckHeight: '0%',
+                    width: '50%',
+                }
+            },
+            series: [{
+                showInLegend: false,
+                name: 'Cantidad',
+                data: [
+                    {% for el in oportunidades_por_estado %}['{{ el.estado_oportunidad__estado }}', {{el.total}}]{% if not forloop.last %}, {% endif %}{% endfor %}
+                ]
+            }],
+            // tooltip: {
+            //     useHTML: true,
+            //     headerFormat: '',
+            //     pointFormat: '<tr><td style="color: {series.color}">{point.name}: </td>' +
+            //         '<td style="text-align: right"><b>{point.y}</b></td></tr>',
+            //     footerFormat: '</table>',
+            //     valueDecimals: 0
+            // }
+        });
+    </script>
 
 {% endblock %}
