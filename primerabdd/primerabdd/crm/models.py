@@ -142,8 +142,8 @@ class Contacto(models.Model):
     categoria = models.ForeignKey(
             CampoCustomTipoContacto,
             on_delete=models.PROTECT,
-            blank=True,
-            null=True
+            blank=False,
+            null=False
         )
 
     email = models.EmailField(default=None, blank=False, null=False)
