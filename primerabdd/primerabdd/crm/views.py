@@ -538,10 +538,8 @@ class CampoCustomOrigenEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
-            template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {"nombre":self.object}
-            return HttpResponse(template.render(context, request))
+            sweetify.error(self.request, 'Error', text='Existen contactos usando este campo!', persistent='Ok')
+            return HttpResponseRedirect(self.success_url)
 
 class CampoCustomTipoContactoCrear(CreateView):
     model = CampoCustomTipoContacto
@@ -607,10 +605,8 @@ class CampoCustomTipoContactoEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
-            template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {"nombre":self.object}
-            return HttpResponse(template.render(context, request))
+            sweetify.error(self.request, 'Error', text='Existen contactos usando este campo!', persistent='Ok')
+            return HttpResponseRedirect(self.success_url)
 
 class CampoCustomTipoCuentaCrear(CreateView):
     model = CampoCustomTipoCuenta
@@ -677,10 +673,8 @@ class CampoCustomTipoCuentaEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
-            template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {"nombre":self.object}
-            return HttpResponse(template.render(context, request))
+            sweetify.error(self.request, 'Error', text='Existen cuentas usando este campo!', persistent='Ok')
+            return HttpResponseRedirect(self.success_url)
 
 class CampoCustomEstadoOportunidadCrear(CreateView):
     model = CampoCustomEstadoOportunidad
@@ -747,10 +741,8 @@ class CampoCustomEstadoOportunidadEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
-            template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {"nombre":self.object}
-            return HttpResponse(template.render(context, request))
+            sweetify.error(self.request, 'Error', text='Existen oportunidades usando este campo!', persistent='Ok')
+            return HttpResponseRedirect(self.success_url)
 
 class CampoCustomTipoOportunidadCrear(CreateView):
     model = CampoCustomTipoOportunidad
@@ -817,10 +809,8 @@ class CampoCustomTipoOportunidadEliminar(DeleteView):
             )
         except models.ProtectedError as e:
             # Return the appropriate response
-            messages.error(request, 'No se pudo Eliminar: Esta en uso!')
-            template = loader.get_template('crm/eliminar_campo_custom.html')
-            context = {"nombre":self.object}
-            return HttpResponse(template.render(context, request))
+            sweetify.error(self.request, 'Error', text='Existen oportunidades usando este campo!', persistent='Ok')
+            return HttpResponseRedirect(self.success_url)
 
 
 # Lista de Oportunidades
