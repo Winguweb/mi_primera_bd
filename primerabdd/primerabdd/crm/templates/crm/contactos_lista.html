@@ -82,9 +82,9 @@
 				</td>
 				<td class="tdCenter">{{ contacto.cuenta }}</td>
 				<td class="tdCenter">
-					<a class="btn btn-primary" href="{% url "contacto_detalle"  contacto.id  %}">Detalles</a>
-					<a class="btn btn-secondary" href="{% url "editar_contacto"  contacto.id  %}">Editar</a>
-					<a class="btn btn-danger" href="{% url "eliminar_contacto"  contacto.id  %}">Eliminar</a>
+					<a class="btn btn-primary" href="{% url "contacto_detalle"  contacto.id  %}" title="Ver detalle"><i class="fa fa-info-circle"></i></a>
+					<a class="btn btn-secondary" href="{% url "editar_contacto"  contacto.id  %}" title="Editar"><i class="fa fa-edit"></i></a>
+					<a class="btn btn-danger" href="{% url "eliminar_contacto"  contacto.id  %}" title="Eliminar"><i class="fa fa-trash"></i></a>
 				</td>
 			</tr>
 			{% endfor %}

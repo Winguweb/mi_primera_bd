@@ -52,9 +52,9 @@
 				<td class="tdCenter">{{ oportunidad.cuenta }}</td>
 				<td class="tdCenter">{{ oportunidad.fecha|date:'d/m/Y' }}</td>
 				<td class="tdCenter">
-					<a class="btn btn-primary" href="{% url 'oportunidades_detalles'  oportunidad.id  %}">Detalles</a>
-					<a class="btn btn-secondary" href="{% url 'editar_oportunidad'  oportunidad.id  %}">Editar</a>
-					<a class="btn btn-danger" onclick="return confirm('¿Está seguro que desea eliminar esta oportunidad?')" href="{% url 'eliminar_oportunidad'  oportunidad.id  %}">Eliminar</a>
+					<a class="btn btn-primary" href="{% url 'oportunidades_detalles'  oportunidad.id  %}" title="Ver detalle"><i class="fa fa-info-circle"></i></a>
+					<a class="btn btn-secondary" href="{% url 'editar_oportunidad'  oportunidad.id  %}" title="Editar"><i class="fa fa-edit"></i></a>
+					<a class="btn btn-danger" onclick="return confirm('¿Está seguro que desea eliminar esta oportunidad?')" href="{% url 'eliminar_oportunidad'  oportunidad.id  %}"title="Eliminar"><i class="fa fa-trash"></i></a>
 				</td>
 			</tr>
 

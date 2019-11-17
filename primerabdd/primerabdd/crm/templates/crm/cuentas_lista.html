@@ -60,14 +60,15 @@
 					{% endif %}
 				</td>
 				<td class="tdCenter">
-					<a class="btn btn-primary" href="{% url 'cuentas_detalles'  cuenta.id  %}">Detalles</a>
-					<a class="btn btn-secondary" href="{% url 'editar_cuenta'  cuenta.id  %}">Editar</a>
+					<a class="btn btn-primary" href="{% url 'cuentas_detalles'  cuenta.id  %}" title="Ver detalle"><i class="fa fa-info-circle"></i></a>
+					<a class="btn btn-secondary" href="{% url 'editar_cuenta'  cuenta.id  %}" title="Editar"><i class="fa fa-edit"></i></a>
+					<a class="btn btn-success" href="{% url 'crear_contacto' %}" title="Crear contacto"><i class="fa fa-user-plus"></i></a>
 					{% if cuenta.tiene_contactos == True %}
-						<button class="btn btn-dark" href="#" title="Sin contactos" disabled>Ver contactos</button>
-						<a class="btn btn-danger" onclick="return confirm('¿Está seguro que desea eliminar esta cuenta?')" href="{% url 'eliminar_cuenta'  cuenta.id  %}">Eliminar</a>
+						<button class="btn btn-dark" href="#" title="Sin contactos" disabled><i class="fa fa-users"></i></button>
+						<a class="btn btn-danger" onclick="return confirm('¿Está seguro que desea eliminar esta cuenta?')" href="{% url 'eliminar_cuenta'  cuenta.id  %}" title="Eliminar"><i class="fa fa-trash"></i></a>
 					{% else %}
-						<a class="btn btn-dark" href="{% url 'cuentas_contactos' cuenta.id %}">Ver contactos</a>
-						<button type="button" class="btn btn-danger" href="#" title="No se puede eliminar una cuenta que contenga contactos" disabled>Eliminar</a>
+						<a class="btn btn-dark" href="{% url 'cuentas_contactos' cuenta.id %}" title="Ver contactos"><i class="fa fa-users"></i></a>
+						<button type="button" class="btn btn-danger" href="#" title="No se puede eliminar una cuenta que contenga contactos" disabled><i class="fa fa-trash"></i></a>
 					{% endif %}
 				</td>
 			</tr>
