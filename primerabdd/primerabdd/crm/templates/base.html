@@ -158,6 +158,14 @@
             }     
         });
     </script>
+
+    <script type="text/javascript">
+    	
+    	if($("#cuentaAsociada").val() != "" && $("#cuentaAsociada").val() != undefined){
+    		$('#id_cuenta').val($("#cuentaAsociada").val()).trigger('change');
+    	}
+
+    </script>
 	{% load sweetify %}
 	{% sweetify %}
 	</body>

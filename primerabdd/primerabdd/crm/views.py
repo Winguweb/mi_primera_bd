@@ -223,7 +223,8 @@ class ContactoCrear(CreateView):
     def get_context_data(self, **kwargs):
         data = super(ContactoCrear, self).get_context_data(**kwargs)    
         data['accion'] = 'Nuevo Contacto'
-
+        data['cuentaAsociada'] = self.request.GET.get('cuentaAsociada', None)
+        print(data['cuentaAsociada'])
         return data
 
     def form_valid(self, form):
