@@ -305,6 +305,7 @@ class Oportunidad(models.Model):
 
     fecha = models.DateField('fecha de nacimiento')
     monto = MoneyField(max_digits=14, decimal_places=2, default_currency='ARS', default=0, blank=True)
+    campania = models.CharField(max_length=200, default= None, blank=True, null=True)
     observaciones = models.TextField(default= None, blank=True, null=True)
 
 # Al crear una nueva organizacion, entra aca para crear los campos custom default

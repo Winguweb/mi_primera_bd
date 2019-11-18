@@ -1,112 +1,132 @@
-{% extends "base.html" %}
-
-{% block body %}
+{% extends "base.html" %} {% block body %}
 
 <style type="text/css">
+  .row {
+    padding-bottom: 20px;
+  }
 
-    .row {
-        padding-bottom: 20px;
-    }
+  label {
+    margin-bottom: 0px;
+  }
 
-    label {
-        margin-bottom: 0px;
-    }
-    
-    .col-lg-4 input, .col-lg-4 select {
-        width: 90%;
-    }
+  .col-lg-4 input,
+  .col-lg-4 select {
+    width: 90%;
+  }
 
-    .col-lg-4 .btn {
-        width: 50%;
-    }
+  .col-lg-4 .btn {
+    width: 50%;
+  }
 
-    #id_monto_0 {
-        width: 20%;
-    }
+  #id_monto_0 {
+    width: 20%;
+  }
 
-    #id_monto_1 {
-        width: 70%;
-        height: 53%;
-    }
+  #id_monto_1 {
+    width: 70%;
+    height: 53%;
+  }
 
-    p {
-        margin-top: 10px;
-        margin-bottom: 5px;
-    }
+  p {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
 
-    #id_observaciones {
-        width: 97%;
-        height: 100px;
-    }
-
+  #id_observaciones {
+    width: 97%;
+    height: 100px;
+  }
 </style>
 
 <form style="padding: 15px;" action="" method="post">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
+  {% csrf_token %} {{ form.non_field_errors }}
 
-    <h2>Gestión de Cuentas</h2>
+  <h2>Gestión de Oportunidades</h2>
 
-    <div class="row">
-        <div class="col-lg-4">
-            {{ form.nombre.errors }}
-            <label for="{{ form.nombre.id_for_label }}">Nombre *</label>
-            {{ form.nombre }}
-        </div>
-
-        <div class="col-lg-4">
-            {{ form.estado_oportunidad.errors }}
-            <label for="{{ form.estado_oportunidad.id_for_label }}">Estado *</label><br>
-            {{ form.estado_oportunidad }}
-        </div>
-
-        <div class="col-lg-4">
-            {{ form.tipo.errors }}
-            <label for="{{ form.sexo.id_for_label }}">Tipo *</label><br>
-            {{ form.tipo }}
-        </div>
+  <div class="row">
+    <div class="col-lg-4">
+      {{ form.nombre.errors }}
+      <label for="{{ form.nombre.id_for_label }}">Nombre *</label>
+      {{ form.nombre }}
     </div>
 
-    <div class="row">
-        <div class="col-lg-4">
-            {{ form.cuenta.errors }}
-            <label for="{{ form.email.id_for_label }}">Cuenta *</label>
-            {{ form.cuenta }}
-        </div>
-
-        <div class="col-lg-4">
-            {{ form.fecha.errors }}
-            <label for="{{ form.fecha.id_for_label }}">Fecha *</label>
-            {{ form.fecha }}
-        </div>
-
-        <div class="col-lg-4">
-            {{ form.monto.errors }}
-            <label for="{{ form.tipo.id_for_label }}">Monto</label><br>
-            {{ form.monto }}
-        </div>
+    <div class="col-lg-4">
+      {{ form.estado_oportunidad.errors }}
+      <label for="{{ form.estado_oportunidad.id_for_label }}">Estado *</label
+      ><br />
+      {{ form.estado_oportunidad }}
     </div>
 
-    <div class="row">
-        <div class="col-lg-12">
-            {{ form.observaciones.errors }}
-            <label for="{{ form.observaciones.id_for_label }}">Observaciones</label><br>
-            {{ form.observaciones }}
-        </div>
+    <div class="col-lg-4">
+      {{ form.tipo.errors }}
+      <label for="{{ form.sexo.id_for_label }}">Tipo *</label><br />
+      {{ form.tipo }}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4">
+      {{ form.cuenta.errors }}
+      <label for="{{ form.email.id_for_label }}">Cuenta *</label>
+      {{ form.cuenta }}
     </div>
 
-    <div class="row" style="padding-right: 50px; padding-left: 10px;">
-        <div class="col-6 col-sm-6 col-md-6 col-lg-6">
-        </div>
-        <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
-        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
-            <a class="btn btn-secondary" style="margin-top: 10px; margin-right: 40px;" href="/oportunidades">Volver</a>
-        </div>
-        <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px;">
-            <input class="btn btn-success" type="submit" value="Guardar" style="margin-top: 10px; margin-right: 40px;" /> 
-        </div>
+    <div class="col-lg-4">
+      {{ form.fecha.errors }}
+      <label for="{{ form.fecha.id_for_label }}">Fecha *</label>
+      {{ form.fecha }}
     </div>
 
+    <div class="col-lg-4">
+      {{ form.campania.errors }}
+      <label for="{{ form.campania.id_for_label }}">Campaña</label><br />
+      {{ form.campania }}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4">
+      {{ form.monto.errors }}
+      <label for="{{ form.tipo.id_for_label }}">Monto</label><br />
+      {{ form.monto }}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      {{ form.observaciones.errors }}
+      <label for="{{ form.observaciones.id_for_label }}">Observaciones</label
+      ><br />
+      {{ form.observaciones }}
+    </div>
+  </div>
+
+  <div class="row" style="padding-right: 50px; padding-left: 10px;">
+    <div class="col-6 col-sm-6 col-md-6 col-lg-6"></div>
+    <div class="col-2 col-sm-2 col-md-2 col-lg-2"></div>
+    <div
+      class="col-2 col-sm-2 col-md-2 col-lg-2"
+      style="padding-left: 2px; padding-right: 2px;"
+    >
+      <a
+        class="btn btn-secondary"
+        style="margin-top: 10px; margin-right: 40px;"
+        href="/oportunidades"
+        >Volver</a
+      >
+    </div>
+    <div
+      class="col-2 col-sm-2 col-md-2 col-lg-2"
+      style="padding-left: 2px; padding-right: 2px;"
+    >
+      <input
+        class="btn btn-success"
+        type="submit"
+        value="Guardar"
+        style="margin-top: 10px; margin-right: 40px;"
+      />
+    </div>
+  </div>
 </form>
 
 {% endblock %}
