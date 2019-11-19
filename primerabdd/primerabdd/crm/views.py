@@ -21,6 +21,9 @@ from django.template import loader
 from django.db.models import Count
 
 import sweetify
+import csv
+from django.utils.encoding import smart_str
+from datetime import datetime
 
 
 CSV_NOMBRE_INDEX = 0
@@ -360,6 +363,34 @@ class Importador(TemplateView):
 
     template_name = 'crm/uploader.html'
 
+
+def download_csv(request):
+    print("Estoy importando")
+    user = request.user
+    listado_contactos = Contacto.objects.filter(cuenta__organizacion__usuario=user).values_list('id', flat=True)       
+
+    query = request.GET.get('query')
+    if query:
+        listado_contactos = Contacto.objects.filter(Q(nombre__icontains=query) | 
+        Q(apellido__icontains=query) | Q(cuenta__nombre__icontains=query)).filter(id__in=listado_contactos)
+    else:
+        listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    filename = 'temp_' + str(user.id) + '_' + current_time + '.csv'
+
+
+
+    with open(filename, 'w') as tmp_file:
+        writer = csv.writer(tmp_file)
+        writer.writerow(['nombre', 'apellido','cuenta', 'documento', 'cargo', 'ocupacion', 'direccion', 'ciudad', 'cod_postal', 'pais', 'fecha_de_nacimiento', 'tipo', 'categoria', 'email', 'email_alternativo', 'sexo', 'origen', 'telefono', 'movil', 'recibir_novedades', 'observaciones', 'es_voluntario', 'turno', 'estado', 'habilidades'])
+        for contacto in listado_contactos:
+            writer.writerow([contacto.nombre, contacto.apellido, contacto.cuenta, contacto.documento, contacto.cargo, contacto.ocupacion, contacto.direccion, contacto.ciudad, contacto.cod_postal, contacto.pais, contacto.fecha_de_nacimiento, contacto.tipo, contacto.categoria, contacto.email, contacto.email_alternativo, contacto.sexo, contacto.origen, contacto.telefono, contacto.movil, contacto.recibir_novedades, contacto.observaciones, contacto.es_voluntario, contacto.turno, contacto.estado, contacto.habilidades])
+
+    with open(filename) as tmp_file:
+        response = HttpResponse(tmp_file, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=' + filename
+        return response
 
 def upload_csv(request):
     if "GET" == request.method:
