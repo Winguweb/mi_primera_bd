@@ -19,6 +19,7 @@ from django.db import models
 from django.db.models.deletion import ProtectedError
 from django.template import loader
 from django.db.models import Count
+from django.db.models import Func, Sum
 
 import sweetify
 
@@ -314,7 +315,15 @@ class ContactoEditar(UpdateView):
         sweetify.error(self.request, 'Error', text='Ya existe un contacto con este mail en esta cuenta.', persistent='Ok')
         return render(self.request, self.template_name, {'form': form, 'accion': 'Editar Contacto'})
 
+class Month(Func):
+    function = 'EXTRACT'
+    template = '%(function)s(MONTH from %(expressions)s)'
+    output_field = models.IntegerField()
 
+class Year(Func):
+    function = 'EXTRACT'
+    template = '%(function)s(YEAR from %(expressions)s)'
+    output_field = models.IntegerField()   
 
 class DashBoard(ListView):
     model = Contacto
@@ -353,6 +362,15 @@ class DashBoard(ListView):
                                                 .annotate(total=Count('estado_oportunidad'))\
                                                 .order_by('estado_oportunidad__estado')
         context['oportunidades_por_estado'] = oportunidades_por_estado
+
+        # Monto de Oportunidades por Mes
+        monto_oportunidades_por_mes = (Oportunidad.objects.filter(cuenta__organizacion__usuario=usuario, estado_oportunidad__estado__isnull=False)
+                                                .annotate(month=Month('fecha'), year=Year('fecha'))
+                                                .values('month', 'year')
+                                                .annotate(total=Sum('monto'))
+                                                .order_by("year", "month"))
+
+        context['monto_oportunidades_por_mes'] = monto_oportunidades_por_mes
 
         return context
 

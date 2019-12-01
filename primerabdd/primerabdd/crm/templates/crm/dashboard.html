@@ -47,6 +47,17 @@
                 </div>
             </div>
 
+        <div class="row justify-content-around">
+            <div class="col-auto mb-2">
+                <div class="card h-100" style="width: 35rem;">
+                    <div class="card-header">Monto de Oportunidades por Mes</div>
+                    <div class="card-body">
+                    	<div id="grafico-oportunidades-monto"></div>
+                	</div>
+            	</div>
+       		</div>
+        </div>
+
         </div>
         
     </div>
@@ -149,6 +160,35 @@
             //     footerFormat: '</table>',
             //     valueDecimals: 0
             // }
+        });
+    </script>
+
+    <script>
+        Highcharts.chart('grafico-oportunidades-monto', {
+            chart: {
+                type: 'column'
+            },
+            title:{
+                text: ''
+            },
+            xAxis: {
+                categories: [
+                    {% for el in monto_oportunidades_por_mes %}'{{ el.month }}/{{ el.year }}'{% if not forloop.last %},
+                    {% endif %}{% endfor %}
+                ]
+            },
+            yAxis:{
+                title: {
+                    text: 'Monto por Mes'
+                }
+            },
+            series: [{
+                showInLegend: false,
+                name: 'Cantidad',
+                data: [
+                    {% for el in monto_oportunidades_por_mes %}{{ el.total }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                ]
+            }]
         });
     </script>
 
