@@ -378,10 +378,31 @@ def download_oportunidades_csv(request):
             
             writer.writerow([oportunidad.nombre, oportunidad.cuenta, oportunidad.estado_oportunidad, oportunidad.tipo, 
                 oportunidad.fecha, oportunidad.monto, oportunidad.campania, oportunidad.observaciones])
-    cuenta = models.ForeignKey(Cuenta, on_delete=models.CASCADE, blank=False)
-    nombre = models.CharField(max_length=200, default=None, blank=False, null=False)
     
    
+    with open(filename) as tmp_file:
+        response = HttpResponse(tmp_file, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=' + filename
+        return response
+
+def download_cuentas_csv(request):
+    user = request.user
+    id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+
+    listado_cuentas = Cuenta.objects.filter(id__in=id_listado_cuentas)
+  
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    filename = 'cuentas_temp_' + str(user.id) + '_' + current_time + '.csv'
+
+    with open(filename, 'w') as tmp_file:
+        writer = csv.writer(tmp_file)
+        for cuenta in listado_cuentas:
+            
+            writer.writerow([cuenta.nombre, cuenta.calle, cuenta.numero, cuenta.ciudad, cuenta.cod_postal, 
+                cuenta.pais, cuenta.email, cuenta.email_alternativo, cuenta.tipo, cuenta.telefono, 
+                cuenta.telefono_alternativo, cuenta.web, cuenta.observaciones])
+  
     with open(filename) as tmp_file:
         response = HttpResponse(tmp_file, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=' + filename
