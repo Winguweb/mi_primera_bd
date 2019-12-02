@@ -87,5 +87,7 @@
     {% endfor %}
   </tbody>
 </table>
-
+    <div class="col-2 col-sm-2 col-md-2 col-lg-2" style="padding-left: 2px; padding-right: 2px; float: right;" >
+      <a class="btn btn-secondary pull-right" href="{% url "download_oportunidades_csv"  %}">Exportar Oportunidades</a>
+    </div>
 {% endblock %}
