@@ -22,6 +22,9 @@ from django.db.models import Count
 from django.db.models import Func, Sum
 
 import sweetify
+import csv
+from django.utils.encoding import smart_str
+from datetime import datetime
 
 
 CSV_NOMBRE_INDEX = 0
@@ -29,27 +32,27 @@ CSV_APELLIDO_INDEX = 1
 CSV_DOCUMENTO_INDEX = 2
 CSV_CARGO_INDEX = 3
 CSV_OCUPACION_INDEX = 4
-CSV_CALLE_INDEX = 5
-CSV_NUMERO_INDEX = 6
-CSV_CIUDAD_INDEX = 7
-CSV_COD_POSTAL_INDEX = 8
-CSV_PAIS_INDEX = 9
-CSV_FECHA_NACIMIENTO_INDEX = 10
-CSV_TIPO_INDEX = 11
-CSV_EMAIL_INDEX = 12
-CSV_EMAIL_ALTERNATIVO_INDEX = 13 
-CSV_TELEFONO_INDEX = 14
-CSV_MOVIL_INDEX = 15
-CSV_RECIBIR_NOVEDADES_INDEX = 16
-CSV_OBSERVACIONES_INDEX = 17
-CSV_ES_VOLUNTARIO_INDEX = 18
-CSV_TURNO_INDEX = 19
-CSV_ESTADO_INDEX = 20
-CSV_HABILIDADES_INDEX = 21
-CSV_CATEGORIA_INDEX = 22
-CSV_NOMBRE_CUENTA_INDEX = 23
-CSV_NOMBRE_ORIGEN_INDEX = 24
-CSV_GENERO_INDEX = 25
+CSV_DIRECCION_INDEX = 5
+
+CSV_CIUDAD_INDEX = 6
+CSV_COD_POSTAL_INDEX = 7
+CSV_PAIS_INDEX = 8
+CSV_FECHA_NACIMIENTO_INDEX = 9
+CSV_TIPO_INDEX = 10
+CSV_EMAIL_INDEX = 11
+CSV_EMAIL_ALTERNATIVO_INDEX = 12 
+CSV_TELEFONO_INDEX = 13
+CSV_MOVIL_INDEX = 14
+CSV_RECIBIR_NOVEDADES_INDEX = 15
+CSV_OBSERVACIONES_INDEX = 16
+CSV_ES_VOLUNTARIO_INDEX = 17
+CSV_TURNO_INDEX = 18
+CSV_ESTADO_INDEX = 19
+CSV_HABILIDADES_INDEX = 20
+CSV_CATEGORIA_INDEX = 21
+CSV_NOMBRE_CUENTA_INDEX = 22
+CSV_NOMBRE_ORIGEN_INDEX = 23
+CSV_GENERO_INDEX = 24
 
 # Lista de cuentas
 class CuentasLista(ListView): 
@@ -378,6 +381,76 @@ class Importador(TemplateView):
 
     template_name = 'crm/uploader.html'
 
+def download_oportunidades_csv(request):
+    user = request.user
+    id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+
+    listado_oportunidades = Oportunidad.objects.filter(cuenta__id__in=id_listado_cuentas)
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    filename = 'oportunidades_temp_' + str(user.id) + '_' + current_time + '.csv'
+
+    with open(filename, 'w') as tmp_file:
+        writer = csv.writer(tmp_file)
+        for oportunidad in listado_oportunidades:
+            
+            writer.writerow([oportunidad.nombre, oportunidad.cuenta, oportunidad.estado_oportunidad, oportunidad.tipo, 
+                oportunidad.fecha, oportunidad.monto, oportunidad.campania, oportunidad.observaciones])
+    
+   
+    with open(filename) as tmp_file:
+        response = HttpResponse(tmp_file, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=' + filename
+        return response
+
+def download_cuentas_csv(request):
+    user = request.user
+    id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).values_list('id', flat=True)
+
+    listado_cuentas = Cuenta.objects.filter(id__in=id_listado_cuentas)
+  
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    filename = 'cuentas_temp_' + str(user.id) + '_' + current_time + '.csv'
+
+    with open(filename, 'w') as tmp_file:
+        writer = csv.writer(tmp_file)
+        for cuenta in listado_cuentas:
+            
+            writer.writerow([cuenta.nombre, cuenta.calle, cuenta.numero, cuenta.ciudad, cuenta.cod_postal, 
+                cuenta.pais, cuenta.email, cuenta.email_alternativo, cuenta.tipo, cuenta.telefono, 
+                cuenta.telefono_alternativo, cuenta.web, cuenta.observaciones])
+  
+    with open(filename) as tmp_file:
+        response = HttpResponse(tmp_file, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=' + filename
+        return response
+ 
+def download_csv(request):
+    user = request.user
+    listado_contactos = Contacto.objects.filter(cuenta__organizacion__usuario=user).values_list('id', flat=True)       
+
+
+    listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
+    
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    filename = 'temp_' + str(user.id) + '_' + current_time + '.csv'
+
+    with open(filename, 'w') as tmp_file:
+        writer = csv.writer(tmp_file)
+        for contacto in listado_contactos:
+            writer.writerow([contacto.nombre, contacto.apellido, contacto.documento, contacto.cargo, contacto.ocupacion,
+             contacto.direccion, contacto.ciudad, contacto.cod_postal, contacto.pais, contacto.fecha_de_nacimiento, 
+             contacto.tipo, contacto.email, contacto.email_alternativo, contacto.sexo, contacto.telefono, contacto.movil, 
+             contacto.recibir_novedades,
+             contacto.observaciones,  contacto.es_voluntario, contacto.turno, contacto.estado,
+              contacto.habilidades, contacto.categoria, contacto.cuenta, contacto.origen])
+
+    with open(filename) as tmp_file:
+        response = HttpResponse(tmp_file, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=' + filename
+        return response
 
 def upload_csv(request):
     if "GET" == request.method:
@@ -403,76 +476,91 @@ def upload_csv(request):
         try:
             fields = linea.split(",")
 
-            nombre = fields[CSV_NOMBRE_INDEX]
-            apellido = fields[CSV_APELLIDO_INDEX]
-            documento = fields[CSV_DOCUMENTO_INDEX]
-            cargo = fields[CSV_CARGO_INDEX]
-            ocupacion = fields[CSV_OCUPACION_INDEX]
-            calle = fields[CSV_CALLE_INDEX]
-            numero = fields[CSV_NUMERO_INDEX]
-            ciudad = fields[CSV_CIUDAD_INDEX]
-            cod_postal = fields[CSV_COD_POSTAL_INDEX]
-            pais = fields[CSV_PAIS_INDEX]
-            fecha_nacimiento = fields[CSV_FECHA_NACIMIENTO_INDEX]
+            nombre = fields[0]
+            apellido = fields[1]
+            documento = fields[2]
+            cargo = fields[3]
+            ocupacion = fields[4]
+            direccion = fields[5]
+            ciudad = fields[6]
+            cod_postal = fields[7]
+            pais = fields[8]
+            fecha_nacimiento = fields[9]
 
-            tipo = fields[CSV_TIPO_INDEX]
-            email = fields[CSV_EMAIL_INDEX]
-            email_alternativo = fields[CSV_EMAIL_ALTERNATIVO_INDEX]
-            telefono = fields[CSV_TELEFONO_INDEX]
-            movil = fields[CSV_MOVIL_INDEX]
-            recibir_novedades = fields[CSV_RECIBIR_NOVEDADES_INDEX]
-            observaciones = fields[CSV_OBSERVACIONES_INDEX]
-            es_voluntario = fields[CSV_ES_VOLUNTARIO_INDEX]
+            tipo = fields[10]
+            email = fields[11]
+            email_alternativo = fields[12]
+            sexo = fields[13]
+            telefono = fields[14]
+            movil = fields[15]
+            recibir_novedades = fields[16]
+            observaciones = fields[17]
+            es_voluntario = fields[18]
 
-            turno = fields[CSV_TURNO_INDEX]
-            estado = fields[CSV_ESTADO_INDEX]
-            habilidades = fields[CSV_HABILIDADES_INDEX]
-            categoria = fields[CSV_CATEGORIA_INDEX]
-            nombre_cuenta = fields[CSV_NOMBRE_CUENTA_INDEX]
-            origen = fields[CSV_NOMBRE_ORIGEN_INDEX]
-            sexo = fields[CSV_GENERO_INDEX]
-            
+            turno = fields[19]
+            estado = fields[20]
+            habilidades = fields[21]
+            categoria = fields[22]
+            nombre_cuenta = fields[23]
+            origen = fields[24]
+        
+
+            if estado == '':
+                estado = '1'
+            if turno == '':
+                turno = '0'    
+            if habilidades == '':
+                habilidades = '3'    
+
             id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).filter(nombre=nombre_cuenta).values_list('id', flat=True)
             print(id_listado_cuentas)
             cuenta = None
             if not id_listado_cuentas:
-                cuenta = Cuenta.objects.create(organizacion=user.organizacion,nombre=nombre_cuenta,email=email_alternativo)
+                cuenta = Cuenta.objects.create(organizacion=user.organizacion,nombre=nombre_cuenta,email=email)
             else:
                 cuenta = Cuenta.objects.filter(id=id_listado_cuentas[0])[0]
 
-
+            print("llegue")
             tipoCustom = CampoCustomTipoContacto.objects.filter(organizacion__usuario=user).filter(tipo=tipo)
             if not tipoCustom:
                 categoria = CampoCustomTipoContacto.objects.create(organizacion=user.organizacion,tipo=tipo)
             else:
                 categoria = tipoCustom[0]
             
+
             campoOrigen = CampoCustomOrigen.objects.filter(organizacion__usuario=user).filter(origen=origen)
             if not campoOrigen:
-                origen = CampoCustomOrigen.objects.create(organizacion=user.organizacion,origen=origen)
+                if origen != '':
+                    origen = CampoCustomOrigen.objects.create(organizacion=user.organizacion,origen=origen)
             else:
                 origen = campoOrigen[0]
 
             if turno == "Mañana":
                 turno = 0
-            else:
+            elif turno == "Tarde":
                 turno = 1
+            else: 
+                turno = None
             if estado == "Activo":
                 estado = 1
-            else: 
-                estado = 0           
+            elif estado == "Inactivo": 
+                estado = 0 
+            else:
+                estado = None
+            print("LLegue 2")
+         
             contacto = Contacto(cuenta=cuenta, nombre=nombre, 
                 apellido=apellido, email=email, tipo=0, categoria=categoria, documento=documento,
-                cargo=cargo, ocupacion=ocupacion, direccion=calle + " " + numero, ciudad=ciudad, 
+                cargo=cargo, ocupacion=ocupacion, direccion=direccion, ciudad=ciudad, 
                 pais=pais,cod_postal=cod_postal, email_alternativo=email_alternativo, observaciones=observaciones,
-                movil=movil,origen=origen, habilidades=3, turno=turno, estado=estado, es_voluntario=True,
+                movil=movil,origen=origen, habilidades=habilidades, turno=turno, estado=estado, es_voluntario=es_voluntario,
                  sexo=sexo, telefono=telefono, fecha_de_nacimiento=parse_date(fecha_nacimiento))
             contacto.save()              
         except Exception as e:
             print("Error cargando un usuario: " + linea)
             print(e)
             failed_contacts += 1
-    messages.error(request,"Se importaron {} de {} contactos".format(total_contacts - failed_contacts, total_contacts))
+    messages.error(request,"Se importaron {} de {} contactos".format(total_contacts - failed_contacts, total_contacts-1))
     return HttpResponseRedirect(reverse("contactos"))
 
 
