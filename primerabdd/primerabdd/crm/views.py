@@ -407,17 +407,14 @@ def download_cuentas_csv(request):
         response = HttpResponse(tmp_file, content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=' + filename
         return response
-
+ 
 def download_csv(request):
     user = request.user
     listado_contactos = Contacto.objects.filter(cuenta__organizacion__usuario=user).values_list('id', flat=True)       
 
-    query = request.GET.get('query')
-    if query:
-        listado_contactos = Contacto.objects.filter(Q(nombre__icontains=query) | 
-        Q(apellido__icontains=query) | Q(cuenta__nombre__icontains=query)).filter(id__in=listado_contactos)
-    else:
-        listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
+
+    listado_contactos = Contacto.objects.filter(id__in=listado_contactos)
+    
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     filename = 'temp_' + str(user.id) + '_' + current_time + '.csv'
@@ -425,29 +422,12 @@ def download_csv(request):
     with open(filename, 'w') as tmp_file:
         writer = csv.writer(tmp_file)
         for contacto in listado_contactos:
-            recibir_novedades = 1
-            if contacto.recibir_novedades:
-                recibir_novedades = 0
-            es_voluntario = 1
-            if contacto.es_voluntario:
-                es_voluntario = 0
-            turno = None
-            if contacto.turno == 0:
-                turno = "Mañana"
-            elif contacto.turno == 1:
-                turno = "Tarde"
-            estado = None
-            if contacto.estado == 1:
-                estado = "Activo"
-            elif contacto.estado == 0: 
-                estado = "Inactivo"
-
             writer.writerow([contacto.nombre, contacto.apellido, contacto.documento, contacto.cargo, contacto.ocupacion,
              contacto.direccion, contacto.ciudad, contacto.cod_postal, contacto.pais, contacto.fecha_de_nacimiento, 
-             contacto.categoria, contacto.email, contacto.email_alternativo, contacto.telefono, contacto.movil, 
-             recibir_novedades,
-             contacto.observaciones,  es_voluntario, turno, estado,
-              contacto.habilidades, contacto.tipo, contacto.cuenta, contacto.origen, contacto.sexo])
+             contacto.tipo, contacto.email, contacto.email_alternativo, contacto.sexo, contacto.telefono, contacto.movil, 
+             contacto.recibir_novedades,
+             contacto.observaciones,  contacto.es_voluntario, contacto.turno, contacto.estado,
+              contacto.habilidades, contacto.categoria, contacto.cuenta, contacto.origen])
 
     with open(filename) as tmp_file:
         response = HttpResponse(tmp_file, content_type='text/csv')
@@ -478,34 +458,42 @@ def upload_csv(request):
         try:
             fields = linea.split(",")
 
-            nombre = fields[CSV_NOMBRE_INDEX]
-            apellido = fields[CSV_APELLIDO_INDEX]
-            documento = fields[CSV_DOCUMENTO_INDEX]
-            cargo = fields[CSV_CARGO_INDEX]
-            ocupacion = fields[CSV_OCUPACION_INDEX]
-            direccion = fields[CSV_DIRECCION_INDEX]
-            ciudad = fields[CSV_CIUDAD_INDEX]
-            cod_postal = fields[CSV_COD_POSTAL_INDEX]
-            pais = fields[CSV_PAIS_INDEX]
-            fecha_nacimiento = fields[CSV_FECHA_NACIMIENTO_INDEX]
+            nombre = fields[0]
+            apellido = fields[1]
+            documento = fields[2]
+            cargo = fields[3]
+            ocupacion = fields[4]
+            direccion = fields[5]
+            ciudad = fields[6]
+            cod_postal = fields[7]
+            pais = fields[8]
+            fecha_nacimiento = fields[9]
 
-            tipo = fields[CSV_TIPO_INDEX]
-            email = fields[CSV_EMAIL_INDEX]
-            email_alternativo = fields[CSV_EMAIL_ALTERNATIVO_INDEX]
-            telefono = fields[CSV_TELEFONO_INDEX]
-            movil = fields[CSV_MOVIL_INDEX]
-            recibir_novedades = fields[CSV_RECIBIR_NOVEDADES_INDEX]
-            observaciones = fields[CSV_OBSERVACIONES_INDEX]
-            es_voluntario = fields[CSV_ES_VOLUNTARIO_INDEX]
+            tipo = fields[10]
+            email = fields[11]
+            email_alternativo = fields[12]
+            sexo = fields[13]
+            telefono = fields[14]
+            movil = fields[15]
+            recibir_novedades = fields[16]
+            observaciones = fields[17]
+            es_voluntario = fields[18]
 
-            turno = fields[CSV_TURNO_INDEX]
-            estado = fields[CSV_ESTADO_INDEX]
-            habilidades = fields[CSV_HABILIDADES_INDEX]
-            categoria = fields[CSV_CATEGORIA_INDEX]
-            nombre_cuenta = fields[CSV_NOMBRE_CUENTA_INDEX]
-            origen = fields[CSV_NOMBRE_ORIGEN_INDEX]
-            sexo = fields[CSV_GENERO_INDEX]
-            
+            turno = fields[19]
+            estado = fields[20]
+            habilidades = fields[21]
+            categoria = fields[22]
+            nombre_cuenta = fields[23]
+            origen = fields[24]
+        
+
+            if estado == '':
+                estado = '1'
+            if turno == '':
+                turno = '0'    
+            if habilidades == '':
+                habilidades = '3'    
+
             id_listado_cuentas = Cuenta.objects.filter(organizacion__usuario=user).filter(nombre=nombre_cuenta).values_list('id', flat=True)
             print(id_listado_cuentas)
             cuenta = None

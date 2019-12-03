@@ -1,2 +1,3 @@
-Rafael,Borre,3829333,Jugador de futbol,Desarrollador,NUNEZ,CABA,1342,3,1998-12-21,Socio,email@m.com,asdad@mail.com,1221,12341321,0,metio un gol en la final,0,Mañana,Inactivo,2,0,CARP,Evento,0
-Mauro,Zarete,39222332,Jugador,delantero,,CABA,1423,0,1991-02-05,Socio,diego@m.com,,23434232,15-32111231,0,Patea buenos tiros libres,0,Mañana,Activo,1,0,Cuenta Zarete,Redes Sociales,0
+Rafael,Borre,3829333,Jugador de futbol,Desarrollador,NUNEZ,CABA,1342,3,1998-12-21,0,email@m.com,asdad@mail.com,0,1221,12341321,False,metio un gol en la final,True,0,0,2,Socio,CARP,Evento
+Mauro,Zarete,39222332,Jugador,delantero,,CABA,1423,0,1991-02-05,0,diego@m.com,,0,23434232,15-32111231,False,Patea buenos tiros libres,True,0,1,1,Socio,Cuenta Zarete,Redes Sociales
+Nahual,qwqvaz,adad,as,Desarrollador,13qweq,CABA,13,0,1992-12-12,0,diego222344@m.com,zrete@gmail.com,0,23434232,qweq,False,eeeeee,False,,,,Staff,Cuenta vaz2332322332,Mail
